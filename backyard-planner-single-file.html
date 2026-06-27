@@ -1,0 +1,2435 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backyard Planner — Single File React App</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #1f2937;
+      --panel-3: #273244;
+      --border: #334155;
+      --border-soft: #475569;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --muted-2: #cbd5e1;
+      --accent: #38bdf8;
+      --accent-2: #0ea5e9;
+      --danger: #fb7185;
+      --warning: #f59e0b;
+      --ok: #34d399;
+      --canvas: #f8fafc;
+      --canvas-line: #dbe4ee;
+      --canvas-major: #b7c4d1;
+      --focus: #facc15;
+      --shadow: 0 14px 40px rgba(0,0,0,.25);
+      --font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body, #root { width: 100%; max-width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body { font-family: var(--font); color: var(--text); background: var(--bg); }
+
+    button, input, select, textarea { font: inherit; max-width: 100%; min-width: 0; }
+    button, select, input[type="checkbox"], input[type="color"], input[type="file"] { cursor: pointer; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, .tool-btn:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .app-shell {
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      background: var(--bg);
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .top-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      background: linear-gradient(180deg, #111827, #0f172a);
+      border-bottom: 1px solid var(--border);
+      min-height: 46px;
+      white-space: normal;
+      flex-wrap: wrap;
+      align-content: center;
+      overflow: hidden;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-right: 8px;
+      color: #f8fafc;
+      font-weight: 700;
+      letter-spacing: .01em;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .brand-mark {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #22c55e, #38bdf8);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.35);
+    }
+
+    .toolbar-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 7px;
+      border-left: 1px solid rgba(148,163,184,.18);
+      flex: 0 1 auto;
+      flex-wrap: wrap;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .toolbar-group:first-of-type { border-left: 0; }
+
+    .btn, .icon-btn, .toggle-btn {
+      border: 1px solid var(--border-soft);
+      background: #1e293b;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 6px 9px;
+      min-height: 30px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+      flex: 0 1 auto;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .icon-btn { width: 32px; padding: 0; font-size: 15px; }
+    .btn:hover, .icon-btn:hover, .toggle-btn:hover { background: #273244; border-color: #64748b; }
+    .btn:active, .icon-btn:active, .toggle-btn:active { transform: translateY(1px); }
+    .btn[disabled], .icon-btn[disabled] { opacity: .45; cursor: not-allowed; transform: none; }
+    .toggle-btn[aria-pressed="true"], .tool-btn.active { background: #075985; border-color: var(--accent); color: white; }
+    .toggle-btn.compact { min-width: 34px; padding: 6px 7px; }
+    .danger { border-color: rgba(251,113,133,.55); color: #fecdd3; }
+    .danger:hover { background: #4c1d2f; border-color: #fb7185; }
+
+    .editor-layout {
+      min-height: 0;
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr) clamp(280px, 31vw, 360px);
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .tool-palette {
+      border-right: 1px solid var(--border);
+      background: #0b1220;
+      padding: 8px 7px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+      min-height: 0;
+      max-width: 100%;
+    }
+    .tool-btn {
+      width: 62px;
+      min-height: 54px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #111827;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      user-select: none;
+      text-align: center;
+      overflow: hidden;
+    }
+    .tool-btn:hover { background: #1f2937; border-color: #64748b; }
+    .tool-icon { font-size: 18px; line-height: 18px; }
+    .tool-name { max-width: 100%; overflow: hidden; text-overflow: ellipsis; font-size: 10px; line-height: 1.1; color: var(--muted-2); }
+    .tool-btn.active .tool-name { color: white; }
+    .palette-divider { height: 1px; background: rgba(148,163,184,.16); margin: 3px 4px; }
+
+    .workspace-wrap {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      background: #020617;
+      overflow: hidden;
+    }
+    .svg-workspace {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: radial-gradient(circle at 35% 15%, #1e293b 0%, #0f172a 50%, #020617 100%);
+      touch-action: none;
+      cursor: crosshair;
+    }
+    .svg-workspace.select-cursor { cursor: default; }
+    .svg-workspace.pan-cursor { cursor: grab; }
+    .svg-workspace.panning { cursor: grabbing; }
+    .workspace-overlay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      pointer-events: none;
+      max-width: calc(100% - 20px);
+      overflow: hidden;
+    }
+    .pill {
+      pointer-events: none;
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: rgba(15,23,42,.78);
+      border: 1px solid rgba(148,163,184,.3);
+      color: #e2e8f0;
+      font-size: 12px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .drawing-actions {
+      position: absolute;
+      left: 50%;
+      bottom: 16px;
+      transform: translateX(-50%);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-width: calc(100% - 24px);
+      overflow: hidden;
+      background: rgba(15,23,42,.88);
+      border: 1px solid rgba(148,163,184,.35);
+      border-radius: 12px;
+      padding: 8px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .inspector {
+      min-width: 0;
+      border-left: 1px solid var(--border);
+      background: #0b1220;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 10px;
+      width: 100%;
+      max-width: 100%;
+      min-height: 0;
+    }
+    .panel {
+      background: #111827;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+      min-width: 0;
+      max-width: 100%;
+    }
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 9px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.16);
+      background: rgba(30,41,59,.5);
+      font-weight: 700;
+      color: #f8fafc;
+      font-size: 13px;
+      min-width: 0;
+    }
+    .panel-header > span:first-child, .panel-header h2 { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .panel-body { padding: 10px; min-width: 0; overflow-wrap: anywhere; }
+    .muted { color: var(--muted); }
+    .tiny { font-size: 11px; }
+    .small { font-size: 12px; }
+    .row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .row.wrap { flex-wrap: wrap; }
+    .row.between { justify-content: space-between; flex-wrap: wrap; }
+    .stack { display: grid; gap: 8px; min-width: 0; }
+    .two-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr)); gap: 8px; }
+    .three-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(92px, 100%), 1fr)); gap: 8px; }
+    .field { display: grid; gap: 4px; min-width: 0; }
+    .field label { color: var(--muted-2); font-size: 11px; font-weight: 600; }
+    .input, .select, .textarea {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid var(--border-soft);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 7px 8px;
+      min-height: 31px;
+    }
+    .textarea { resize: vertical; min-height: 72px; }
+    .checkbox-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+      color: var(--muted-2);
+      font-size: 12px;
+      min-width: 0;
+    }
+    .checkbox-line span { min-width: 0; overflow-wrap: anywhere; }
+    .tailwind-palette { display: grid; grid-template-columns: repeat(auto-fill, minmax(18px, 1fr)); gap: 4px; padding: 5px; border: 1px solid var(--border); border-radius: 8px; background: #0f172a; min-width: 0; max-width: 100%; overflow: hidden; }
+    .color-swatch {
+      width: 100%;
+      aspect-ratio: 1;
+      min-width: 0;
+      min-height: 18px;
+      max-height: 24px;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 5px;
+      padding: 0;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+    }
+    .color-swatch:hover { border-color: #f8fafc; transform: translateY(-1px); }
+    .color-swatch.selected { outline: 2px solid var(--focus); outline-offset: 1px; }
+    .color-swatch[disabled] { opacity: .45; cursor: not-allowed; transform: none; }
+    .warning-box {
+      border: 1px solid rgba(245,158,11,.5);
+      background: rgba(245,158,11,.1);
+      color: #fde68a;
+      border-radius: 10px;
+      padding: 8px;
+      font-size: 12px;
+    }
+    .ok-box {
+      border: 1px solid rgba(52,211,153,.45);
+      background: rgba(16,185,129,.08);
+      color: #bbf7d0;
+      border-radius: 10px;
+      padding: 8px;
+      font-size: 12px;
+    }
+    .layer-row, .inventory-row {
+      display: grid;
+      grid-template-columns: 26px 26px 1fr auto;
+      gap: 6px;
+      align-items: center;
+      padding: 5px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      min-width: 0;
+    }
+    .layer-row:hover, .inventory-row:hover { background: rgba(30,41,59,.45); border-color: rgba(148,163,184,.15); }
+    .inventory-row { grid-template-columns: 1fr auto; font-size: 12px; color: var(--muted-2); }
+    .layer-row span, .inventory-row span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 22px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.3);
+      background: rgba(15,23,42,.75);
+      color: var(--muted-2);
+      font-size: 11px;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .measure-list { display: grid; gap: 5px; font-size: 12px; color: var(--muted-2); }
+    .measure-list div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed rgba(148,163,184,.16); padding-bottom: 4px; min-width: 0; }
+    .measure-list span, .measure-list strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+    .measure-list div:last-child { border-bottom: 0; }
+    .kbd {
+      font-family: var(--mono);
+      background: #020617;
+      border: 1px solid #334155;
+      border-bottom-color: #64748b;
+      color: #e2e8f0;
+      padding: 1px 5px;
+      border-radius: 5px;
+      font-size: 10px;
+    }
+
+    .status-bar {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 86px) minmax(0, 145px) minmax(0, 118px);
+      gap: 10px;
+      align-items: center;
+      padding: 4px 10px;
+      background: #0b1220;
+      border-top: 1px solid var(--border);
+      color: var(--muted-2);
+      font-size: 12px;
+    }
+    .status-main { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .status-bar > div { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .modal-scrim {
+      position: fixed;
+      inset: 0;
+      background: rgba(2,6,23,.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+    .modal {
+      width: min(760px, calc(100vw - 40px));
+      max-height: min(780px, calc(100vh - 40px));
+      overflow: auto;
+      background: #111827;
+      border: 1px solid #475569;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+    .modal h2 { margin: 0; font-size: 18px; }
+    .modal ol { margin-top: 8px; padding-left: 22px; color: var(--muted-2); }
+    .modal li { margin: 6px 0; }
+
+    .svg-label, .object-label { font-family: var(--font); paint-order: stroke; stroke: rgba(255,255,255,.8); stroke-width: 3px; stroke-linejoin: round; }
+    .object-label { font-size: 13px; cursor: grab; pointer-events: auto; }
+    .object-label:active { cursor: grabbing; }
+    .measurement-label { font-family: var(--font); font-size: 11px; fill: #0f172a; paint-order: stroke; stroke: rgba(255,255,255,.85); stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
+    .draggable-measurement-label { pointer-events: auto; cursor: grab; }
+    .draggable-measurement-label:active { cursor: grabbing; }
+    .object-shape { transition: opacity .12s linear; }
+    .object-shape:hover { filter: drop-shadow(0 0 4px rgba(14,165,233,.45)); }
+    .handle { fill: #f8fafc; stroke: #0284c7; stroke-width: 1.5; vector-effect: non-scaling-stroke; cursor: grab; }
+    .handle:hover { fill: #bae6fd; stroke: #0369a1; }
+    .mid-handle { fill: #fef3c7; stroke: #d97706; stroke-width: 1.3; vector-effect: non-scaling-stroke; cursor: copy; }
+    .resize-handle { fill: #f8fafc; stroke: #7c3aed; stroke-width: 1.5; vector-effect: non-scaling-stroke; cursor: nwse-resize; }
+    .selection-outline { fill: none; stroke: #0284c7; stroke-width: 2; vector-effect: non-scaling-stroke; stroke-dasharray: 7 4; pointer-events: none; }
+    .hover-outline { fill: none; stroke: rgba(14,165,233,.75); stroke-width: 1.5; vector-effect: non-scaling-stroke; pointer-events: none; }
+    .invalid-outline { fill: none; stroke: #f59e0b; stroke-width: 2.5; vector-effect: non-scaling-stroke; stroke-dasharray: 3 3; pointer-events: none; }
+    .selection-box { fill: rgba(14,165,233,.14); stroke: #0284c7; stroke-width: 1.5; vector-effect: non-scaling-stroke; stroke-dasharray: 5 4; pointer-events: none; }
+    .snap-guide { fill: none; stroke: #f97316; stroke-width: 1.5; vector-effect: non-scaling-stroke; stroke-dasharray: 5 4; pointer-events: none; }
+    .snap-dot { fill: #f97316; stroke: white; stroke-width: 1.4; vector-effect: non-scaling-stroke; pointer-events: none; }
+
+    @media (max-width: 1050px) {
+      .editor-layout { grid-template-columns: 68px minmax(0, 1fr) clamp(260px, 35vw, 320px); }
+      .tool-palette { padding: 7px 5px; }
+      .tool-btn { width: 56px; }
+      .brand span { display: none; }
+    }
+
+    @media (max-width: 760px) {
+      .editor-layout { grid-template-columns: 58px minmax(0, 1fr) clamp(220px, 39vw, 280px); }
+      .tool-palette { padding: 6px 4px; }
+      .tool-btn { width: 48px; min-height: 50px; border-radius: 10px; }
+      .tool-name { font-size: 9px; }
+      .inspector { padding: 8px; }
+      .panel-body { padding: 8px; }
+      .tailwind-palette { grid-template-columns: repeat(auto-fill, minmax(16px, 1fr)); }
+      .status-bar { grid-template-columns: minmax(0, 1fr) minmax(0, 64px) minmax(0, 92px) minmax(0, 82px); gap: 6px; }
+    }
+
+    @media (max-width: 620px) {
+      .editor-layout { grid-template-columns: 54px minmax(0, 1fr) clamp(190px, 43vw, 240px); }
+      .tool-btn { width: 46px; }
+      .top-toolbar { gap: 4px; padding-left: 6px; padding-right: 6px; }
+      .toolbar-group { padding: 0 4px; }
+      .panel-header { padding: 8px; }
+      .status-bar { grid-template-columns: minmax(0, 1fr) minmax(0, 58px) minmax(0, 80px); }
+      .status-bar > div:last-child { display: none; }
+    }
+
+    @media (max-width: 500px) {
+      .editor-layout { grid-template-columns: 48px minmax(0, 1fr) clamp(168px, 45vw, 210px); }
+      .tool-palette { padding: 5px 3px; }
+      .tool-btn { width: 42px; min-height: 48px; }
+      .tool-icon { font-size: 16px; }
+      .tool-name { font-size: 8px; }
+      .inspector { padding: 6px; }
+      .panel-body { padding: 7px; }
+      .tailwind-palette { grid-template-columns: repeat(auto-fill, minmax(14px, 1fr)); gap: 3px; padding: 4px; }
+      .color-swatch { min-height: 14px; border-radius: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.26.0/babel.min.js"></script>
+
+  <script id="app-source" type="text/plain">
+    const { useEffect, useMemo, useReducer, useRef, useState } = React;
+
+    type Point = { x: number; y: number };
+    type Layer = { id: string; name: string; visible: boolean; locked: boolean; order: number };
+    type Style = { fill: string; stroke: string; strokeWidth: number; opacity: number; dash?: string };
+    type ObjectType = "polygon" | "rectangle" | "circle" | "polyline" | "label";
+    type ObjectKind = "property" | "polygon" | "rectangle" | "circle" | "line" | "sketch" | "label" | "area";
+    type AttachedLabel = { visible: boolean; text: string; offset: Point; fontSizeM: number };
+    type CommonObject = { id: string; type: ObjectType; kind: ObjectKind; name: string; layerId: string; locked: boolean; visible: boolean; style: Style; z: number; rotation?: number; measurementHidden?: boolean; hiddenMeasurements?: string[]; measurementOffsets?: Record<string, Point>; objectLabel?: AttachedLabel };
+    type PolygonObject = CommonObject & { type: "polygon"; points: Point[] };
+    type RectangleObject = CommonObject & { type: "rectangle"; x: number; y: number; width: number; height: number };
+    type CircleObject = CommonObject & { type: "circle"; cx: number; cy: number; r: number };
+    type PolylineObject = CommonObject & { type: "polyline"; points: Point[]; widthM?: number };
+    type LabelObject = CommonObject & { type: "label"; x: number; y: number; text: string; fontSizeM: number };
+    type PlanObject = PolygonObject | RectangleObject | CircleObject | PolylineObject | LabelObject;
+    type Project = {
+      id: string;
+      name: string;
+      workspace: { widthM: number; heightM: number };
+      units: "m";
+      layers: Layer[];
+      objects: PlanObject[];
+      settings: {
+        showGrid: boolean;
+        showMeasurements: boolean;
+        snapToGrid: boolean;
+        snapToVertices: boolean;
+        snapToEdges: boolean;
+        snapToMidpoints: boolean;
+        orthogonalSnap: boolean;
+      };
+      savedAt?: string;
+    };
+    type Tool = "select" | "pan" | "property" | "polygon" | "line" | "rect" | "circle" | "sketch" | "label";
+    type DragMode = "pan" | "move" | "vertex" | "midpoint" | "resize" | "radius" | "draw-rect" | "draw-circle" | "draw-freehand" | "select-box" | "measure-label" | "object-label";
+    type MeasurementItem = { id: string; label: string; value: string; point: Point };
+    type SelectedHandle = null | { objectId: string; kind: "vertex" | "midpoint" | "resize" | "radius"; index?: number; corner?: string };
+    type SnapResult = { point: Point; indicator?: { point: Point; label: string; line?: [Point, Point] } };
+    type HistoryState = { project: Project; past: Project[]; future: Project[]; ui: UiState };
+    type UiState = {
+      tool: Tool;
+      selectedIds: string[];
+      hoveredId: string | null;
+      selectedHandle: SelectedHandle;
+      drawing: null | { tool: Tool; points: Point[]; preview?: Point; start?: Point; current?: Point };
+      viewport: { scale: number; panX: number; panY: number };
+      drag: null | any;
+      spaceDown: boolean;
+      snapIndicator?: SnapResult["indicator"];
+      status: string;
+      tests: { passed: number; total: number; failures: string[] };
+      showChecklist: boolean;
+    };
+
+    const PX_PER_M = 10;
+    const HISTORY_LIMIT = 80;
+    const STORAGE_KEY = "backyard-planner-single-file-v1";
+    const FREEHAND_MIN_POINT_DISTANCE_M = .2;
+    const FREEHAND_MAX_POINTS = 500;
+
+    const fmtM = (n: number) => `${round1(n).toFixed(1)} m`;
+    const fmtM2 = (n: number) => `${round1(n).toFixed(1)} m²`;
+    const round1 = (n: number) => Math.round((Number.isFinite(n) ? n : 0) * 10) / 10;
+    const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
+    const uid = (prefix = "id") => `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+    const deepClone = <T,>(v: T): T => JSON.parse(JSON.stringify(v));
+    const mToPx = (m: number) => m * PX_PER_M;
+    const pxToM = (px: number) => px / PX_PER_M;
+    const pointToPx = (p: Point) => ({ x: mToPx(p.x), y: mToPx(p.y) });
+    const ptsAttr = (pts: Point[]) => pts.map(p => `${mToPx(p.x)},${mToPx(p.y)}`).join(" ");
+    const almost = (a: number, b: number, eps = 0.0001) => Math.abs(a - b) < eps;
+    const distance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y);
+    const midpoint = (a: Point, b: Point): Point => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+    const add = (a: Point, b: Point): Point => ({ x: a.x + b.x, y: a.y + b.y });
+    const sub = (a: Point, b: Point): Point => ({ x: a.x - b.x, y: a.y - b.y });
+    const clampPointToWorkspace = (project: Project, p: Point): Point => ({ x: round1(clamp(p.x, 0, project.workspace.widthM)), y: round1(clamp(p.y, 0, project.workspace.heightM)) });
+    const normalizeRotation = (deg: number) => {
+      const n = ((Number.isFinite(deg) ? deg : 0) % 360 + 360) % 360;
+      return round1(n === 360 ? 0 : n);
+    };
+    const getRotation = (o: PlanObject) => normalizeRotation(o.rotation || 0);
+    const rotationDelta = (from: number, to: number) => {
+      let d = normalizeRotation(to) - normalizeRotation(from);
+      if (d > 180) d -= 360;
+      if (d < -180) d += 360;
+      return d;
+    };
+    function rotatePointAround(p: Point, center: Point, degrees: number): Point {
+      const rad = degrees * Math.PI / 180;
+      const cos = Math.cos(rad), sin = Math.sin(rad);
+      const dx = p.x - center.x, dy = p.y - center.y;
+      return { x: round1(center.x + dx * cos - dy * sin), y: round1(center.y + dx * sin + dy * cos) };
+    }
+
+    function polygonArea(points: Point[]) {
+      if (points.length < 3) return 0;
+      let sum = 0;
+      for (let i = 0; i < points.length; i++) {
+        const a = points[i], b = points[(i + 1) % points.length];
+        sum += a.x * b.y - b.x * a.y;
+      }
+      return Math.abs(sum) / 2;
+    }
+
+    function pathLength(points: Point[], closed = false) {
+      if (points.length < 2) return 0;
+      let len = 0;
+      for (let i = 0; i < points.length - 1; i++) len += distance(points[i], points[i + 1]);
+      if (closed && points.length > 2) len += distance(points[points.length - 1], points[0]);
+      return len;
+    }
+    const polygonPerimeter = (points: Point[]) => pathLength(points, true);
+    const rectArea = (o: RectangleObject) => Math.abs(o.width * o.height);
+    const rectPerimeter = (o: RectangleObject) => 2 * Math.abs(o.width) + 2 * Math.abs(o.height);
+    const circleArea = (o: CircleObject) => Math.PI * o.r * o.r;
+    const circlePerimeter = (o: CircleObject) => 2 * Math.PI * o.r;
+
+    function projectPointOnSegment(p: Point, a: Point, b: Point) {
+      const ab = sub(b, a);
+      const ab2 = ab.x * ab.x + ab.y * ab.y;
+      if (ab2 === 0) return { point: a, t: 0, dist: distance(p, a) };
+      const ap = sub(p, a);
+      const t = clamp((ap.x * ab.x + ap.y * ab.y) / ab2, 0, 1);
+      const q = { x: a.x + ab.x * t, y: a.y + ab.y * t };
+      return { point: q, t, dist: distance(p, q) };
+    }
+
+    function orientation(a: Point, b: Point, c: Point) {
+      const v = (b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y);
+      if (almost(v, 0, 1e-9)) return 0;
+      return v > 0 ? 1 : 2;
+    }
+    function onSegment(a: Point, b: Point, c: Point) {
+      return b.x <= Math.max(a.x, c.x) + 1e-9 && b.x + 1e-9 >= Math.min(a.x, c.x) && b.y <= Math.max(a.y, c.y) + 1e-9 && b.y + 1e-9 >= Math.min(a.y, c.y);
+    }
+    function segmentsIntersect(p1: Point, q1: Point, p2: Point, q2: Point) {
+      const o1 = orientation(p1, q1, p2), o2 = orientation(p1, q1, q2), o3 = orientation(p2, q2, p1), o4 = orientation(p2, q2, q1);
+      if (o1 !== o2 && o3 !== o4) return true;
+      if (o1 === 0 && onSegment(p1, p2, q1)) return true;
+      if (o2 === 0 && onSegment(p1, q2, q1)) return true;
+      if (o3 === 0 && onSegment(p2, p1, q2)) return true;
+      if (o4 === 0 && onSegment(p2, q1, q2)) return true;
+      return false;
+    }
+    function polygonSelfIntersects(points: Point[]) {
+      if (points.length < 4) return false;
+      for (let i = 0; i < points.length; i++) {
+        const a1 = points[i], a2 = points[(i + 1) % points.length];
+        for (let j = i + 1; j < points.length; j++) {
+          const b1 = points[j], b2 = points[(j + 1) % points.length];
+          const adjacent = i === j || (i + 1) % points.length === j || i === (j + 1) % points.length;
+          const firstLast = i === 0 && j === points.length - 1;
+          if (adjacent || firstLast) continue;
+          if (segmentsIntersect(a1, a2, b1, b2)) return true;
+        }
+      }
+      return false;
+    }
+    function polygonWarnings(points: Point[]) {
+      const warnings: string[] = [];
+      if (points.length < 3) warnings.push("A closed polygon needs at least 3 vertices.");
+      if (polygonArea(points) < 0.1) warnings.push("Area is extremely small or zero.");
+      for (let i = 0; i < points.length; i++) {
+        const a = points[i], b = points[(i + 1) % points.length];
+        if (distance(a, b) < 0.1) warnings.push("One or more sides are too short.");
+      }
+      if (polygonSelfIntersects(points)) warnings.push("Polygon edges self-intersect.");
+      return Array.from(new Set(warnings));
+    }
+
+    function boundingBoxForObject(o: PlanObject) {
+      if (o.type === "rectangle") return { x: o.x, y: o.y, width: o.width, height: o.height };
+      if (o.type === "circle") return { x: o.cx - o.r, y: o.cy - o.r, width: o.r * 2, height: o.r * 2 };
+      if (o.type === "label") return { x: o.x, y: o.y, width: Math.max(1, o.text.length * o.fontSizeM * .45), height: o.fontSizeM };
+      const points = o.points;
+      const xs = points.map(p => p.x), ys = points.map(p => p.y);
+      return { x: Math.min(...xs), y: Math.min(...ys), width: Math.max(...xs) - Math.min(...xs), height: Math.max(...ys) - Math.min(...ys) };
+    }
+
+    function rectFromPoints(a: Point, b: Point) {
+      const x = Math.min(a.x, b.x), y = Math.min(a.y, b.y);
+      return { x, y, width: Math.abs(b.x - a.x), height: Math.abs(b.y - a.y) };
+    }
+
+    function pointInRectBounds(p: Point, rect: { x: number; y: number; width: number; height: number }) {
+      return p.x >= rect.x && p.x <= rect.x + rect.width && p.y >= rect.y && p.y <= rect.y + rect.height;
+    }
+
+    function objectCenter(o: PlanObject): Point {
+      if (o.type === "rectangle") return { x: o.x + o.width / 2, y: o.y + o.height / 2 };
+      if (o.type === "circle") return { x: o.cx, y: o.cy };
+      if (o.type === "label") {
+        const bb = boundingBoxForObject(o);
+        return { x: bb.x + bb.width / 2, y: bb.y - bb.height / 2 };
+      }
+      const bb = boundingBoxForObject(o);
+      return { x: bb.x + bb.width / 2, y: bb.y + bb.height / 2 };
+    }
+
+    function defaultObjectLabelOffset(o: PlanObject): Point {
+      const bb = boundingBoxForObject(o);
+      return { x: 0, y: round1(-Math.max(1.4, bb.height / 2 + 1)) };
+    }
+
+    function objectLabelPosition(o: PlanObject): Point {
+      const label = o.objectLabel;
+      const offset = label?.offset || defaultObjectLabelOffset(o);
+      return add(objectCenter(o), offset);
+    }
+
+    function localRectPoints(o: RectangleObject): Point[] {
+      return [
+        { x: o.x, y: o.y },
+        { x: o.x + o.width, y: o.y },
+        { x: o.x + o.width, y: o.y + o.height },
+        { x: o.x, y: o.y + o.height },
+      ];
+    }
+
+    function objectSelectionPoints(o: PlanObject): Point[] {
+      if (o.type === "polygon" || o.type === "polyline" || o.type === "rectangle") return getObjectVertices(o);
+      if (o.type === "circle") return [
+        { x: o.cx - o.r, y: o.cy - o.r },
+        { x: o.cx + o.r, y: o.cy - o.r },
+        { x: o.cx + o.r, y: o.cy + o.r },
+        { x: o.cx - o.r, y: o.cy + o.r },
+      ];
+      const bb = boundingBoxForObject(o);
+      const pts = [
+        { x: bb.x, y: bb.y },
+        { x: bb.x + bb.width, y: bb.y },
+        { x: bb.x + bb.width, y: bb.y - bb.height },
+        { x: bb.x, y: bb.y - bb.height },
+      ];
+      return pts.map(p => rotatePointAround(p, objectCenter(o), getRotation(o)));
+    }
+
+    function objectInsideSelectionBox(o: PlanObject, start: Point, end: Point) {
+      if (o.kind === "property") return false;
+      const rect = rectFromPoints(start, end);
+      const pts = objectSelectionPoints(o);
+      return pts.length > 0 && pts.every(p => pointInRectBounds(p, rect));
+    }
+
+    function objectTransform(o: PlanObject) {
+      const rotation = getRotation(o);
+      if (!rotation || o.type === "polygon" || o.type === "polyline") return "";
+      const c = objectCenter(o);
+      return `rotate(${rotation} ${mToPx(c.x)} ${mToPx(c.y)})`;
+    }
+
+    function unrotatePointForObject(o: PlanObject, p: Point) {
+      const rotation = getRotation(o);
+      return rotation ? rotatePointAround(p, objectCenter(o), -rotation) : p;
+    }
+
+    function rotateObject(o: PlanObject, deltaDegrees: number): PlanObject {
+      const delta = Number.isFinite(deltaDegrees) ? deltaDegrees : 0;
+      if (almost(delta, 0)) return o;
+      const nextRotation = normalizeRotation(getRotation(o) + delta);
+      if (o.type === "polygon" || o.type === "polyline") {
+        const center = objectCenter(o);
+        return { ...o, rotation: nextRotation, points: o.points.map(p => rotatePointAround(p, center, delta)) } as PlanObject;
+      }
+      return { ...o, rotation: nextRotation } as PlanObject;
+    }
+
+    function setObjectRotation(o: PlanObject, rotation: number): PlanObject {
+      return rotateObject(o, rotationDelta(getRotation(o), rotation));
+    }
+
+    function isMeasurementVisible(o: PlanObject, id: string) {
+      return !o.measurementHidden && !(o.hiddenMeasurements || []).includes(id);
+    }
+
+    function measurementOffset(o: PlanObject, id: string): Point {
+      const offset = o.measurementOffsets?.[id];
+      return offset ? { x: round1(offset.x), y: round1(offset.y) } : { x: 0, y: 0 };
+    }
+
+    function applyMeasurementOffsets(o: PlanObject, items: MeasurementItem[]) {
+      return items.map(item => ({ ...item, point: add(item.point, measurementOffset(o, item.id)) }));
+    }
+
+    function objectMeasurementItems(o: PlanObject, visibleOnly = true): MeasurementItem[] {
+      if (o.kind === "sketch" || o.type === "label") return [];
+      const items: MeasurementItem[] = [];
+      if (o.type === "polygon") {
+        o.points.forEach((a, i) => {
+          const b = o.points[(i + 1) % o.points.length];
+          items.push({ id: `seg-${i}`, label: `Segment ${i + 1}`, value: fmtM(distance(a, b)), point: midpoint(a, b) });
+        });
+        const bb = boundingBoxForObject(o);
+        items.push({ id: "area", label: "Area", value: fmtM2(polygonArea(o.points)), point: { x: bb.x + bb.width / 2, y: bb.y + bb.height / 2 } });
+      } else if (o.type === "rectangle") {
+        const pts = getObjectVertices(o);
+        items.push({ id: "width", label: "Width", value: fmtM(Math.abs(o.width)), point: midpoint(pts[0], pts[1]) });
+        items.push({ id: "height", label: "Height", value: fmtM(Math.abs(o.height)), point: midpoint(pts[1], pts[2]) });
+        items.push({ id: "area", label: "Area", value: fmtM2(rectArea(o)), point: objectCenter(o) });
+      } else if (o.type === "circle") {
+        items.push({ id: "diameter", label: "Diameter", value: `Ø ${fmtM(o.r * 2)}`, point: { x: o.cx, y: o.cy } });
+      } else if (o.type === "polyline") {
+        for (let i = 0; i < o.points.length - 1; i++) {
+          items.push({ id: `seg-${i}`, label: `Segment ${i + 1}`, value: fmtM(distance(o.points[i], o.points[i + 1])), point: midpoint(o.points[i], o.points[i + 1]) });
+        }
+        const last = o.points[o.points.length - 1];
+        if (last) items.push({ id: "length", label: "Total length", value: fmtM(pathLength(o.points)), point: { x: last.x, y: last.y - .8 } });
+      }
+      const positioned = applyMeasurementOffsets(o, items);
+      return visibleOnly ? positioned.filter(item => isMeasurementVisible(o, item.id)) : positioned;
+    }
+
+    function getObjectVertices(o: PlanObject): Point[] {
+      if (o.type === "polygon" || o.type === "polyline") return o.points;
+      if (o.type === "rectangle") return localRectPoints(o).map(p => rotatePointAround(p, objectCenter(o), getRotation(o)));
+      if (o.type === "circle") return [
+        { x: o.cx, y: o.cy }, { x: o.cx + o.r, y: o.cy }, { x: o.cx - o.r, y: o.cy }, { x: o.cx, y: o.cy + o.r }, { x: o.cx, y: o.cy - o.r }
+      ];
+      return [{ x: o.x, y: o.y }];
+    }
+
+    function getObjectEdges(o: PlanObject): [Point, Point][] {
+      if (o.type === "polygon") return o.points.map((p, i) => [p, o.points[(i + 1) % o.points.length]] as [Point, Point]);
+      if (o.type === "polyline") return o.points.slice(0, -1).map((p, i) => [p, o.points[i + 1]] as [Point, Point]);
+      if (o.type === "rectangle") {
+        const pts = getObjectVertices(o);
+        return pts.map((p, i) => [p, pts[(i + 1) % pts.length]] as [Point, Point]);
+      }
+      return [];
+    }
+
+    function pointInPolygon(p: Point, pts: Point[]) {
+      let inside = false;
+      for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+        const xi = pts[i].x, yi = pts[i].y, xj = pts[j].x, yj = pts[j].y;
+        const intersect = ((yi > p.y) !== (yj > p.y)) && (p.x < (xj - xi) * (p.y - yi) / ((yj - yi) || 1e-9) + xi);
+        if (intersect) inside = !inside;
+      }
+      return inside;
+    }
+
+    function hitTestObject(o: PlanObject, p: Point, toleranceM = .35) {
+      if (!o.visible) return false;
+      if (o.type === "polygon") {
+        if (o.kind !== "property" && pointInPolygon(p, o.points)) return true;
+        return getObjectEdges(o).some(([a,b]) => projectPointOnSegment(p,a,b).dist <= toleranceM);
+      }
+      if (o.type === "rectangle") {
+        const local = unrotatePointForObject(o, p);
+        const minX = Math.min(o.x, o.x + o.width), maxX = Math.max(o.x, o.x + o.width);
+        const minY = Math.min(o.y, o.y + o.height), maxY = Math.max(o.y, o.y + o.height);
+        return local.x >= minX - toleranceM && local.x <= maxX + toleranceM && local.y >= minY - toleranceM && local.y <= maxY + toleranceM;
+      }
+      if (o.type === "circle") return distance(p, { x: o.cx, y: o.cy }) <= o.r + toleranceM;
+      if (o.type === "polyline") return getObjectEdges(o).some(([a,b]) => projectPointOnSegment(p,a,b).dist <= Math.max(toleranceM, (o.widthM || 0) / 2));
+      if (o.type === "label") {
+        const local = unrotatePointForObject(o, p);
+        const bb = boundingBoxForObject(o);
+        return local.x >= bb.x - .2 && local.x <= bb.x + bb.width + .2 && local.y >= bb.y - bb.height - .2 && local.y <= bb.y + .4;
+      }
+      return false;
+    }
+
+    function moveObject(o: PlanObject, dx: number, dy: number): PlanObject {
+      const copy: any = deepClone(o);
+      if (copy.type === "polygon" || copy.type === "polyline") copy.points = copy.points.map((p: Point) => ({ x: round1(p.x + dx), y: round1(p.y + dy) }));
+      if (copy.type === "rectangle") { copy.x = round1(copy.x + dx); copy.y = round1(copy.y + dy); }
+      if (copy.type === "circle") { copy.cx = round1(copy.cx + dx); copy.cy = round1(copy.cy + dy); }
+      if (copy.type === "label") { copy.x = round1(copy.x + dx); copy.y = round1(copy.y + dy); }
+      return copy;
+    }
+
+    function resizeRectangleFromCorner(o: RectangleObject, corner: string, p: Point): RectangleObject {
+      let x1 = o.x, y1 = o.y, x2 = o.x + o.width, y2 = o.y + o.height;
+      if (corner.includes("w")) x1 = p.x;
+      if (corner.includes("e")) x2 = p.x;
+      if (corner.includes("n")) y1 = p.y;
+      if (corner.includes("s")) y2 = p.y;
+      const nx = Math.min(x1, x2), ny = Math.min(y1, y2);
+      return { ...o, x: round1(nx), y: round1(ny), width: round1(Math.abs(x2 - x1)), height: round1(Math.abs(y2 - y1)) };
+    }
+
+    function objectMeasurements(o: PlanObject) {
+      if (o.type === "polygon") return { area: polygonArea(o.points), perimeter: polygonPerimeter(o.points) };
+      if (o.type === "rectangle") return { area: rectArea(o), perimeter: rectPerimeter(o), width: Math.abs(o.width), height: Math.abs(o.height) };
+      if (o.type === "circle") return { area: circleArea(o), perimeter: circlePerimeter(o), diameter: o.r * 2 };
+      if (o.type === "polyline") {
+        const length = pathLength(o.points);
+        return { length };
+      }
+      return {};
+    }
+
+    function defaultLayers(): Layer[] {
+      return [
+        { id: "property", name: "Property", visible: true, locked: false, order: 0 },
+        { id: "shapes", name: "Shapes", visible: true, locked: false, order: 1 },
+        { id: "text", name: "Text", visible: true, locked: false, order: 2 },
+      ];
+    }
+
+    const KIND_LABELS: Record<ObjectKind, string> = {
+      property: "Property boundary", polygon: "Polygon", rectangle: "Rectangle", circle: "Circle", line: "Line", sketch: "Hand-drawn line", label: "Text", area: "Polygon"
+    };
+    const KIND_LAYER: Record<ObjectKind, string> = {
+      property: "property", polygon: "shapes", rectangle: "shapes", circle: "shapes", line: "shapes", sketch: "shapes", label: "text", area: "shapes"
+    };
+    const KIND_STYLE: Record<ObjectKind, Style> = {
+      property: { fill: "rgba(15,23,42,0.04)", stroke: "#0f172a", strokeWidth: .18, opacity: 1, dash: "8 5" },
+      polygon: { fill: "#22c55e", stroke: "#22c55e", strokeWidth: .12, opacity: .58 },
+      rectangle: { fill: "#64748b", stroke: "#64748b", strokeWidth: .14, opacity: .72 },
+      circle: { fill: "#0ea5e9", stroke: "#0ea5e9", strokeWidth: .12, opacity: .55 },
+      line: { fill: "none", stroke: "#334155", strokeWidth: .22, opacity: .95 },
+      sketch: { fill: "none", stroke: "#1f2937", strokeWidth: .16, opacity: .95 },
+      label: { fill: "#0f172a", stroke: "#0f172a", strokeWidth: .05, opacity: 1 },
+      area: { fill: "#22c55e", stroke: "#22c55e", strokeWidth: .12, opacity: .58 },
+    };
+
+    const TAILWIND_PALETTE = [
+      { name:"slate", shades:["#f8fafc","#f1f5f9","#e2e8f0","#cbd5e1","#94a3b8","#64748b","#475569","#334155","#1e293b","#0f172a","#020617"] },
+      { name:"gray", shades:["#f9fafb","#f3f4f6","#e5e7eb","#d1d5db","#9ca3af","#6b7280","#4b5563","#374151","#1f2937","#111827","#030712"] },
+      { name:"zinc", shades:["#fafafa","#f4f4f5","#e4e4e7","#d4d4d8","#a1a1aa","#71717a","#52525b","#3f3f46","#27272a","#18181b","#09090b"] },
+      { name:"neutral", shades:["#fafafa","#f5f5f5","#e5e5e5","#d4d4d4","#a3a3a3","#737373","#525252","#404040","#262626","#171717","#0a0a0a"] },
+      { name:"stone", shades:["#fafaf9","#f5f5f4","#e7e5e4","#d6d3d1","#a8a29e","#78716c","#57534e","#44403c","#292524","#1c1917","#0c0a09"] },
+      { name:"red", shades:["#fef2f2","#fee2e2","#fecaca","#fca5a5","#f87171","#ef4444","#dc2626","#b91c1c","#991b1b","#7f1d1d","#450a0a"] },
+      { name:"orange", shades:["#fff7ed","#ffedd5","#fed7aa","#fdba74","#fb923c","#f97316","#ea580c","#c2410c","#9a3412","#7c2d12","#431407"] },
+      { name:"amber", shades:["#fffbeb","#fef3c7","#fde68a","#fcd34d","#fbbf24","#f59e0b","#d97706","#b45309","#92400e","#78350f","#451a03"] },
+      { name:"yellow", shades:["#fefce8","#fef9c3","#fef08a","#fde047","#facc15","#eab308","#ca8a04","#a16207","#854d0e","#713f12","#422006"] },
+      { name:"lime", shades:["#f7fee7","#ecfccb","#d9f99d","#bef264","#a3e635","#84cc16","#65a30d","#4d7c0f","#3f6212","#365314","#1a2e05"] },
+      { name:"green", shades:["#f0fdf4","#dcfce7","#bbf7d0","#86efac","#4ade80","#22c55e","#16a34a","#15803d","#166534","#14532d","#052e16"] },
+      { name:"emerald", shades:["#ecfdf5","#d1fae5","#a7f3d0","#6ee7b7","#34d399","#10b981","#059669","#047857","#065f46","#064e3b","#022c22"] },
+      { name:"teal", shades:["#f0fdfa","#ccfbf1","#99f6e4","#5eead4","#2dd4bf","#14b8a6","#0d9488","#0f766e","#115e59","#134e4a","#042f2e"] },
+      { name:"cyan", shades:["#ecfeff","#cffafe","#a5f3fc","#67e8f9","#22d3ee","#06b6d4","#0891b2","#0e7490","#155e75","#164e63","#083344"] },
+      { name:"sky", shades:["#f0f9ff","#e0f2fe","#bae6fd","#7dd3fc","#38bdf8","#0ea5e9","#0284c7","#0369a1","#075985","#0c4a6e","#082f49"] },
+      { name:"blue", shades:["#eff6ff","#dbeafe","#bfdbfe","#93c5fd","#60a5fa","#3b82f6","#2563eb","#1d4ed8","#1e40af","#1e3a8a","#172554"] },
+      { name:"indigo", shades:["#eef2ff","#e0e7ff","#c7d2fe","#a5b4fc","#818cf8","#6366f1","#4f46e5","#4338ca","#3730a3","#312e81","#1e1b4b"] },
+      { name:"violet", shades:["#f5f3ff","#ede9fe","#ddd6fe","#c4b5fd","#a78bfa","#8b5cf6","#7c3aed","#6d28d9","#5b21b6","#4c1d95","#2e1065"] },
+      { name:"purple", shades:["#faf5ff","#f3e8ff","#e9d5ff","#d8b4fe","#c084fc","#a855f7","#9333ea","#7e22ce","#6b21a8","#581c87","#3b0764"] },
+      { name:"fuchsia", shades:["#fdf4ff","#fae8ff","#f5d0fe","#f0abfc","#e879f9","#d946ef","#c026d3","#a21caf","#86198f","#701a75","#4a044e"] },
+      { name:"pink", shades:["#fdf2f8","#fce7f3","#fbcfe8","#f9a8d4","#f472b6","#ec4899","#db2777","#be185d","#9d174d","#831843","#500724"] },
+      { name:"rose", shades:["#fff1f2","#ffe4e6","#fecdd3","#fda4af","#fb7185","#f43f5e","#e11d48","#be123c","#9f1239","#881337","#4c0519"] },
+    ].flatMap(group => group.shades.map((value, index) => ({ name: `${group.name}-${[50,100,200,300,400,500,600,700,800,900,950][index]}`, value })));
+
+    function genericKindForObject(o: any): ObjectKind {
+      if (o?.kind === "property") return "property";
+      if (o?.kind === "sketch") return "sketch";
+      if (o?.type === "label" || o?.kind === "label") return "label";
+      if (o?.type === "rectangle") return "rectangle";
+      if (o?.type === "circle") return "circle";
+      if (o?.type === "polyline") return "line";
+      if (o?.type === "polygon") return "polygon";
+      return "polygon";
+    }
+
+    function displayObjectType(o: PlanObject | { type: ObjectType; kind?: ObjectKind }) {
+      if (o.kind === "property") return "Property boundary";
+      if (o.kind === "sketch") return "Hand-drawn line";
+      if (o.type === "label") return "Text";
+      if (o.type === "polyline") return "Line";
+      return o.type[0].toUpperCase() + o.type.slice(1);
+    }
+
+    function isLineLike(o: PlanObject) {
+      return o.type === "polyline" || o.kind === "sketch";
+    }
+
+    function objectColor(o: PlanObject) {
+      const st = o.style || KIND_STYLE[o.kind] || KIND_STYLE.area;
+      const stroke = st.stroke && st.stroke !== "none" ? st.stroke : "";
+      const fill = st.fill && st.fill !== "none" ? st.fill : "";
+      return stroke || fill || "#334155";
+    }
+
+    function makeInitialProject(): Project {
+      const layers = defaultLayers();
+      const property: PolygonObject = {
+        id: "property-boundary",
+        type: "polygon",
+        kind: "property",
+        name: "Property boundary",
+        layerId: "property",
+        locked: false,
+        visible: true,
+        style: KIND_STYLE.property,
+        z: 0,
+        rotation: 0,
+        measurementHidden: false,
+        hiddenMeasurements: [],
+        measurementOffsets: {},
+        objectLabel: { visible: false, text: "Property boundary", offset: { x: 0, y: -2 }, fontSizeM: 1.3 },
+        points: [{x:0,y:0},{x:100,y:0},{x:100,y:100},{x:0,y:100}],
+      };
+      return {
+        id: uid("project"),
+        name: "Untitled backyard plan",
+        workspace: { widthM: 100, heightM: 100 },
+        units: "m",
+        layers,
+        objects: [property],
+        settings: { showGrid: true, showMeasurements: true, snapToGrid: true, snapToVertices: true, snapToEdges: true, snapToMidpoints: true, orthogonalSnap: true },
+      };
+    }
+
+    function isWorkspaceRectangle(points: Point[], workspace: Project["workspace"]) {
+      const expected = [{x:0,y:0},{x:workspace.widthM,y:0},{x:workspace.widthM,y:workspace.heightM},{x:0,y:workspace.heightM}];
+      return points.length === expected.length && points.every((p, i) => almost(p.x, expected[i].x) && almost(p.y, expected[i].y));
+    }
+
+    function workspaceRectanglePoints(workspace: Project["workspace"]) {
+      return [{x:0,y:0},{x:workspace.widthM,y:0},{x:workspace.widthM,y:workspace.heightM},{x:0,y:workspace.heightM}];
+    }
+
+    function resizeWorkspace(project: Project, workspace: Project["workspace"]): Project {
+      return {
+        ...project,
+        workspace,
+        objects: project.objects.map(o => {
+          if (o.id === "property-boundary" && o.type === "polygon" && isWorkspaceRectangle(o.points, project.workspace)) {
+            return { ...o, points: workspaceRectanglePoints(workspace) };
+          }
+          return o;
+        })
+      };
+    }
+
+    function expandWorkspaceToPropertyBoundary(project: Project): Project {
+      const boundary = project.objects.find(o => o.id === "property-boundary" && o.type === "polygon") as PolygonObject | undefined;
+      if (!boundary) return project;
+      const maxX = Math.max(project.workspace.widthM, ...boundary.points.map(p => p.x));
+      const maxY = Math.max(project.workspace.heightM, ...boundary.points.map(p => p.y));
+      const workspace = {
+        widthM: round1(clamp(maxX, 5, 500)),
+        heightM: round1(clamp(maxY, 5, 500)),
+      };
+      if (almost(workspace.widthM, project.workspace.widthM) && almost(workspace.heightM, project.workspace.heightM)) return project;
+      return { ...project, workspace };
+    }
+
+    function normalizePoint(input: any, fallback: Point = { x: 0, y: 0 }): Point {
+      return { x: round1(Number(input?.x) || fallback.x), y: round1(Number(input?.y) || fallback.y) };
+    }
+
+    function normalizeMeasurementOffsets(input: any): Record<string, Point> {
+      if (!input || typeof input !== "object") return {};
+      return Object.fromEntries(Object.entries(input).map(([key, value]) => [key, normalizePoint(value)]));
+    }
+
+    function normalizeObjectLabel(o: any, kind: ObjectKind): AttachedLabel {
+      const incoming = o?.objectLabel;
+      if (incoming && typeof incoming === "object") {
+        return {
+          visible: !!incoming.visible,
+          text: String(incoming.text || o?.name || KIND_LABELS[kind]),
+          offset: normalizePoint(incoming.offset, { x: 0, y: -2 }),
+          fontSizeM: Math.max(.3, round1(Number(incoming.fontSizeM) || 1.3)),
+        };
+      }
+      return { visible: false, text: String(o?.name || KIND_LABELS[kind]), offset: { x: 0, y: -2 }, fontSizeM: 1.3 };
+    }
+
+    function normalizedProject(input: any): Project {
+      if (!input || typeof input !== "object") throw new Error("Invalid project JSON.");
+      const p = input as Project;
+      if (!p.workspace || !Array.isArray(p.objects)) throw new Error("The JSON does not look like a Backyard Planner project.");
+      return expandWorkspaceToPropertyBoundary({
+        id: p.id || uid("project"),
+        name: p.name || "Imported backyard plan",
+        workspace: { widthM: Number(p.workspace.widthM) || 100, heightM: Number(p.workspace.heightM) || 100 },
+        units: "m",
+        layers: defaultLayers(),
+        objects: p.objects.map((o: any, i: number) => {
+          const kind = genericKindForObject(o);
+          const style = { ...(KIND_STYLE[kind] || KIND_STYLE.polygon), ...(o.style || {}) };
+          const color = style.stroke && style.stroke !== "none" ? style.stroke : (style.fill && style.fill !== "none" ? style.fill : objectColor({ ...o, kind, style } as PlanObject));
+          const normalizedStyle = { ...style, stroke: color, fill: (kind === "line" || kind === "sketch") ? "none" : color };
+          if (kind === "property") normalizedStyle.fill = style.fill || KIND_STYLE.property.fill;
+          return {
+            visible: true,
+            locked: false,
+            z: i,
+            ...o,
+            kind,
+            layerId: KIND_LAYER[kind],
+            style: normalizedStyle,
+            rotation: normalizeRotation(Number(o.rotation) || 0),
+            measurementHidden: !!o.measurementHidden,
+            hiddenMeasurements: Array.isArray(o.hiddenMeasurements) ? o.hiddenMeasurements : [],
+            measurementOffsets: normalizeMeasurementOffsets(o.measurementOffsets),
+            objectLabel: normalizeObjectLabel(o, kind),
+          } as PlanObject;
+        }),
+        settings: { ...makeInitialProject().settings, ...(p.settings || {}) },
+        savedAt: p.savedAt,
+      });
+    }
+
+    function createObjectForTool(tool: Tool, points: Point[], extra: any = {}): PlanObject | null {
+      const kindMap: Partial<Record<Tool, ObjectKind>> = {
+        property: "property", polygon: "polygon", line: "line", rect: "rectangle", circle: "circle", sketch: "sketch", label: "label"
+      };
+      const kind = kindMap[tool] || "area";
+      const base = {
+        id: uid(kind), kind, name: `${KIND_LABELS[kind]} ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`,
+        layerId: KIND_LAYER[kind], locked: false, visible: true, style: deepClone(KIND_STYLE[kind]), z: Date.now()
+      } as any;
+      base.rotation = 0;
+      base.measurementHidden = false;
+      base.hiddenMeasurements = [];
+      base.measurementOffsets = {};
+      base.objectLabel = { visible: false, text: KIND_LABELS[kind], offset: { x: 0, y: -2 }, fontSizeM: 1.3 };
+      if (["polygon","property"].includes(tool)) {
+        if (points.length < 3) return null;
+        return { ...base, type: "polygon", points: points.map(p => ({ x: round1(p.x), y: round1(p.y) })) } as PolygonObject;
+      }
+      if (tool === "line") {
+        if (points.length < 2) return null;
+        return { ...base, type: "polyline", points: points.map(p => ({ x: round1(p.x), y: round1(p.y) })), widthM: 0 } as PolylineObject;
+      }
+      if (tool === "sketch") {
+        const clean = points.reduce((acc: Point[], p) => {
+          const next = { x: round1(p.x), y: round1(p.y) };
+          const last = acc[acc.length - 1];
+          if (!last || distance(last, next) >= .1) acc.push(next);
+          return acc;
+        }, []);
+        if (clean.length < 2 || pathLength(clean) < .2) return null;
+        return { ...base, type: "polyline", points: clean, widthM: 0 } as PolylineObject;
+      }
+      if (tool === "rect") {
+        const start = points[0], end = points[1] || points[0];
+        const x = Math.min(start.x, end.x), y = Math.min(start.y, end.y), w = Math.abs(end.x - start.x), h = Math.abs(end.y - start.y);
+        if (w < .2 || h < .2) return null;
+        return { ...base, type: "rectangle", x: round1(x), y: round1(y), width: round1(w), height: round1(h) } as RectangleObject;
+      }
+      if (tool === "circle") {
+        const start = points[0], end = points[1] || { x: start.x + 2.5, y: start.y };
+        const defaultR = 2.5;
+        const r = Math.max(.2, distance(start, end) || defaultR);
+        return { ...base, type: "circle", cx: round1(start.x), cy: round1(start.y), r: round1(r) } as CircleObject;
+      }
+      if (tool === "label") {
+        const p = points[0];
+        return { ...base, type: "label", x: round1(p.x), y: round1(p.y), text: extra.text || "Label", fontSizeM: 1.5 } as LabelObject;
+      }
+      return null;
+    }
+
+    function getLayer(project: Project, layerId: string) { return project.layers.find(l => l.id === layerId); }
+    function isEditable(project: Project, o: PlanObject | undefined | null) {
+      if (!o) return false;
+      const layer = getLayer(project, o.layerId);
+      return !o.locked && !!layer && !layer.locked && layer.visible && o.visible;
+    }
+    function visibleObjects(project: Project) {
+      const layerMap = new Map(project.layers.map(l => [l.id, l]));
+      return project.objects
+        .filter(o => o.visible && layerMap.get(o.layerId)?.visible)
+        .sort((a,b) => (layerMap.get(a.layerId)?.order ?? 0) - (layerMap.get(b.layerId)?.order ?? 0) || a.z - b.z);
+    }
+    function selectedObjects(project: Project, ids: string[]) { return project.objects.filter(o => ids.includes(o.id)); }
+
+    function updateObject(project: Project, objectId: string, patcher: (o: PlanObject) => PlanObject): Project {
+      return { ...project, objects: project.objects.map(o => o.id === objectId ? patcher(o) : o) };
+    }
+    function updateObjects(project: Project, ids: string[], patcher: (o: PlanObject) => PlanObject): Project {
+      return { ...project, objects: project.objects.map(o => ids.includes(o.id) ? patcher(o) : o) };
+    }
+
+    function collectSnapTargets(project: Project, excludeIds: string[] = []) {
+      const vertices: Point[] = [];
+      const edges: [Point, Point][] = [];
+      const mids: Point[] = [];
+      for (const o of visibleObjects(project)) {
+        if (excludeIds.includes(o.id)) continue;
+        if (o.kind === "sketch") continue;
+        vertices.push(...getObjectVertices(o));
+        const objEdges = getObjectEdges(o);
+        edges.push(...objEdges);
+        mids.push(...objEdges.map(([a,b]) => midpoint(a,b)));
+      }
+      return { vertices, edges, mids };
+    }
+
+    function applySnapping(project: Project, point: Point, context: { base?: Point; excludeIds?: string[]; allowOutsideWorkspace?: boolean } = {}): SnapResult {
+      let p = { ...point };
+      let indicator: SnapResult["indicator"] | undefined;
+      const settings = project.settings;
+      if (settings.snapToGrid) {
+        const snapped = { x: Math.round(p.x), y: Math.round(p.y) };
+        if (distance(snapped, p) <= .35) {
+          p = snapped;
+          indicator = { point: p, label: "Grid" };
+        }
+      }
+      const targets = collectSnapTargets(project, context.excludeIds || []);
+      if (settings.snapToVertices) {
+        let best: { point: Point; dist: number } | null = null;
+        for (const v of targets.vertices) {
+          const d = distance(p, v);
+          if (d <= .45 && (!best || d < best.dist)) best = { point: v, dist: d };
+        }
+        if (best) { p = { ...best.point }; indicator = { point: p, label: "Vertex" }; }
+      }
+      if (settings.snapToMidpoints) {
+        let best: { point: Point; dist: number } | null = null;
+        for (const v of targets.mids) {
+          const d = distance(p, v);
+          if (d <= .45 && (!best || d < best.dist)) best = { point: v, dist: d };
+        }
+        if (best) { p = { ...best.point }; indicator = { point: p, label: "Midpoint" }; }
+      }
+      if (settings.snapToEdges) {
+        let best: { point: Point; dist: number; edge: [Point,Point] } | null = null;
+        for (const [a,b] of targets.edges) {
+          const proj = projectPointOnSegment(p, a, b);
+          if (proj.dist <= .35 && (!best || proj.dist < best.dist)) best = { point: proj.point, dist: proj.dist, edge: [a,b] };
+        }
+        if (best) { p = { x: round1(best.point.x), y: round1(best.point.y) }; indicator = { point: p, label: "Edge", line: best.edge }; }
+      }
+      if (settings.orthogonalSnap && context.base) {
+        const dx = Math.abs(p.x - context.base.x), dy = Math.abs(p.y - context.base.y);
+        if (dx > .15 || dy > .15) {
+          if (dx < dy * .23) {
+            p.x = context.base.x;
+            indicator = { point: p, label: "90°", line: [context.base, p] };
+          } else if (dy < dx * .23) {
+            p.y = context.base.y;
+            indicator = { point: p, label: "180°", line: [context.base, p] };
+          }
+        }
+      }
+      p.x = context.allowOutsideWorkspace ? round1(Math.max(0, p.x)) : round1(clamp(p.x, 0, project.workspace.widthM));
+      p.y = context.allowOutsideWorkspace ? round1(Math.max(0, p.y)) : round1(clamp(p.y, 0, project.workspace.heightM));
+      return { point: p, indicator };
+    }
+
+    function deriveQuantities(project: Project) {
+      const q = { polygonArea: 0, rectangleArea: 0, circleArea: 0, lineLength: 0, sketchLength: 0, textCount: 0, inventory: [] as { id: string; name: string; value: string }[] };
+      for (const o of project.objects) {
+        if (o.kind === "property" || !o.visible) continue;
+        const m = objectMeasurements(o) as any;
+        if (o.type === "polygon") q.polygonArea += m.area || 0;
+        if (o.type === "rectangle") q.rectangleArea += m.area || 0;
+        if (o.type === "circle") q.circleArea += m.area || 0;
+        if (o.type === "polyline" && o.kind === "sketch") q.sketchLength += m.length || 0;
+        else if (o.type === "polyline") q.lineLength += m.length || 0;
+        if (o.type === "label") q.textCount += 1;
+        let value = "";
+        if (m.area) value = fmtM2(m.area);
+        else if (m.length) value = fmtM(m.length);
+        else if (o.type === "circle") value = `Ø ${fmtM(o.r * 2)}`;
+        else if (o.type === "label") value = o.text;
+        q.inventory.push({ id: o.id, name: `${displayObjectType(o)} · ${o.name}`, value });
+      }
+      return q;
+    }
+
+    function downloadText(filename: string, text: string, type = "application/json") {
+      const blob = new Blob([text], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function escapeXml(s: string) {
+      return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c] || c));
+    }
+
+    function renderObjectAsSvg(o: PlanObject, project: Project, exportMode = false) {
+      const st = o.style || KIND_STYLE[o.kind] || KIND_STYLE.area;
+      const color = objectColor(o);
+      const strokeWidth = mToPx(st.strokeWidth || .1);
+      const opacity = st.opacity ?? 1;
+      const transform = objectTransform(o);
+      const transformAttr = transform ? ` transform="${transform}"` : "";
+      const fill = o.kind === "property" ? (st.fill || "none") : (isLineLike(o) ? "none" : color);
+      if (o.type === "polygon") {
+        return `<polygon points="${ptsAttr(o.points)}" fill="${fill}" stroke="${color}" stroke-width="${strokeWidth}" opacity="${opacity}" ${st.dash ? `stroke-dasharray="${st.dash}"` : ""}/>`;
+      }
+      if (o.type === "rectangle") {
+        return `<rect x="${mToPx(o.x)}" y="${mToPx(o.y)}" width="${mToPx(o.width)}" height="${mToPx(o.height)}" fill="${fill}" stroke="${color}" stroke-width="${strokeWidth}" opacity="${opacity}"${transformAttr}/>`;
+      }
+      if (o.type === "circle") {
+        const shape = `<circle cx="${mToPx(o.cx)}" cy="${mToPx(o.cy)}" r="${mToPx(o.r)}" fill="${fill}" stroke="${color}" stroke-width="${strokeWidth}" opacity="${opacity}"/>`;
+        return transform ? `<g${transformAttr}>${shape}</g>` : shape;
+      }
+      if (o.type === "polyline") {
+        const width = Math.max(strokeWidth, 2);
+        return `<polyline points="${ptsAttr(o.points)}" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round" opacity="${opacity}"/>`;
+      }
+      if (o.type === "label") {
+        return `<text x="${mToPx(o.x)}" y="${mToPx(o.y)}" font-family="system-ui, sans-serif" font-size="${mToPx(o.fontSizeM)}" fill="${color}" stroke="white" stroke-width="3" paint-order="stroke"${transformAttr}>${escapeXml(o.text)}</text>`;
+      }
+      return "";
+    }
+
+    function renderObjectLabelAsSvg(o: PlanObject) {
+      if (o.type === "label" || !o.objectLabel?.visible) return "";
+      const p = objectLabelPosition(o);
+      return `<text x="${mToPx(p.x)}" y="${mToPx(p.y)}" font-family="system-ui, sans-serif" font-size="${mToPx(o.objectLabel.fontSizeM || 1.3)}" fill="${objectColor(o)}" stroke="white" stroke-width="3" paint-order="stroke" text-anchor="middle">${escapeXml(o.objectLabel.text || o.name)}</text>`;
+    }
+
+    function renderMeasurementsAsSvg(o: PlanObject) {
+      const text = (p: Point, label: string) => `<text x="${mToPx(p.x)}" y="${mToPx(p.y)}" font-family="system-ui, sans-serif" font-size="12" fill="${objectColor(o)}" stroke="white" stroke-width="3" paint-order="stroke" text-anchor="middle">${escapeXml(label)}</text>`;
+      return objectMeasurementItems(o).map(item => text(item.point, item.value)).join("");
+    }
+
+    async function exportProjectPng(project: Project) {
+      const widthPx = mToPx(project.workspace.widthM), heightPx = mToPx(project.workspace.heightM);
+      let grid = `<rect x="0" y="0" width="${widthPx}" height="${heightPx}" fill="#f8fafc"/>`;
+      if (project.settings.showGrid) {
+        for (let x = 0; x <= project.workspace.widthM; x += 1) grid += `<line x1="${mToPx(x)}" y1="0" x2="${mToPx(x)}" y2="${heightPx}" stroke="${x % 10 === 0 ? "#b7c4d1" : "#dbe4ee"}" stroke-width="${x % 10 === 0 ? 1.2 : .55}"/>`;
+        for (let y = 0; y <= project.workspace.heightM; y += 1) grid += `<line x1="0" y1="${mToPx(y)}" x2="${widthPx}" y2="${mToPx(y)}" stroke="${y % 10 === 0 ? "#b7c4d1" : "#dbe4ee"}" stroke-width="${y % 10 === 0 ? 1.2 : .55}"/>`;
+      }
+      const objs = visibleObjects(project).map(o => renderObjectAsSvg(o, project, true)).join("\n");
+      const measurements = project.settings.showMeasurements ? visibleObjects(project).filter(o => o.kind !== "label").map(renderMeasurementsAsSvg).join("\n") : "";
+      const labels = visibleObjects(project).map(renderObjectLabelAsSvg).join("\n");
+      const title = `<text x="16" y="28" font-family="system-ui, sans-serif" font-size="18" fill="#0f172a" font-weight="700">${escapeXml(project.name)}</text><text x="16" y="50" font-family="system-ui, sans-serif" font-size="12" fill="#334155">${fmtM(project.workspace.widthM)} × ${fmtM(project.workspace.heightM)}</text>`;
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${widthPx}" height="${heightPx}" viewBox="0 0 ${widthPx} ${heightPx}">${grid}<g>${objs}</g><g>${measurements}</g><g>${labels}</g>${title}</svg>`;
+      const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      const loaded = new Promise<void>((resolve, reject) => { img.onload = () => resolve(); img.onerror = reject; });
+      img.src = url;
+      await loaded;
+      const canvas = document.createElement("canvas");
+      canvas.width = widthPx;
+      canvas.height = heightPx;
+      const ctx = canvas.getContext("2d")!;
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0,0,widthPx,heightPx);
+      ctx.drawImage(img, 0, 0);
+      URL.revokeObjectURL(url);
+      const png = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, "image/png"));
+      if (!png) throw new Error("PNG export failed.");
+      const pngUrl = URL.createObjectURL(png);
+      const a = document.createElement("a");
+      a.href = pngUrl;
+      a.download = `${project.name.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "") || "backyard-plan"}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(pngUrl), 1000);
+    }
+
+    function runGeometryTests() {
+      const tests: [string, () => boolean][] = [
+        ["meters-to-pixels", () => mToPx(3.2) === 32],
+        ["pixels-to-meters", () => pxToM(25) === 2.5],
+        ["rounding", () => round1(12.34) === 12.3 && round1(12.35) === 12.4],
+        ["point rotation", () => { const p = rotatePointAround({x:1,y:0}, {x:0,y:0}, 90); return p.x === 0 && p.y === 1; }],
+        ["grid snapping", () => applySnapping(makeInitialProject(), {x: 4.88, y: 5.11}, {}).point.x === 5],
+        ["orthogonal snapping", () => applySnapping(makeInitialProject(), {x: 10.2, y: 25}, {base:{x:10,y:10}}).point.x === 10],
+        ["midpoint", () => midpoint({x:0,y:0},{x:4,y:2}).x === 2 && midpoint({x:0,y:0},{x:4,y:2}).y === 1],
+        ["polygon perimeter", () => round1(polygonPerimeter([{x:0,y:0},{x:3,y:0},{x:3,y:4}])) === 12],
+        ["polygon area", () => polygonArea([{x:0,y:0},{x:10,y:0},{x:10,y:10},{x:0,y:10}]) === 100],
+        ["self-intersection", () => polygonSelfIntersects([{x:0,y:0},{x:4,y:4},{x:0,y:4},{x:4,y:0}]) === true],
+        ["path length", () => pathLength([{x:0,y:0},{x:3,y:4},{x:6,y:4}]) === 8],
+        ["rectangle measurement", () => rectArea({type:"rectangle", id:"t", kind:"rectangle", name:"r", layerId:"shapes", locked:false, visible:true, style:KIND_STYLE.rectangle, z:0, x:0,y:0,width:5,height:4}) === 20],
+        ["hidden measurement", () => objectMeasurementItems({type:"rectangle", id:"h", kind:"rectangle", name:"h", layerId:"shapes", locked:false, visible:true, style:KIND_STYLE.rectangle, z:0, x:0,y:0,width:5,height:4, hiddenMeasurements:["width"]}).length === 2],
+        ["circle measurement", () => round1(circlePerimeter({type:"circle", id:"c", kind:"circle", name:"c", layerId:"shapes", locked:false, visible:true, style:KIND_STYLE.circle, z:0, cx:0,cy:0,r:2})) === 12.6],
+      ];
+      const failures: string[] = [];
+      tests.forEach(([name, fn]) => { try { if (!fn()) failures.push(name); } catch (e) { failures.push(`${name}: ${(e as Error).message}`); } });
+      return { passed: tests.length - failures.length, total: tests.length, failures };
+    }
+
+    const initialUi: UiState = {
+      tool: "select",
+      selectedIds: [],
+      hoveredId: null,
+      selectedHandle: null,
+      drawing: null,
+      viewport: { scale: .75, panX: 80, panY: 60 },
+      drag: null,
+      spaceDown: false,
+      status: "Ready. Workspace is 100.0 m × 100.0 m.",
+      tests: runGeometryTests(),
+      showChecklist: false,
+    };
+
+    function loadInitialProject() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return normalizedProject(JSON.parse(raw));
+      } catch (e) { console.warn("Could not load autosave", e); }
+      return makeInitialProject();
+    }
+
+    function appReducer(state: HistoryState, action: any): HistoryState {
+      const push = (incoming: Project, status?: string) => {
+        const next = expandWorkspaceToPropertyBoundary(incoming);
+        const currentStr = JSON.stringify(state.project);
+        const nextStr = JSON.stringify(next);
+        if (currentStr === nextStr) return { ...state, ui: { ...state.ui, status: status || state.ui.status } };
+        const past = [...state.past, state.project].slice(-HISTORY_LIMIT);
+        return { ...state, project: next, past, future: [], ui: { ...state.ui, status: status || state.ui.status } };
+      };
+      switch (action.type) {
+        case "SET_TOOL":
+          return { ...state, ui: { ...state.ui, tool: action.tool, drawing: null, selectedHandle: null, status: action.status || `${action.tool} tool active.` } };
+        case "SET_UI":
+          return { ...state, ui: { ...state.ui, ...action.patch } };
+        case "PROJECT_APPLY":
+          return push(action.project, action.status);
+        case "PROJECT_TRANSIENT":
+          return { ...state, project: expandWorkspaceToPropertyBoundary(action.project), ui: { ...state.ui, status: action.status || state.ui.status } };
+        case "PROJECT_COMMIT_FROM": {
+          const changed = JSON.stringify(action.beforeProject) !== JSON.stringify(state.project);
+          if (!changed) return { ...state, ui: { ...state.ui, drag: null } };
+          return { ...state, past: [...state.past, action.beforeProject].slice(-HISTORY_LIMIT), future: [], ui: { ...state.ui, drag: null, status: action.status || "Edit committed." } };
+        }
+        case "UNDO": {
+          if (!state.past.length) return state;
+          const prev = state.past[state.past.length - 1];
+          return { ...state, project: prev, past: state.past.slice(0, -1), future: [state.project, ...state.future], ui: { ...state.ui, drawing: null, selectedHandle: null, status: "Undo." } };
+        }
+        case "REDO": {
+          if (!state.future.length) return state;
+          const next = state.future[0];
+          return { ...state, project: next, past: [...state.past, state.project].slice(-HISTORY_LIMIT), future: state.future.slice(1), ui: { ...state.ui, drawing: null, selectedHandle: null, status: "Redo." } };
+        }
+        case "NEW_PROJECT":
+          return { project: makeInitialProject(), past: [], future: [], ui: { ...state.ui, selectedIds: [], selectedHandle: null, drawing: null, status: "New project created." } };
+        case "IMPORT_PROJECT":
+          return { project: expandWorkspaceToPropertyBoundary(action.project), past: [state.project].slice(-HISTORY_LIMIT), future: [], ui: { ...state.ui, selectedIds: [], selectedHandle: null, drawing: null, status: "Project imported." } };
+        default:
+          return state;
+      }
+    }
+
+    function IconButton({ label, title, children, onClick, disabled=false, pressed, className="" }: any) {
+      const props: any = { className: `${pressed === undefined ? "icon-btn" : "toggle-btn compact"} ${className}`, title: title || label, "aria-label": label, onClick, disabled };
+      if (pressed !== undefined) props["aria-pressed"] = pressed;
+      return <button {...props}>{children}</button>;
+    }
+
+    function TopToolbar({ state, dispatch, fitWorkspace }: { state: HistoryState; dispatch: any; fitWorkspace: () => void }) {
+      const { project, past, future, ui } = state;
+      const fileRef = useRef<HTMLInputElement | null>(null);
+      const applyProject = (project: Project, status?: string) => dispatch({ type: "PROJECT_APPLY", project, status });
+      const toggleSetting = (key: keyof Project["settings"]) => applyProject({ ...project, settings: { ...project.settings, [key]: !project.settings[key] } }, `${key} ${project.settings[key] ? "off" : "on"}.`);
+      const exportJson = () => downloadText(`${project.name.replace(/[^a-z0-9]+/gi,"-") || "backyard-plan"}.json`, JSON.stringify({ ...project, savedAt: new Date().toISOString() }, null, 2));
+      const importJson = (file: File) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          try { dispatch({ type: "IMPORT_PROJECT", project: normalizedProject(JSON.parse(String(reader.result))) }); }
+          catch(e) { dispatch({ type: "SET_UI", patch: { status: `Import failed: ${(e as Error).message}` } }); }
+        };
+        reader.readAsText(file);
+      };
+      const save = () => {
+        const saved = { ...project, savedAt: new Date().toISOString() };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+        applyProject(saved, "Project saved to localStorage.");
+      };
+      const zoom = (factor: number) => dispatch({ type: "SET_UI", patch: { viewport: { ...ui.viewport, scale: clamp(ui.viewport.scale * factor, .15, 6) }, status: `Zoom ${Math.round(clamp(ui.viewport.scale * factor, .15, 6) * 100)}%.` } });
+
+      return <div className="top-toolbar" role="toolbar" aria-label="Project toolbar">
+        <div className="brand"><span className="brand-mark" aria-hidden="true"></span><span>Backyard Planner</span></div>
+        <div className="toolbar-group">
+          <button className="btn" title="Create a new empty project" onClick={() => { if (confirm("Create a new project? Unsaved changes remain only in browser history/autosave.")) dispatch({ type: "NEW_PROJECT" }); }}>New</button>
+          <button className="btn" title="Save to this browser's localStorage" onClick={save}>Save</button>
+        </div>
+        <div className="toolbar-group">
+          <IconButton label="Undo" title="Undo (Ctrl/Cmd+Z)" disabled={!past.length} onClick={() => dispatch({type:"UNDO"})}>↶</IconButton>
+          <IconButton label="Redo" title="Redo (Ctrl/Cmd+Shift+Z or Ctrl/Cmd+Y)" disabled={!future.length} onClick={() => dispatch({type:"REDO"})}>↷</IconButton>
+        </div>
+        <div className="toolbar-group">
+          <IconButton label="Zoom out" title="Zoom out" onClick={() => zoom(.82)}>−</IconButton>
+          <span className="chip" aria-label="Current zoom">{Math.round(ui.viewport.scale * 100)}%</span>
+          <IconButton label="Zoom in" title="Zoom in" onClick={() => zoom(1.22)}>＋</IconButton>
+          <button className="btn" title="Fit workspace" onClick={fitWorkspace}>Fit</button>
+        </div>
+        <div className="toolbar-group" aria-label="View and snap toggles">
+          <IconButton label="Toggle grid" title="Grid" pressed={project.settings.showGrid} onClick={() => toggleSetting("showGrid")}>▦</IconButton>
+          <IconButton label="Toggle measurements" title="Measurements" pressed={project.settings.showMeasurements} onClick={() => toggleSetting("showMeasurements")}>⌁</IconButton>
+          <IconButton label="Toggle grid snap" title="Snap to grid" pressed={project.settings.snapToGrid} onClick={() => toggleSetting("snapToGrid")}>#</IconButton>
+          <IconButton label="Toggle vertex snap" title="Snap to vertices" pressed={project.settings.snapToVertices} onClick={() => toggleSetting("snapToVertices")}>●</IconButton>
+          <IconButton label="Toggle edge snap" title="Snap to edges" pressed={project.settings.snapToEdges} onClick={() => toggleSetting("snapToEdges")}>╱</IconButton>
+          <IconButton label="Toggle midpoint snap" title="Snap to midpoints" pressed={project.settings.snapToMidpoints} onClick={() => toggleSetting("snapToMidpoints")}>◇</IconButton>
+          <IconButton label="Toggle orthogonal snap" title="Orthogonal 90°/180° snap" pressed={project.settings.orthogonalSnap} onClick={() => toggleSetting("orthogonalSnap")}>⟂</IconButton>
+        </div>
+        <div className="toolbar-group">
+          <button className="btn" title="Export full editable project JSON" onClick={exportJson}>Export JSON</button>
+          <button className="btn" title="Import project JSON" onClick={() => fileRef.current?.click()}>Import JSON</button>
+          <input ref={fileRef} type="file" accept="application/json,.json" style={{display:"none"}} onChange={(e) => e.target.files?.[0] && importJson(e.target.files[0])} />
+          <button className="btn" title="Export visible plan to PNG" onClick={() => exportProjectPng(project).then(() => dispatch({type:"SET_UI", patch:{status:"PNG exported."}})).catch((e) => dispatch({type:"SET_UI", patch:{status:`PNG export failed: ${e.message}`}}))}>Export PNG</button>
+          <button className="btn" title="Manual QA checklist" onClick={() => dispatch({type:"SET_UI", patch:{showChecklist:true}})}>QA</button>
+        </div>
+      </div>;
+    }
+
+    const TOOL_GROUPS: { tools: { tool: Tool; icon: string; name: string; title: string }[] }[] = [
+      { tools: [
+        { tool:"select", icon:"↖", name:"Select", title:"Select/move (V)" },
+        { tool:"pan", icon:"✥", name:"Pan", title:"Pan workspace (Space or middle mouse)" },
+        { tool:"property", icon:"▱", name:"Boundary", title:"Edit property boundary" },
+      ]},
+      { tools: [
+        { tool:"rect", icon:"▭", name:"Rect", title:"Draw rectangle (R)" },
+        { tool:"polygon", icon:"⬟", name:"Polygon", title:"Draw polygon (P)" },
+        { tool:"line", icon:"╱", name:"Line", title:"Draw line/polyline (L)" },
+        { tool:"circle", icon:"◯", name:"Circle", title:"Draw circle (C)" },
+        { tool:"sketch", icon:"〰", name:"Sketch", title:"Draw hand-drawn line" },
+        { tool:"label", icon:"T", name:"Text", title:"Place text (T)" },
+      ]},
+    ];
+
+    function ToolPalette({ tool, dispatch }: { tool: Tool; dispatch: any }) {
+      return <aside className="tool-palette" aria-label="Drawing tools">
+        {TOOL_GROUPS.map((group, gi) => <React.Fragment key={gi}>
+          {gi > 0 && <div className="palette-divider" />}
+          {group.tools.map(t => <button key={t.tool} className={`tool-btn ${tool === t.tool ? "active" : ""}`} aria-label={t.title} title={t.title} onClick={() => dispatch({ type:"SET_TOOL", tool:t.tool, status:`${t.name} tool active.` })}>
+            <span className="tool-icon" aria-hidden="true">{t.icon}</span><span className="tool-name">{t.name}</span>
+          </button>)}
+        </React.Fragment>)}
+      </aside>;
+    }
+
+    function Grid({ project }: { project: Project }) {
+      if (!project.settings.showGrid) return null;
+      const lines = [] as any[];
+      const w = project.workspace.widthM, h = project.workspace.heightM;
+      for (let x = 0; x <= w; x += 1) lines.push(<line key={`vx${x}`} x1={mToPx(x)} y1={0} x2={mToPx(x)} y2={mToPx(h)} stroke={x % 10 === 0 ? "var(--canvas-major)" : "var(--canvas-line)"} strokeWidth={x % 10 === 0 ? 1.2 : .55} vectorEffect="non-scaling-stroke" />);
+      for (let y = 0; y <= h; y += 1) lines.push(<line key={`hy${y}`} x1={0} y1={mToPx(y)} x2={mToPx(w)} y2={mToPx(y)} stroke={y % 10 === 0 ? "var(--canvas-major)" : "var(--canvas-line)"} strokeWidth={y % 10 === 0 ? 1.2 : .55} vectorEffect="non-scaling-stroke" />);
+      return <g aria-hidden="true"><rect x={0} y={0} width={mToPx(w)} height={mToPx(h)} fill="var(--canvas)" />{lines}</g>;
+    }
+
+    function MeasurementLabels({ o }: { o: PlanObject }) {
+      const color = objectColor(o);
+      const text = (item: MeasurementItem) => <text key={`${o.id}-${item.id}`} className="measurement-label draggable-measurement-label" style={{fill: color}} x={mToPx(item.point.x)} y={mToPx(item.point.y)} textAnchor="middle" data-measure-object={o.id} data-measure-id={item.id}>{item.value}</text>;
+      return <g>{objectMeasurementItems(o).map(text)}</g>;
+    }
+
+    function ObjectAttachedLabel({ o }: { o: PlanObject }) {
+      if (o.type === "label" || !o.objectLabel?.visible) return null;
+      const p = objectLabelPosition(o);
+      return <text className="object-label" fill={objectColor(o)} x={mToPx(p.x)} y={mToPx(p.y)} fontSize={mToPx(o.objectLabel.fontSizeM || 1.3)} textAnchor="middle" data-object-label={o.id}>{o.objectLabel.text || o.name}</text>;
+    }
+
+    function PlanObjectView({ o, selected, hovered, project, dispatch }: { o: PlanObject; selected: boolean; hovered: boolean; project: Project; dispatch: any }) {
+      const st = o.style || KIND_STYLE[o.kind] || KIND_STYLE.area;
+      const color = objectColor(o);
+      const fill = o.kind === "property" ? (st.fill || "none") : (isLineLike(o) ? "none" : color);
+      const isInvalid = o.type === "polygon" && polygonWarnings(o.points).length > 0;
+      const common = {
+        className: "object-shape",
+        fill,
+        stroke: color,
+        strokeWidth: mToPx(st.strokeWidth || .1),
+        opacity: st.opacity ?? 1,
+        vectorEffect: "non-scaling-stroke" as any,
+        strokeDasharray: st.dash || undefined,
+        onPointerEnter: (e: any) => { e.stopPropagation(); dispatch({type:"SET_UI", patch:{hoveredId:o.id}}); },
+        onPointerLeave: (e: any) => { e.stopPropagation(); dispatch({type:"SET_UI", patch:{hoveredId:null}}); },
+        style: { cursor: isEditable(project, o) ? "pointer" : "not-allowed" }
+      };
+      let shape: any = null;
+      let outline: any = null;
+      const outlineClass = selected ? "selection-outline" : hovered ? "hover-outline" : isInvalid ? "invalid-outline" : "";
+      const transform = objectTransform(o);
+      if (o.type === "polygon") {
+        shape = <polygon {...common} points={ptsAttr(o.points)} />;
+        outline = outlineClass ? <polygon className={outlineClass} points={ptsAttr(o.points)} /> : null;
+      } else if (o.type === "rectangle") {
+        shape = <rect {...common} x={mToPx(o.x)} y={mToPx(o.y)} width={mToPx(o.width)} height={mToPx(o.height)} />;
+        outline = outlineClass ? <rect className={outlineClass} x={mToPx(o.x)} y={mToPx(o.y)} width={mToPx(o.width)} height={mToPx(o.height)} /> : null;
+      } else if (o.type === "circle") {
+        shape = <g>
+          <circle {...common} cx={mToPx(o.cx)} cy={mToPx(o.cy)} r={mToPx(o.r)} />
+        </g>;
+        outline = outlineClass ? <circle className={outlineClass} cx={mToPx(o.cx)} cy={mToPx(o.cy)} r={mToPx(o.r)} /> : null;
+      } else if (o.type === "polyline") {
+        const width = mToPx(st.strokeWidth || .25);
+        shape = <g>
+          <polyline {...common} points={ptsAttr(o.points)} fill="none" strokeWidth={width} strokeLinecap="round" strokeLinejoin="round" />
+        </g>;
+        outline = outlineClass ? <polyline className={outlineClass} points={ptsAttr(o.points)} /> : null;
+      } else if (o.type === "label") {
+        shape = <text className="svg-label" x={mToPx(o.x)} y={mToPx(o.y)} fontSize={mToPx(o.fontSizeM)} fill={color} onPointerEnter={(e:any) => {e.stopPropagation(); dispatch({type:"SET_UI", patch:{hoveredId:o.id}});}} onPointerLeave={(e:any) => {e.stopPropagation(); dispatch({type:"SET_UI", patch:{hoveredId:null}});}}>{o.text}</text>;
+        const bb = boundingBoxForObject(o);
+        outline = outlineClass ? <rect className={outlineClass} x={mToPx(bb.x)} y={mToPx(bb.y - bb.height)} width={mToPx(bb.width)} height={mToPx(bb.height * 1.25)} /> : null;
+      }
+      return <g data-object-id={o.id} transform={transform || undefined}>{shape}{outline}</g>;
+    }
+
+    function Handles({ project, selectedIds, selectedHandle, dispatch }: { project: Project; selectedIds: string[]; selectedHandle: SelectedHandle; dispatch: any }) {
+      const objs = selectedObjects(project, selectedIds).filter(o => isEditable(project, o));
+      const handles: any[] = [];
+      const circleSize = 5;
+      objs.forEach(o => {
+        if ((o.type === "polygon" || o.type === "polyline") && o.kind !== "sketch") {
+          o.points.forEach((p, i) => handles.push(<circle key={`${o.id}-v-${i}`} className="handle" cx={mToPx(p.x)} cy={mToPx(p.y)} r={circleSize} data-handle-object={o.id} data-handle-kind="vertex" data-handle-index={i} />));
+          const edgeCount = o.type === "polygon" ? o.points.length : o.points.length - 1;
+          for (let i = 0; i < edgeCount; i++) {
+            const m = midpoint(o.points[i], o.points[(i+1) % o.points.length]);
+            handles.push(<rect key={`${o.id}-m-${i}`} className="mid-handle" x={mToPx(m.x)-4} y={mToPx(m.y)-4} width={8} height={8} transform={`rotate(45 ${mToPx(m.x)} ${mToPx(m.y)})`} data-handle-object={o.id} data-handle-kind="midpoint" data-handle-index={i} />);
+          }
+        }
+        if (o.type === "rectangle") {
+          const pts = getObjectVertices(o);
+          const corners = [["nw", pts[0]], ["ne", pts[1]], ["se", pts[2]], ["sw", pts[3]]] as [string, Point][];
+          corners.forEach(([corner, p]) => handles.push(<rect key={`${o.id}-${corner}`} className="resize-handle" x={mToPx(p.x)-5} y={mToPx(p.y)-5} width={10} height={10} data-handle-object={o.id} data-handle-kind="resize" data-handle-corner={corner} />));
+        }
+        if (o.type === "circle") {
+          const p = {x:o.cx+o.r, y:o.cy};
+          handles.push(<circle key={`${o.id}-radius`} className="resize-handle" cx={mToPx(p.x)} cy={mToPx(p.y)} r={5.5} data-handle-object={o.id} data-handle-kind="radius" />);
+        }
+      });
+      return <g>{handles}</g>;
+    }
+
+    function DrawingPreview({ drawing }: { drawing: UiState["drawing"] }) {
+      if (!drawing) return null;
+      const pts = [...drawing.points];
+      if (drawing.preview) pts.push(drawing.preview);
+      if (["polygon","property"].includes(drawing.tool)) {
+        return <g pointerEvents="none">
+          {pts.length > 1 && <polyline points={ptsAttr(pts)} fill="none" stroke="#f97316" strokeWidth={2} strokeDasharray="6 5" vectorEffect="non-scaling-stroke" />}
+          {pts.map((p,i) => <circle key={i} cx={mToPx(p.x)} cy={mToPx(p.y)} r={4} fill="#f97316" stroke="white" vectorEffect="non-scaling-stroke" />)}
+        </g>;
+      }
+      if (drawing.tool === "line") {
+        return <g pointerEvents="none">
+          {pts.length > 1 && <polyline points={ptsAttr(pts)} fill="none" stroke="#f97316" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" opacity=".75" vectorEffect="non-scaling-stroke" />}
+          {pts.map((p,i) => <circle key={i} cx={mToPx(p.x)} cy={mToPx(p.y)} r={4} fill="#f97316" stroke="white" vectorEffect="non-scaling-stroke" />)}
+        </g>;
+      }
+      if (drawing.tool === "sketch") {
+        return <g pointerEvents="none">
+          {pts.length > 1 && <polyline points={ptsAttr(pts)} fill="none" stroke="#f97316" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" opacity=".85" vectorEffect="non-scaling-stroke" />}
+        </g>;
+      }
+      if (drawing.tool === "rect" && drawing.start && drawing.current) {
+        const x = Math.min(drawing.start.x, drawing.current.x), y = Math.min(drawing.start.y, drawing.current.y), w = Math.abs(drawing.current.x - drawing.start.x), h = Math.abs(drawing.current.y - drawing.start.y);
+        return <rect pointerEvents="none" x={mToPx(x)} y={mToPx(y)} width={mToPx(w)} height={mToPx(h)} fill="rgba(249,115,22,.18)" stroke="#f97316" strokeWidth={2} strokeDasharray="6 5" vectorEffect="non-scaling-stroke" />;
+      }
+      if (drawing.tool === "circle" && drawing.start && drawing.current) {
+        return <circle pointerEvents="none" cx={mToPx(drawing.start.x)} cy={mToPx(drawing.start.y)} r={mToPx(distance(drawing.start, drawing.current))} fill="rgba(249,115,22,.18)" stroke="#f97316" strokeWidth={2} strokeDasharray="6 5" vectorEffect="non-scaling-stroke" />;
+      }
+      return null;
+    }
+
+    function SelectionBoxPreview({ drag }: { drag: any }) {
+      if (!drag || drag.mode !== "select-box" || !drag.current) return null;
+      const rect = rectFromPoints(drag.start, drag.current);
+      if (rect.width < .05 && rect.height < .05) return null;
+      return <rect className="selection-box" x={mToPx(rect.x)} y={mToPx(rect.y)} width={mToPx(rect.width)} height={mToPx(rect.height)} />;
+    }
+
+    function ScaleIndicator({ viewport }: { viewport: UiState["viewport"] }) {
+      const targetPx = 110;
+      const meters = Math.max(1, Math.round(targetPx / (PX_PER_M * viewport.scale)));
+      return <div className="pill">Scale: {fmtM(meters)} ≈ {Math.round(meters * PX_PER_M * viewport.scale)} px</div>;
+    }
+
+    function SvgWorkspace({ state, dispatch, fitRef }: { state: HistoryState; dispatch: any; fitRef: React.MutableRefObject<(() => void) | null> }) {
+      const { project, ui } = state;
+      const svgRef = useRef<SVGSVGElement | null>(null);
+      const visible = useMemo(() => visibleObjects(project), [project]);
+      const projectRef = useRef(project);
+      const uiRef = useRef(ui);
+      useEffect(() => { projectRef.current = project; uiRef.current = ui; });
+
+      const screenToM = (e: any): Point => {
+        const svg = svgRef.current!;
+        const rect = svg.getBoundingClientRect();
+        const sx = e.clientX - rect.left;
+        const sy = e.clientY - rect.top;
+        return { x: pxToM((sx - uiRef.current.viewport.panX) / uiRef.current.viewport.scale), y: pxToM((sy - uiRef.current.viewport.panY) / uiRef.current.viewport.scale) };
+      };
+      const hitTest = (p: Point) => {
+        const objs = visibleObjects(projectRef.current).slice().reverse();
+        return objs.find(o => hitTestObject(o, p));
+      };
+      const setStatus = (status: string) => dispatch({type:"SET_UI", patch:{status}});
+
+      const fitWorkspace = () => {
+        const svg = svgRef.current;
+        if (!svg) return;
+        const rect = svg.getBoundingClientRect();
+        const margin = 52;
+        const sx = (rect.width - margin * 2) / mToPx(projectRef.current.workspace.widthM);
+        const sy = (rect.height - margin * 2) / mToPx(projectRef.current.workspace.heightM);
+        const scale = clamp(Math.min(sx, sy), .1, 6);
+        dispatch({ type:"SET_UI", patch:{ viewport:{ scale, panX: margin, panY: margin }, status:"Workspace fitted." } });
+      };
+      fitRef.current = fitWorkspace;
+      useEffect(() => { setTimeout(fitWorkspace, 40); }, []);
+
+      const nextSelectionForHit = (id: string, additive = false) => {
+        const current = uiRef.current.selectedIds;
+        if (additive) return current.includes(id) ? current.filter(x => x !== id) : [...current, id];
+        return current.includes(id) && current.length > 1 ? current : [id];
+      };
+
+      const selectObject = (id: string, additive = false) => {
+        const selectedIds = nextSelectionForHit(id, additive);
+        dispatch({type:"SET_UI", patch:{selectedIds, selectedHandle:null, status:`Selected ${selectedIds.length} object${selectedIds.length === 1 ? "" : "s"}.`}});
+        return selectedIds;
+      };
+
+      const commitDrawing = (drawing = uiRef.current.drawing) => {
+        if (!drawing) return;
+        if (["polygon","property"].includes(drawing.tool)) {
+          const obj = createObjectForTool(drawing.tool as Tool, drawing.points);
+          if (!obj) { setStatus("Need at least 3 vertices to finish this polygon."); return; }
+          let next = projectRef.current;
+          if (drawing.tool === "property") {
+            next = updateObject(next, "property-boundary", () => ({ ...(obj as PolygonObject), id:"property-boundary", name:"Property boundary", z:0, layerId:"property" }));
+          } else {
+            next = { ...next, objects: [...next.objects, obj] };
+          }
+          dispatch({ type:"PROJECT_APPLY", project: next, status:`Created ${displayObjectType(obj)}.` });
+          dispatch({ type:"SET_UI", patch:{drawing:null, selectedIds:[obj.id], tool:"select"} });
+        } else if (["line","sketch"].includes(drawing.tool)) {
+          const obj = createObjectForTool(drawing.tool as Tool, drawing.points);
+          if (!obj) { setStatus("Need at least 2 points to finish this line."); return; }
+          const next = { ...projectRef.current, objects: [...projectRef.current.objects, obj] };
+          dispatch({ type:"PROJECT_APPLY", project: next, status:`Created ${displayObjectType(obj)}.` });
+          dispatch({ type:"SET_UI", patch:{drawing:null, selectedIds:[obj.id], tool:"select"} });
+        }
+      };
+
+      const onPointerDown = (e: any) => {
+        const raw = screenToM(e);
+        const tool = uiRef.current.spaceDown || e.button === 1 ? "pan" : uiRef.current.tool;
+        const handleEl = e.target.closest?.("[data-handle-object]");
+        const measureEl = e.target.closest?.("[data-measure-object]");
+        const objectLabelEl = e.target.closest?.("[data-object-label]");
+        const isLabelDragTarget = tool === "select" && (measureEl || objectLabelEl);
+        const allowOutsideWorkspace = tool === "property" || handleEl?.getAttribute("data-handle-object") === "property-boundary";
+        const p = tool === "sketch" || isLabelDragTarget
+          ? clampPointToWorkspace(projectRef.current, raw)
+          : applySnapping(projectRef.current, raw, { base: uiRef.current.drawing?.points?.slice(-1)[0], excludeIds: uiRef.current.selectedIds, allowOutsideWorkspace }).point;
+        if (tool === "pan") {
+          e.preventDefault();
+          dispatch({type:"SET_UI", patch:{drag:{mode:"pan", startClient:{x:e.clientX,y:e.clientY}, startViewport: uiRef.current.viewport}}});
+          try { svgRef.current?.setPointerCapture(e.pointerId); } catch {}
+          return;
+        }
+        if (measureEl && tool === "select") {
+          e.preventDefault();
+          e.stopPropagation();
+          const objectId = measureEl.getAttribute("data-measure-object");
+          const measurementId = measureEl.getAttribute("data-measure-id");
+          const object = projectRef.current.objects.find(o => o.id === objectId);
+          if (object && measurementId && isEditable(projectRef.current, object)) {
+            dispatch({type:"SET_UI", patch:{selectedIds:[object.id], selectedHandle:null, drag:{mode:"measure-label", objectId:object.id, measurementId, start:p, beforeProject:deepClone(projectRef.current), offset:measurementOffset(object, measurementId)}, status:"Dragging dimension label."}});
+            try { svgRef.current?.setPointerCapture(e.pointerId); } catch {}
+          }
+          return;
+        }
+        if (objectLabelEl && tool === "select") {
+          e.preventDefault();
+          e.stopPropagation();
+          const objectId = objectLabelEl.getAttribute("data-object-label");
+          const object = projectRef.current.objects.find(o => o.id === objectId);
+          if (object && isEditable(projectRef.current, object)) {
+            const label = object.objectLabel || { visible: true, text: object.name, offset: defaultObjectLabelOffset(object), fontSizeM: 1.3 };
+            dispatch({type:"SET_UI", patch:{selectedIds:[object.id], selectedHandle:null, drag:{mode:"object-label", objectId:object.id, start:p, beforeProject:deepClone(projectRef.current), offset:label.offset || defaultObjectLabelOffset(object)}, status:"Dragging object label."}});
+            try { svgRef.current?.setPointerCapture(e.pointerId); } catch {}
+          }
+          return;
+        }
+        if (handleEl) {
+          e.stopPropagation();
+          const objectId = handleEl.getAttribute("data-handle-object");
+          const kind = handleEl.getAttribute("data-handle-kind");
+          const index = Number(handleEl.getAttribute("data-handle-index"));
+          const corner = handleEl.getAttribute("data-handle-corner");
+          const beforeProject = deepClone(projectRef.current);
+          if (kind === "midpoint") {
+            const next = updateObject(projectRef.current, objectId, (o: PlanObject) => {
+              if (o.type !== "polygon" && o.type !== "polyline") return o;
+              const pts = [...o.points];
+              const a = pts[index], b = pts[(index+1) % pts.length];
+              pts.splice(index + 1, 0, midpoint(a,b));
+              return { ...o, points: pts } as PlanObject;
+            });
+            dispatch({type:"PROJECT_APPLY", project:next, status:"Inserted vertex at midpoint."});
+            dispatch({type:"SET_UI", patch:{selectedHandle:{objectId, kind:"vertex", index:index+1}}});
+            return;
+          }
+          dispatch({type:"SET_UI", patch:{selectedHandle:{objectId, kind, index, corner}, drag:{mode:kind, objectId, index, corner, start:p, beforeProject}, status:"Dragging handle."}});
+          try { svgRef.current?.setPointerCapture(e.pointerId); } catch {}
+          return;
+        }
+
+        if (tool === "rect") {
+          e.preventDefault();
+          dispatch({type:"SET_UI", patch:{drawing:{tool, points:[p], start:p, current:p}, drag:{mode:"draw-rect", start:p}, status:"Drag to size rectangle."}});
+          try { svgRef.current?.setPointerCapture(e.pointerId); } catch {}
+          return;
+        }
+        if (tool === "circle") {
+          e.preventDefault();
+          dispatch({type:"SET_UI", patch:{drawing:{tool, points:[p], start:p, current:p}, drag:{mode:"draw-circle", start:p}, status:"Drag to set diameter."}});
+          try { svgRef.current?.setPointerCapture(e.pointerId); } catch {}
+          return;
+        }
+        if (tool === "label") {
+          const obj = createObjectForTool("label", [p]);
+          if (!obj) return;
+          const next = { ...projectRef.current, objects: [...projectRef.current.objects, obj] };
+          dispatch({type:"PROJECT_APPLY", project:next, status:"Text placed. Edit it in the inspector."});
+          dispatch({type:"SET_UI", patch:{selectedIds:[obj.id], tool:"select"}});
+          return;
+        }
+        if (tool === "sketch") {
+          e.preventDefault();
+          dispatch({type:"SET_UI", patch:{drawing:{tool, points:[p], preview:p}, drag:{mode:"draw-freehand", start:p}, snapIndicator:undefined, status:"Drawing hand-drawn line."}});
+          try { svgRef.current?.setPointerCapture(e.pointerId); } catch {}
+          return;
+        }
+        if (["polygon","line","property"].includes(tool)) {
+          const current = uiRef.current.drawing;
+          let points = current && current.tool === tool ? current.points.slice() : [];
+          if (tool === "property" && !current) points = [];
+          if (points.length >= 3 && distance(points[0], p) < .6 && tool !== "line") {
+            commitDrawing({tool, points, preview:p});
+            return;
+          }
+          points.push(p);
+          dispatch({ type:"SET_UI", patch:{ drawing:{tool, points, preview:p}, status:`${tool === "line" ? "Line" : tool === "property" ? "Property boundary" : "Polygon"}: ${points.length} point${points.length===1?"":"s"}. Double-click or Enter to finish.` } });
+          return;
+        }
+
+        const hit = hitTest(p);
+        if (hit) {
+          const additive = e.shiftKey || e.metaKey || e.ctrlKey;
+          const selectedIds = selectObject(hit.id, additive);
+          const dragIds = selectedIds.includes(hit.id) ? selectedIds : [];
+          const editableDragIds = dragIds.filter(id => isEditable(projectRef.current, projectRef.current.objects.find(o => o.id === id)));
+          if (isEditable(projectRef.current, hit) && editableDragIds.length) {
+            dispatch({type:"SET_UI", patch:{drag:{mode:"move", start:p, beforeProject:deepClone(projectRef.current), ids:editableDragIds}, selectedHandle:null}});
+            try { svgRef.current?.setPointerCapture(e.pointerId); } catch {}
+          }
+          return;
+        }
+        if (tool === "select") {
+          const start = clampPointToWorkspace(projectRef.current, raw);
+          dispatch({type:"SET_UI", patch:{drag:{mode:"select-box", start, current:start, additive:e.shiftKey || e.metaKey || e.ctrlKey, beforeSelectedIds:uiRef.current.selectedIds}, selectedHandle:null, status:"Drag to select objects."}});
+          try { svgRef.current?.setPointerCapture(e.pointerId); } catch {}
+          return;
+        }
+        dispatch({type:"SET_UI", patch:{selectedIds:[], selectedHandle:null, status:"Selection cleared."}});
+      };
+
+      const onPointerMove = (e: any) => {
+        const uiNow = uiRef.current;
+        const raw = screenToM(e);
+        const base = uiNow.drawing?.points?.slice(-1)[0] || (uiNow.drag?.start ?? undefined);
+        const allowOutsideWorkspace = uiNow.drawing?.tool === "property" || uiNow.drag?.objectId === "property-boundary" || uiNow.drag?.ids?.includes?.("property-boundary");
+        const isFreehand = uiNow.drawing?.tool === "sketch" || uiNow.drag?.mode === "draw-freehand";
+        const isSelectionBox = uiNow.drag?.mode === "select-box";
+        const isLabelDrag = uiNow.drag?.mode === "measure-label" || uiNow.drag?.mode === "object-label";
+        const snap = isFreehand || isSelectionBox || isLabelDrag ? { point: clampPointToWorkspace(projectRef.current, raw), indicator: undefined } : applySnapping(projectRef.current, raw, { base, excludeIds: uiNow.selectedIds, allowOutsideWorkspace });
+        const p = snap.point;
+        if (!uiNow.drag) {
+          if (uiNow.drawing) dispatch({type:"SET_UI", patch:{drawing:{...uiNow.drawing, preview:p}, snapIndicator:snap.indicator, status:`Pointer ${fmtM(p.x)}, ${fmtM(p.y)}`}});
+          else dispatch({type:"SET_UI", patch:{snapIndicator:snap.indicator, status:`Pointer ${fmtM(p.x)}, ${fmtM(p.y)}`}});
+          return;
+        }
+        const drag = uiNow.drag;
+        if (drag.mode === "pan") {
+          const dx = e.clientX - drag.startClient.x, dy = e.clientY - drag.startClient.y;
+          dispatch({type:"SET_UI", patch:{viewport:{...drag.startViewport, panX:drag.startViewport.panX+dx, panY:drag.startViewport.panY+dy}}});
+          return;
+        }
+        if (drag.mode === "select-box") {
+          const rect = rectFromPoints(drag.start, p);
+          dispatch({type:"SET_UI", patch:{drag:{...drag, current:p}, snapIndicator:undefined, status:`Selection area ${fmtM(rect.width)} × ${fmtM(rect.height)}.`}});
+          return;
+        }
+        if (drag.mode === "draw-rect" || drag.mode === "draw-circle") {
+          const drawing = { ...uiNow.drawing, current:p, preview:p };
+          dispatch({type:"SET_UI", patch:{drawing, snapIndicator:snap.indicator}});
+          return;
+        }
+        if (drag.mode === "draw-freehand") {
+          const drawing = uiNow.drawing;
+          if (!drawing || drawing.tool !== "sketch") return;
+          const last = drawing.points[drawing.points.length - 1];
+          const shouldAdd = (!last || distance(last, p) >= FREEHAND_MIN_POINT_DISTANCE_M) && drawing.points.length < FREEHAND_MAX_POINTS;
+          const points = shouldAdd ? [...drawing.points, p] : drawing.points;
+          dispatch({type:"SET_UI", patch:{drawing:{...drawing, points, preview:p}, snapIndicator:undefined, status:`Sketch: ${points.length} points.`}});
+          return;
+        }
+        if (drag.mode === "measure-label") {
+          const dx = round1(p.x - drag.start.x), dy = round1(p.y - drag.start.y);
+          const offset = { x: round1((drag.offset?.x || 0) + dx), y: round1((drag.offset?.y || 0) + dy) };
+          const next = updateObject(drag.beforeProject as Project, drag.objectId, (o: PlanObject) => ({
+            ...o,
+            measurementOffsets: { ...(o.measurementOffsets || {}), [drag.measurementId]: offset },
+          } as PlanObject));
+          dispatch({type:"PROJECT_TRANSIENT", project:next, status:"Dimension label moved."});
+          return;
+        }
+        if (drag.mode === "object-label") {
+          const dx = round1(p.x - drag.start.x), dy = round1(p.y - drag.start.y);
+          const next = updateObject(drag.beforeProject as Project, drag.objectId, (o: PlanObject) => {
+            const currentLabel = o.objectLabel || { visible: true, text: o.name, offset: defaultObjectLabelOffset(o), fontSizeM: 1.3 };
+            return {
+              ...o,
+              objectLabel: {
+                ...currentLabel,
+                visible: true,
+                offset: { x: round1((drag.offset?.x || 0) + dx), y: round1((drag.offset?.y || 0) + dy) },
+              },
+            } as PlanObject;
+          });
+          dispatch({type:"PROJECT_TRANSIENT", project:next, status:"Object label moved."});
+          return;
+        }
+        if (drag.mode === "move") {
+          const dx = round1(p.x - drag.start.x), dy = round1(p.y - drag.start.y);
+          let next = drag.beforeProject as Project;
+          next = updateObjects(next, drag.ids, (o) => moveObject(o, dx, dy));
+          dispatch({type:"PROJECT_TRANSIENT", project:next, status:`Move ${fmtM(dx)}, ${fmtM(dy)}.`});
+          return;
+        }
+        if (drag.mode === "vertex") {
+          const next = updateObject(drag.beforeProject as Project, drag.objectId, (o: PlanObject) => {
+            if (o.type !== "polygon" && o.type !== "polyline") return o;
+            const pts = o.points.map((pt, i) => i === drag.index ? p : pt);
+            return { ...o, points: pts } as PlanObject;
+          });
+          dispatch({type:"PROJECT_TRANSIENT", project:next, status:`Vertex ${drag.index + 1}: ${fmtM(p.x)}, ${fmtM(p.y)}.`});
+          return;
+        }
+        if (drag.mode === "resize") {
+          const next = updateObject(drag.beforeProject as Project, drag.objectId, (o: PlanObject) => o.type === "rectangle" ? resizeRectangleFromCorner(o, drag.corner, unrotatePointForObject(o, p)) : o);
+          dispatch({type:"PROJECT_TRANSIENT", project:next, status:"Resizing rectangle."});
+          return;
+        }
+        if (drag.mode === "radius") {
+          const next = updateObject(drag.beforeProject as Project, drag.objectId, (o: PlanObject) => o.type === "circle" ? { ...o, r: round1(Math.max(.2, distance({x:o.cx,y:o.cy}, p))) } : o);
+          dispatch({type:"PROJECT_TRANSIENT", project:next, status:"Resizing circle."});
+          return;
+        }
+      };
+
+      const onPointerUp = (e: any) => {
+        const drag = uiRef.current.drag;
+        if (!drag) return;
+        if (drag.mode === "select-box") {
+          const end = clampPointToWorkspace(projectRef.current, screenToM(e));
+          const rect = rectFromPoints(drag.start, end);
+          if (rect.width < .2 && rect.height < .2) {
+            const selectedIds = drag.additive ? (drag.beforeSelectedIds || []) : [];
+            dispatch({type:"SET_UI", patch:{drag:null, selectedIds, selectedHandle:null, snapIndicator:undefined, status:selectedIds.length ? `Selected ${selectedIds.length} object${selectedIds.length === 1 ? "" : "s"}.` : "Selection cleared."}});
+          } else {
+            const boxed = visibleObjects(projectRef.current).filter(o => objectInsideSelectionBox(o, drag.start, end)).map(o => o.id);
+            const selectedIds = drag.additive ? Array.from(new Set([...(drag.beforeSelectedIds || []), ...boxed])) : boxed;
+            dispatch({type:"SET_UI", patch:{drag:null, selectedIds, selectedHandle:null, snapIndicator:undefined, status:`Selected ${selectedIds.length} object${selectedIds.length === 1 ? "" : "s"}.`}});
+          }
+        } else if (drag.mode === "draw-freehand") {
+          const d = uiRef.current.drawing;
+          if (d?.tool === "sketch") {
+            const p = clampPointToWorkspace(projectRef.current, screenToM(e));
+            const last = d.points[d.points.length - 1];
+            const points = last && distance(last, p) >= .1 && d.points.length < FREEHAND_MAX_POINTS ? [...d.points, p] : d.points;
+            const obj = createObjectForTool("sketch", points);
+            if (obj) {
+              const next = { ...projectRef.current, objects: [...projectRef.current.objects, obj] };
+              dispatch({type:"PROJECT_APPLY", project:next, status:`Created ${displayObjectType(obj)}.`});
+              dispatch({type:"SET_UI", patch:{drawing:null, drag:null, selectedIds:[obj.id], tool:"select", snapIndicator:undefined}});
+            } else {
+              dispatch({type:"SET_UI", patch:{drawing:null, drag:null, snapIndicator:undefined, status:"Hand-drawn line was too short to create."}});
+            }
+          }
+        } else if (drag.mode === "draw-rect" || drag.mode === "draw-circle") {
+          const d = uiRef.current.drawing;
+          if (d?.start && d.current) {
+            const obj = createObjectForTool(d.tool, [d.start, d.current]);
+            if (obj) {
+              const next = { ...projectRef.current, objects: [...projectRef.current.objects, obj] };
+              dispatch({type:"PROJECT_APPLY", project:next, status:`Created ${displayObjectType(obj)}.`});
+              dispatch({type:"SET_UI", patch:{drawing:null, drag:null, selectedIds:[obj.id], tool:"select"}});
+            } else {
+              dispatch({type:"SET_UI", patch:{drawing:null, drag:null, status:"Shape was too small to create."}});
+            }
+          }
+        } else if (drag.beforeProject) {
+          dispatch({type:"PROJECT_COMMIT_FROM", beforeProject:drag.beforeProject, status:"Edit committed."});
+        } else {
+          dispatch({type:"SET_UI", patch:{drag:null}});
+        }
+        try { svgRef.current?.releasePointerCapture(e.pointerId); } catch {}
+      };
+
+      const onDoubleClick = (e: any) => {
+        if (uiRef.current.drawing) commitDrawing();
+      };
+
+      const onWheel = (e: any) => {
+        e.preventDefault();
+        const svg = svgRef.current!;
+        const rect = svg.getBoundingClientRect();
+        const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+        const old = uiRef.current.viewport;
+        const factor = e.deltaY > 0 ? .9 : 1.1;
+        const scale = clamp(old.scale * factor, .15, 6);
+        const worldX = (sx - old.panX) / old.scale;
+        const worldY = (sy - old.panY) / old.scale;
+        const panX = sx - worldX * scale;
+        const panY = sy - worldY * scale;
+        dispatch({type:"SET_UI", patch:{viewport:{scale, panX, panY}, status:`Zoom ${Math.round(scale*100)}%.`}});
+      };
+
+      const className = `svg-workspace ${ui.tool === "select" ? "select-cursor" : ""} ${(ui.tool === "pan" || ui.spaceDown) ? "pan-cursor" : ""} ${ui.drag?.mode === "pan" ? "panning" : ""}`;
+
+      return <main className="workspace-wrap">
+        <svg ref={svgRef} className={className} role="application" aria-label="Backyard drawing workspace" onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp} onDoubleClick={onDoubleClick} onWheel={onWheel}>
+          <g transform={`translate(${ui.viewport.panX} ${ui.viewport.panY}) scale(${ui.viewport.scale})`}>
+            <Grid project={project} />
+            <rect x={0} y={0} width={mToPx(project.workspace.widthM)} height={mToPx(project.workspace.heightM)} fill="none" stroke="#0f172a" strokeWidth={2} vectorEffect="non-scaling-stroke" />
+            <g>
+              {visible.map(o => <PlanObjectView key={o.id} o={o} selected={ui.selectedIds.includes(o.id)} hovered={ui.hoveredId === o.id} project={project} dispatch={dispatch} />)}
+            </g>
+            {project.settings.showMeasurements && <g>{visible.filter(o => o.kind !== "label").map(o => <MeasurementLabels key={`m-${o.id}`} o={o} />)}</g>}
+            <g>{visible.map(o => <ObjectAttachedLabel key={`label-${o.id}`} o={o} />)}</g>
+            <DrawingPreview drawing={ui.drawing} />
+            <SelectionBoxPreview drag={ui.drag} />
+            {ui.snapIndicator && <g pointerEvents="none">
+              {ui.snapIndicator.line && <line className="snap-guide" x1={mToPx(ui.snapIndicator.line[0].x)} y1={mToPx(ui.snapIndicator.line[0].y)} x2={mToPx(ui.snapIndicator.line[1].x)} y2={mToPx(ui.snapIndicator.line[1].y)} />}
+              <circle className="snap-dot" cx={mToPx(ui.snapIndicator.point.x)} cy={mToPx(ui.snapIndicator.point.y)} r={5} />
+              <text className="measurement-label" x={mToPx(ui.snapIndicator.point.x + .9)} y={mToPx(ui.snapIndicator.point.y - .7)}>{ui.snapIndicator.label}</text>
+            </g>}
+            <Handles project={project} selectedIds={ui.selectedIds} selectedHandle={ui.selectedHandle} dispatch={dispatch} />
+          </g>
+        </svg>
+        <div className="workspace-overlay"><div className="pill">{fmtM(project.workspace.widthM)} × {fmtM(project.workspace.heightM)} workspace</div><ScaleIndicator viewport={ui.viewport} /></div>
+        {ui.drawing && <div className="drawing-actions" role="group" aria-label="Drawing actions">
+          <button className="btn" onClick={() => commitDrawing()}>Finish</button>
+          <button className="btn" onClick={() => dispatch({type:"SET_UI", patch:{drawing:null, drag:null, status:"Drawing cancelled."}})}>Cancel</button>
+          <span className="chip">Enter: finish · Esc: cancel</span>
+        </div>}
+      </main>;
+    }
+
+    function NumberField({ label, value, onChange, step=.1, min, max, disabled=false }: any) {
+      return <div className="field"><label>{label}</label><input className="input" type="number" step={step} min={min} max={max} disabled={disabled} value={Number.isFinite(value) ? round1(value) : 0} onChange={e => onChange(round1(parseFloat(e.target.value || "0")))} /></div>;
+    }
+
+    function ColorPalette({ value, onChange, disabled=false }: { value: string; onChange: (value: string) => void; disabled?: boolean }) {
+      const current = String(value || "").toLowerCase();
+      return <div className="tailwind-palette" role="grid" aria-label="Tailwind color palette">
+        {TAILWIND_PALETTE.map(color => {
+          const selected = current === color.value;
+          return <button
+            type="button"
+            key={color.name}
+            className={`color-swatch ${selected ? "selected" : ""}`}
+            style={{ backgroundColor: color.value }}
+            title={`${color.name} ${color.value}`}
+            aria-label={`${color.name} ${color.value}`}
+            aria-pressed={selected}
+            disabled={disabled}
+            onClick={() => onChange(color.value)}
+          />;
+        })}
+      </div>;
+    }
+
+    function LayersPanel({ project, dispatch }: { project: Project; dispatch: any }) {
+      const apply = (p: Project, status?: string) => dispatch({type:"PROJECT_APPLY", project:p, status});
+      const toggle = (id: string, key: "visible" | "locked") => apply({ ...project, layers: project.layers.map(l => l.id === id ? { ...l, [key]: !l[key] } : l) }, `Layer ${key} toggled.`);
+      return <div className="panel"><div className="panel-header"><span>Layers</span><span className="tiny muted">hide / lock</span></div><div className="panel-body stack">
+        {project.layers.sort((a,b)=>a.order-b.order).map(l => <div className="layer-row" key={l.id}>
+          <button className="icon-btn" aria-label={`${l.visible ? "Hide" : "Show"} ${l.name}`} title="Show/hide layer" onClick={() => toggle(l.id, "visible")}>{l.visible ? "👁" : "—"}</button>
+          <button className="icon-btn" aria-label={`${l.locked ? "Unlock" : "Lock"} ${l.name}`} title="Lock/unlock layer" onClick={() => toggle(l.id, "locked")}>{l.locked ? "🔒" : "🔓"}</button>
+          <span className="small">{l.name}</span>
+          <span className="chip">{project.objects.filter(o=>o.layerId===l.id).length}</span>
+        </div>)}
+      </div></div>;
+    }
+
+    function QuantitiesPanel({ project, dispatch }: { project: Project; dispatch: any }) {
+      const q = useMemo(() => deriveQuantities(project), [project]);
+      return <div className="panel"><div className="panel-header"><span>Quantities</span><span className="tiny muted">meters only</span></div><div className="panel-body stack">
+        <div className="measure-list">
+          <div><span>Polygon area</span><strong>{fmtM2(q.polygonArea)}</strong></div>
+          <div><span>Rectangle area</span><strong>{fmtM2(q.rectangleArea)}</strong></div>
+          <div><span>Circle area</span><strong>{fmtM2(q.circleArea)}</strong></div>
+          <div><span>Line length</span><strong>{fmtM(q.lineLength)}</strong></div>
+          <div><span>Hand-drawn length</span><strong>{fmtM(q.sketchLength)}</strong></div>
+          <div><span>Text objects</span><strong>{q.textCount}</strong></div>
+        </div>
+        <div className="stack" aria-label="Object inventory list">
+          {q.inventory.length ? q.inventory.map(item => <button key={item.id} className="inventory-row" onClick={() => dispatch({type:"SET_UI", patch:{selectedIds:[item.id], selectedHandle:null, status:`Selected ${item.name}.`}})}><span>{item.name}</span><span className="chip">{item.value || "object"}</span></button>) : <div className="muted small">No objects yet.</div>}
+        </div>
+      </div></div>;
+    }
+
+    function ProjectPanel({ project, dispatch }: { project: Project; dispatch: any }) {
+      const apply = (patch: Partial<Project>, status?: string) => dispatch({type:"PROJECT_APPLY", project:{...project, ...patch}, status});
+      const updateWorkspace = (key: "widthM"|"heightM", value: number) => {
+        const workspace = { ...project.workspace, [key]: clamp(value, 5, 500) };
+        dispatch({type:"PROJECT_APPLY", project:resizeWorkspace(project, workspace), status:"Workspace updated."});
+      };
+      return <div className="panel"><div className="panel-header"><span>Project</span><span className="chip">{project.units}</span></div><div className="panel-body stack">
+        <div className="field"><label>Project name</label><input className="input" value={project.name} onChange={e => apply({name:e.target.value}, "Project renamed.")} /></div>
+        <div className="two-cols">
+          <NumberField label="Width (m)" value={project.workspace.widthM} min={5} max={500} onChange={(v:number)=>updateWorkspace("widthM", v)} />
+          <NumberField label="Height (m)" value={project.workspace.heightM} min={5} max={500} onChange={(v:number)=>updateWorkspace("heightM", v)} />
+        </div>
+        <div className="ok-box">Autosave is local to this browser. Export JSON for portable editable backups.</div>
+      </div></div>;
+    }
+
+    function InspectorObjectEditor({ project, object, dispatch, selectedHandle }: { project: Project; object: PlanObject; dispatch: any; selectedHandle: SelectedHandle }) {
+      const layer = getLayer(project, object.layerId);
+      const editable = isEditable(project, object);
+      const canToggleObjectLock = !!layer && layer.visible && !layer.locked && object.visible;
+      const canRotateObject = editable && object.kind !== "property";
+      const applyObject = (patcher: (o: PlanObject) => PlanObject, status?: string) => dispatch({ type:"PROJECT_APPLY", project:expandWorkspaceToPropertyBoundary(updateObject(project, object.id, patcher)), status });
+      const patch = (partial: any, status?: string) => applyObject(o => ({ ...o, ...partial } as PlanObject), status);
+      const style = object.style || KIND_STYLE[object.kind];
+      const color = objectColor(object);
+      const measurements = objectMeasurements(object) as any;
+      const measurementItems = objectMeasurementItems(object, false);
+      const warnings = object.type === "polygon" ? polygonWarnings(object.points) : [];
+      const deleteObject = () => {
+        if (object.kind === "property") { dispatch({type:"SET_UI", patch:{status:"Property boundary cannot be deleted; edit its vertices instead."}}); return; }
+        dispatch({ type:"PROJECT_APPLY", project:{...project, objects:project.objects.filter(o=>o.id!==object.id)}, status:"Object deleted." });
+        dispatch({ type:"SET_UI", patch:{selectedIds:[], selectedHandle:null} });
+      };
+      const duplicateObject = () => {
+        const copy = moveObject({ ...deepClone(object), id: uid(object.kind), name: `${object.name} copy`, z: Date.now() } as PlanObject, 1, 1);
+        dispatch({ type:"PROJECT_APPLY", project:{...project, objects:[...project.objects, copy]}, status:"Object duplicated." });
+        dispatch({ type:"SET_UI", patch:{selectedIds:[copy.id]} });
+      };
+      const bringForward = () => patch({ z: Math.max(...project.objects.filter(o=>o.layerId===object.layerId).map(o=>o.z), object.z) + 1 }, "Brought forward.");
+      const sendBackward = () => patch({ z: Math.min(...project.objects.filter(o=>o.layerId===object.layerId).map(o=>o.z), object.z) - 1 }, "Sent backward.");
+      const updateStyle = (key: keyof Style, value: any) => patch({ style: { ...style, [key]: value } }, "Style updated.");
+      const updateColor = (value: string) => {
+        const fill = object.kind === "property" ? value : (isLineLike(object) ? "none" : value);
+        patch({ style: { ...style, fill, stroke: value } }, "Color updated.");
+      };
+      const rotateBy = (degrees: number) => applyObject(o => rotateObject(o, degrees), "Rotated.");
+      const updateRotation = (degrees: number) => applyObject(o => setObjectRotation(o, degrees), "Rotation updated.");
+      const currentObjectLabel = object.objectLabel || { visible: false, text: object.name, offset: defaultObjectLabelOffset(object), fontSizeM: 1.3 };
+      const updateObjectLabel = (partial: Partial<AttachedLabel>, status = "Object label updated.") => patch({ objectLabel: { ...currentObjectLabel, ...partial } }, status);
+      const toggleAllMeasurements = () => patch({ measurementHidden: !object.measurementHidden }, "Dimension visibility updated.");
+      const toggleMeasurement = (id: string) => {
+        const hidden = new Set(object.hiddenMeasurements || []);
+        hidden.has(id) ? hidden.delete(id) : hidden.add(id);
+        patch({ hiddenMeasurements: Array.from(hidden) }, "Dimension visibility updated.");
+      };
+      const deleteSelectedVertex = () => {
+        if (!selectedHandle || selectedHandle.objectId !== object.id || selectedHandle.kind !== "vertex") return;
+        if (object.type !== "polygon" && object.type !== "polyline") return;
+        const min = object.type === "polygon" ? 3 : 2;
+        if (object.points.length <= min) { dispatch({type:"SET_UI", patch:{status:`Cannot delete: ${object.type} needs at least ${min} vertices.`}}); return; }
+        const pts = object.points.filter((_, i) => i !== selectedHandle.index);
+        applyObject(o => ({ ...(o as any), points: pts }), "Vertex deleted.");
+        dispatch({type:"SET_UI", patch:{selectedHandle:null}});
+      };
+      const updatePoint = (index: number, key: "x"|"y", value: number) => applyObject(o => {
+        if (o.type !== "polygon" && o.type !== "polyline") return o;
+        const pts = o.points.map((p,i) => i === index ? { ...p, [key]: round1(value) } : p);
+        return { ...o, points: pts } as PlanObject;
+      }, "Vertex updated.");
+
+      return <div className="panel"><div className="panel-header"><span>{displayObjectType(object)}</span><span className="chip">{object.type}</span></div><div className="panel-body stack">
+        {!editable && <div className="warning-box">This object is locked, hidden, or on a locked/hidden layer. Unlock it before editing geometry.</div>}
+        {warnings.map((w,i) => <div key={i} className="warning-box">{w}</div>)}
+        <div className="field"><label>Name</label><input className="input" value={object.name} disabled={!editable && object.kind !== "property"} onChange={e => patch({name:e.target.value}, "Name updated.")} /></div>
+        <div className="two-cols">
+          <div className="field"><label>Layer</label><select className="select" value={object.layerId} disabled={!editable || object.kind === "property"} onChange={e => patch({layerId:e.target.value}, "Layer changed.")}>{project.layers.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}</select></div>
+          <div className="field"><label>Type</label><input className="input" value={displayObjectType(object)} disabled /></div>
+        </div>
+        <div className="row wrap">
+          <button className="btn" disabled={!canToggleObjectLock} onClick={() => patch({locked:!object.locked}, object.locked ? "Unlocked." : "Locked.")}>{object.locked ? "Unlock" : "Lock"}</button>
+          <button className="btn" disabled={!editable} onClick={duplicateObject}>Duplicate</button>
+          <button className="btn" disabled={!editable} onClick={bringForward}>Bring forward</button>
+          <button className="btn" disabled={!editable} onClick={sendBackward}>Send backward</button>
+          <button className="btn danger" disabled={!editable || object.kind === "property"} onClick={deleteObject}>Delete</button>
+        </div>
+        {object.kind !== "property" && <div className="stack">
+          <strong className="small">Rotation</strong>
+          <div className="three-cols">
+            <button className="btn" disabled={!canRotateObject} onClick={() => rotateBy(-15)}>⟲ 15°</button>
+            <NumberField label="Angle (°)" value={getRotation(object)} min={0} max={359.9} disabled={!canRotateObject} onChange={(v:number)=>updateRotation(v)} />
+            <button className="btn" disabled={!canRotateObject} onClick={() => rotateBy(15)}>15° ⟳</button>
+          </div>
+        </div>}
+        {object.type !== "label" && <div className="stack">
+          <strong className="small">Object label</strong>
+          <label className="checkbox-line"><input type="checkbox" disabled={!editable} checked={!!currentObjectLabel.visible} onChange={() => updateObjectLabel({ visible: !currentObjectLabel.visible })} /> <span>Show label</span></label>
+          {currentObjectLabel.visible && <div className="stack">
+            <div className="field"><label>Label text</label><input className="input" disabled={!editable} value={currentObjectLabel.text} onChange={e => updateObjectLabel({ text: e.target.value })} /></div>
+            <div className="three-cols">
+              <NumberField label="Offset X" value={currentObjectLabel.offset?.x || 0} disabled={!editable} onChange={(v:number)=>updateObjectLabel({ offset: { ...(currentObjectLabel.offset || {x:0,y:0}), x:v } })} />
+              <NumberField label="Offset Y" value={currentObjectLabel.offset?.y || 0} disabled={!editable} onChange={(v:number)=>updateObjectLabel({ offset: { ...(currentObjectLabel.offset || {x:0,y:0}), y:v } })} />
+              <NumberField label="Text size" value={currentObjectLabel.fontSizeM || 1.3} min={.3} disabled={!editable} onChange={(v:number)=>updateObjectLabel({ fontSizeM:Math.max(.3,v) })} />
+            </div>
+          </div>}
+        </div>}
+        <div className="measure-list">
+          {measurements.area !== undefined && <div><span>Area</span><strong>{fmtM2(measurements.area)}</strong></div>}
+          {measurements.perimeter !== undefined && <div><span>Perimeter</span><strong>{fmtM(measurements.perimeter)}</strong></div>}
+          {measurements.length !== undefined && <div><span>Length</span><strong>{fmtM(measurements.length)}</strong></div>}
+          {measurements.width !== undefined && <div><span>Width</span><strong>{fmtM(measurements.width)}</strong></div>}
+          {measurements.height !== undefined && <div><span>Height</span><strong>{fmtM(measurements.height)}</strong></div>}
+          {measurements.diameter !== undefined && <div><span>Diameter</span><strong>{fmtM(measurements.diameter)}</strong></div>}
+        </div>
+        {measurementItems.length > 0 && <div className="stack">
+          <strong className="small">Dimensions</strong>
+          <label className="checkbox-line"><input type="checkbox" disabled={!editable} checked={!object.measurementHidden} onChange={toggleAllMeasurements} /> Show dimensions</label>
+          <div className="stack">
+            {measurementItems.map(item => <label className="checkbox-line" key={item.id}>
+              <input type="checkbox" disabled={!editable || !!object.measurementHidden} checked={isMeasurementVisible(object, item.id)} onChange={() => toggleMeasurement(item.id)} />
+              <span>{item.label}: {item.value}</span>
+            </label>)}
+          </div>
+        </div>}
+
+        {object.type === "rectangle" && <div className="three-cols">
+          <NumberField label="X" value={object.x} onChange={(v:number)=>patch({x:v}, "X updated.")} />
+          <NumberField label="Y" value={object.y} onChange={(v:number)=>patch({y:v}, "Y updated.")} />
+          <span />
+          <NumberField label="Width" value={object.width} min={.1} onChange={(v:number)=>patch({width:Math.max(.1,v)}, "Width updated.")} />
+          <NumberField label="Height" value={object.height} min={.1} onChange={(v:number)=>patch({height:Math.max(.1,v)}, "Height updated.")} />
+        </div>}
+        {object.type === "circle" && <div className="three-cols">
+          <NumberField label="Center X" value={object.cx} onChange={(v:number)=>patch({cx:v}, "Center updated.")} />
+          <NumberField label="Center Y" value={object.cy} onChange={(v:number)=>patch({cy:v}, "Center updated.")} />
+          <NumberField label="Diameter" value={object.r*2} min={.2} onChange={(v:number)=>patch({r:Math.max(.1, round1(v/2))}, "Diameter updated.")} />
+        </div>}
+        {object.type === "label" && <div className="stack">
+          <div className="field"><label>Text</label><textarea className="textarea" value={object.text} onChange={e => patch({text:e.target.value}, "Label updated.")} /></div>
+          <div className="three-cols"><NumberField label="X" value={object.x} onChange={(v:number)=>patch({x:v}, "X updated.")} /><NumberField label="Y" value={object.y} onChange={(v:number)=>patch({y:v}, "Y updated.")} /><NumberField label="Text size" value={object.fontSizeM} min={.3} onChange={(v:number)=>patch({fontSizeM:Math.max(.3,v)}, "Text size updated.")} /></div>
+        </div>}
+        {object.type === "polyline" && object.kind === "sketch" && <div className="measure-list"><div><span>Sampled points</span><strong>{object.points.length}</strong></div></div>}
+        {(object.type === "polygon" || object.type === "polyline") && object.kind !== "sketch" && <div className="stack">
+          <div className="row between"><strong className="small">Vertices</strong><button className="btn danger" disabled={!selectedHandle || selectedHandle.objectId !== object.id || selectedHandle.kind !== "vertex"} onClick={deleteSelectedVertex}>Delete selected vertex</button></div>
+          <div className="stack">
+            {object.points.map((p, i) => <div className="two-cols" key={i}>
+              <NumberField label={`V${i+1} X`} value={p.x} onChange={(v:number)=>updatePoint(i,"x",v)} />
+              <NumberField label={`V${i+1} Y`} value={p.y} onChange={(v:number)=>updatePoint(i,"y",v)} />
+            </div>)}
+          </div>
+        </div>}
+        <div className="stack">
+          <strong className="small">Style</strong>
+          <div className="stack">
+            <div className="field"><label>Color</label><ColorPalette value={color} disabled={!editable} onChange={updateColor} /></div>
+          </div>
+          <div className="two-cols">
+            {object.type !== "label" ? <NumberField label="Stroke width" value={style.strokeWidth} min={0} disabled={!editable} onChange={(v:number)=>updateStyle("strokeWidth", Math.max(0,v))} /> : <span />}
+            <NumberField label="Opacity" value={style.opacity} min={0} max={1} step={.1} disabled={!editable} onChange={(v:number)=>updateStyle("opacity", clamp(v,0,1))} />
+          </div>
+        </div>
+      </div></div>;
+    }
+
+    function PropertiesInspector({ state, dispatch }: { state: HistoryState; dispatch: any }) {
+      const { project, ui } = state;
+      const selected = selectedObjects(project, ui.selectedIds);
+      return <aside className="inspector" aria-label="Properties inspector">
+        {selected.length === 1 ? <InspectorObjectEditor project={project} object={selected[0]} dispatch={dispatch} selectedHandle={ui.selectedHandle} /> : selected.length > 1 ? <MultiSelectionPanel project={project} selected={selected} dispatch={dispatch} /> : <ProjectPanel project={project} dispatch={dispatch} />}
+        <LayersPanel project={project} dispatch={dispatch} />
+        <QuantitiesPanel project={project} dispatch={dispatch} />
+        <div className="panel"><div className="panel-header"><span>Shortcuts</span></div><div className="panel-body small stack">
+          <div><span className="kbd">V</span> Select · <span className="kbd">P</span> Polygon · <span className="kbd">L</span> Line · <span className="kbd">R</span> Rectangle · <span className="kbd">C</span> Circle · <span className="kbd">T</span> Text</div>
+          <div><span className="kbd">Space</span> Pan · <span className="kbd">Esc</span> cancel/clear · <span className="kbd">Del</span> delete · arrows nudge</div>
+          <div className={ui.tests.failures.length ? "warning-box" : "ok-box"}>Geometry tests: {ui.tests.passed}/{ui.tests.total} passed{ui.tests.failures.length ? ` — ${ui.tests.failures.join(", ")}` : ""}</div>
+        </div></div>
+      </aside>;
+    }
+
+    function MultiSelectionPanel({ project, selected, dispatch }: { project: Project; selected: PlanObject[]; dispatch: any }) {
+      const editableIds = selected.filter(o => isEditable(project, o) && o.kind !== "property").map(o => o.id);
+      const apply = (p: Project, status?: string) => dispatch({type:"PROJECT_APPLY", project:p, status});
+      const moveLayer = (layerId: string) => apply(updateObjects(project, editableIds, o => ({...o, layerId} as PlanObject)), "Moved selected objects to layer.");
+      const rotateSelected = (degrees: number) => apply(updateObjects(project, editableIds, o => rotateObject(o, degrees)), "Rotated selected objects.");
+      const deleteSelected = () => { apply({...project, objects:project.objects.filter(o => !editableIds.includes(o.id))}, "Deleted selected objects."); dispatch({type:"SET_UI", patch:{selectedIds:[]}}); };
+      const duplicate = () => {
+        const copies = selected.filter(o=>editableIds.includes(o.id)).map(o => moveObject({ ...deepClone(o), id: uid(o.kind), name: `${o.name} copy`, z: Date.now() + Math.random() } as PlanObject, 1, 1));
+        apply({...project, objects:[...project.objects, ...copies]}, "Duplicated selected objects.");
+        dispatch({type:"SET_UI", patch:{selectedIds:copies.map(o=>o.id)}});
+      };
+      return <div className="panel"><div className="panel-header"><span>{selected.length} selected objects</span></div><div className="panel-body stack">
+        <div className="field"><label>Move to layer</label><select className="select" onChange={e => moveLayer(e.target.value)} defaultValue=""><option value="" disabled>Choose layer…</option>{project.layers.filter(l=>l.id!=="property").map(l => <option key={l.id} value={l.id}>{l.name}</option>)}</select></div>
+        <div className="row wrap"><button className="btn" disabled={!editableIds.length} onClick={() => rotateSelected(-15)}>⟲ 15°</button><button className="btn" disabled={!editableIds.length} onClick={() => rotateSelected(15)}>15° ⟳</button><button className="btn" onClick={duplicate}>Duplicate</button><button className="btn danger" onClick={deleteSelected}>Delete editable</button></div>
+      </div></div>;
+    }
+
+    function StatusBar({ state }: { state: HistoryState }) {
+      const { project, ui } = state;
+      const sel = ui.selectedIds.length ? `${ui.selectedIds.length} selected` : "No selection";
+      const saved = project.savedAt ? `Saved ${new Date(project.savedAt).toLocaleString()}` : "Autosave active";
+      return <footer className="status-bar" role="status" aria-live="polite">
+        <div className="status-main">{ui.status}</div>
+        <div>{sel}</div>
+        <div>{saved}</div>
+        <div>{ui.tests.passed}/{ui.tests.total} geometry tests</div>
+      </footer>;
+    }
+
+    function ChecklistModal({ onClose }: { onClose: () => void }) {
+      const items = [
+        "Create a new project and confirm the 100.0 m × 100.0 m workspace opens with only the property boundary.",
+        "Edit the property boundary using vertex handles and midpoint insertion.",
+        "Draw a rectangle, then resize it visually and numerically.",
+        "Add polygon, rectangle, line, circle, hand-drawn line, and text objects.",
+        "Edit dimensions, coordinates, object label, text, layer, lock state, and color in the inspector.",
+        "Toggle grid, measurement labels, grid snap, vertex snap, edge snap, midpoint snap, and orthogonal snapping.",
+        "Verify undo/redo with toolbar buttons and Ctrl/Cmd+Z / Ctrl/Cmd+Shift+Z / Ctrl/Cmd+Y.",
+        "Hide and lock layers, then confirm hidden layers disappear and locked layers cannot be edited.",
+        "Reload the page and verify localStorage autosave restores the plan.",
+        "Export JSON, reset/new project, import JSON, and confirm editable objects are restored.",
+        "Export PNG with measurements on, then turn measurements off and export again; selection handles and editor chrome should not appear."
+      ];
+      return <div className="modal-scrim" role="dialog" aria-modal="true" aria-label="Manual QA checklist" onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
+        <div className="modal">
+          <div className="panel-header"><h2>Manual QA checklist</h2><button className="icon-btn" aria-label="Close checklist" onClick={onClose}>×</button></div>
+          <div className="panel-body"><ol>{items.map((item,i)=><li key={i}>{item}</li>)}</ol></div>
+        </div>
+      </div>;
+    }
+
+    function App() {
+      const [state, dispatch] = useReducer(appReducer, null as any, () => ({ project: loadInitialProject(), past: [], future: [], ui: initialUi }));
+      const fitRef = useRef<(() => void) | null>(null);
+      const stateRef = useRef(state);
+      useEffect(() => { stateRef.current = state; });
+
+      useEffect(() => {
+        const t = setTimeout(() => {
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state.project, savedAt: new Date().toISOString() })); } catch (e) { console.warn("Autosave failed", e); }
+        }, 350);
+        return () => clearTimeout(t);
+      }, [state.project]);
+
+      useEffect(() => {
+        const onKeyDown = (e: KeyboardEvent) => {
+          const target = e.target as HTMLElement;
+          const editingText = ["INPUT","TEXTAREA","SELECT"].includes(target.tagName);
+          if (e.code === "Space" && !editingText) { e.preventDefault(); dispatch({type:"SET_UI", patch:{spaceDown:true}}); return; }
+          if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "z") { e.preventDefault(); dispatch({type:e.shiftKey ? "REDO" : "UNDO"}); return; }
+          if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "y") { e.preventDefault(); dispatch({type:"REDO"}); return; }
+          if (editingText) return;
+          const key = e.key.toLowerCase();
+          const toolKeys: Record<string, Tool> = { v:"select", p:"polygon", l:"line", r:"rect", c:"circle", t:"label" };
+          if (toolKeys[key]) { e.preventDefault(); dispatch({type:"SET_TOOL", tool:toolKeys[key]}); return; }
+          if (e.key === "Escape") { dispatch({type:"SET_UI", patch:{drawing:null, selectedIds:[], selectedHandle:null, drag:null, status:"Cancelled / selection cleared."}}); return; }
+          if (e.key === "Delete" || e.key === "Backspace") {
+            e.preventDefault();
+            const { project, ui } = stateRef.current;
+            if (ui.selectedHandle?.kind === "vertex") {
+              const object = project.objects.find(o => o.id === ui.selectedHandle?.objectId);
+              if (object && (object.type === "polygon" || object.type === "polyline")) {
+                const min = object.type === "polygon" ? 3 : 2;
+                if (object.points.length > min) {
+                  const next = updateObject(project, object.id, o => ({ ...(o as any), points:(o as any).points.filter((_:Point, i:number)=>i !== ui.selectedHandle?.index) }));
+                  dispatch({type:"PROJECT_APPLY", project:next, status:"Vertex deleted."});
+                  dispatch({type:"SET_UI", patch:{selectedHandle:null}});
+                }
+              }
+              return;
+            }
+            const deletable = ui.selectedIds.filter(id => project.objects.find(o => o.id === id)?.kind !== "property");
+            if (deletable.length) {
+              dispatch({type:"PROJECT_APPLY", project:{...project, objects:project.objects.filter(o => !deletable.includes(o.id))}, status:"Deleted selected objects."});
+              dispatch({type:"SET_UI", patch:{selectedIds:[], selectedHandle:null}});
+            }
+            return;
+          }
+          if (["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(e.key)) {
+            e.preventDefault();
+            const step = e.shiftKey ? 1 : .1;
+            const dx = e.key === "ArrowLeft" ? -step : e.key === "ArrowRight" ? step : 0;
+            const dy = e.key === "ArrowUp" ? -step : e.key === "ArrowDown" ? step : 0;
+            const { project, ui } = stateRef.current;
+            const editable = ui.selectedIds.filter(id => isEditable(project, project.objects.find(o=>o.id===id)));
+            if (editable.length) dispatch({type:"PROJECT_APPLY", project:updateObjects(project, editable, o => moveObject(o, dx, dy)), status:`Nudged ${fmtM(dx)}, ${fmtM(dy)}.`});
+          }
+          if (e.key === "Enter" && stateRef.current.ui.drawing) {
+            e.preventDefault();
+            // dispatching synthetic finish is done by storing a small flag in status; actual finish button is in workspace.
+            const d = stateRef.current.ui.drawing;
+            if (["polygon","property"].includes(d.tool) && d.points.length >= 3 || ["line","sketch"].includes(d.tool) && d.points.length >= 2) {
+              const obj = createObjectForTool(d.tool, d.points);
+              if (obj) {
+                let next = stateRef.current.project;
+                if (d.tool === "property") next = updateObject(next, "property-boundary", () => ({ ...(obj as PolygonObject), id:"property-boundary", name:"Property boundary", layerId:"property", z:0 }));
+                else next = {...next, objects:[...next.objects, obj]};
+                dispatch({type:"PROJECT_APPLY", project:next, status:`Created ${displayObjectType(obj)}.`});
+                dispatch({type:"SET_UI", patch:{drawing:null, selectedIds:[obj.id], tool:"select"}});
+              }
+            }
+          }
+        };
+        const onKeyUp = (e: KeyboardEvent) => { if (e.code === "Space") dispatch({type:"SET_UI", patch:{spaceDown:false}}); };
+        window.addEventListener("keydown", onKeyDown);
+        window.addEventListener("keyup", onKeyUp);
+        return () => { window.removeEventListener("keydown", onKeyDown); window.removeEventListener("keyup", onKeyUp); };
+      }, []);
+
+      return <div className="app-shell">
+        <TopToolbar state={state} dispatch={dispatch} fitWorkspace={() => fitRef.current?.()} />
+        <div className="editor-layout">
+          <ToolPalette tool={state.ui.tool} dispatch={dispatch} />
+          <SvgWorkspace state={state} dispatch={dispatch} fitRef={fitRef} />
+          <PropertiesInspector state={state} dispatch={dispatch} />
+        </div>
+        <StatusBar state={state} />
+        {state.ui.showChecklist && <ChecklistModal onClose={() => dispatch({type:"SET_UI", patch:{showChecklist:false}})} />}
+      </div>;
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
+  </script>
+  <script>
+    try {
+      const sourceElement = document.getElementById("app-source");
+      if (!sourceElement) throw new Error("App source not found.");
+      const output = Babel.transform(sourceElement.textContent || "", {
+        filename: "backyard-planner.tsx",
+        presets: [
+          ["env", { targets: { browsers: ["defaults"] } }],
+          ["react", { runtime: "classic" }],
+          ["typescript", { isTSX: true, allExtensions: true }]
+        ],
+        sourceMaps: "inline"
+      }).code;
+      new Function(output)();
+    } catch (error) {
+      console.error(error);
+      const root = document.getElementById("root");
+      if (root) {
+        const message = error && error.message ? error.message : String(error);
+        root.textContent = `Backyard Planner failed to start: ${message}`;
+      }
+    }
+  </script>
+</body>
+</html>
