@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <title>Backyard Planner</title>
   <style>
     :root {
@@ -488,7 +489,7 @@
   <script src="https://unpkg.com/@babel/standalone@7.26.0/babel.min.js"></script>
 
   <script id="app-source" type="text/plain">
-    const { useEffect, useMemo, useReducer, useRef, useState } = React;
+    const { useEffect, useMemo, useReducer, useRef } = React;
 
     type Point = { x: number; y: number };
     type Layer = { id: string; name: string; visible: boolean; locked: boolean; order: number };
@@ -545,6 +546,7 @@
     const PX_PER_M = 10;
     const HISTORY_LIMIT = 80;
     const STORAGE_KEY = "backyard-planner-single-file-v1";
+    const STARTER_PROJECT_URL = "plans/plan-terrain-v1.json";
     const FREEHAND_MIN_POINT_DISTANCE_M = .2;
     const FREEHAND_MAX_POINTS = 500;
 
@@ -1404,12 +1406,22 @@
       showChecklist: false,
     };
 
-    function loadInitialProject() {
+    function loadStoredProject() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (raw) return normalizedProject(JSON.parse(raw));
       } catch (e) { console.warn("Could not load autosave", e); }
-      return makeInitialProject();
+      return null;
+    }
+
+    function loadInitialProject() {
+      return loadStoredProject() || makeInitialProject();
+    }
+
+    async function loadStarterProject() {
+      const response = await fetch(STARTER_PROJECT_URL, { cache: "no-cache" });
+      if (!response.ok) throw new Error(`Could not load ${STARTER_PROJECT_URL} (${response.status}).`);
+      return normalizedProject(await response.json());
     }
 
     function appReducer(state: HistoryState, action: any): HistoryState {
@@ -1448,7 +1460,7 @@
         case "NEW_PROJECT":
           return { project: makeInitialProject(), past: [], future: [], ui: { ...state.ui, selectedIds: [], selectedHandle: null, drawing: null, status: "New project created." } };
         case "IMPORT_PROJECT":
-          return { project: expandWorkspaceToPropertyBoundary(action.project), past: [state.project].slice(-HISTORY_LIMIT), future: [], ui: { ...state.ui, selectedIds: [], selectedHandle: null, drawing: null, status: "Project imported." } };
+          return { project: expandWorkspaceToPropertyBoundary(action.project), past: [state.project].slice(-HISTORY_LIMIT), future: [], ui: { ...state.ui, selectedIds: [], selectedHandle: null, drawing: null, status: action.status || "Project imported." } };
         default:
           return state;
       }
@@ -1479,12 +1491,22 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
         applyProject(saved, "Project saved to localStorage.");
       };
+      const loadPlanV1 = async () => {
+        if (!confirm("Load plan v1? This will replace the current project and then autosave it in this browser.")) return;
+        dispatch({ type:"SET_UI", patch:{ status:"Loading plan v1..." } });
+        try {
+          dispatch({ type:"IMPORT_PROJECT", project:await loadStarterProject(), status:"Plan v1 loaded." });
+        } catch (e) {
+          dispatch({ type:"SET_UI", patch:{ status:`Plan v1 load failed: ${(e as Error).message}` } });
+        }
+      };
       const zoom = (factor: number) => dispatch({ type: "SET_UI", patch: { viewport: { ...ui.viewport, scale: clamp(ui.viewport.scale * factor, .15, 6) }, status: `Zoom ${Math.round(clamp(ui.viewport.scale * factor, .15, 6) * 100)}%.` } });
 
       return <div className="top-toolbar" role="toolbar" aria-label="Project toolbar">
         <div className="brand"><span className="brand-mark" aria-hidden="true"></span><span>Backyard Planner</span></div>
         <div className="toolbar-group">
           <button className="btn" title="Create a new empty project" onClick={() => { if (confirm("Create a new project? Unsaved changes remain only in browser history/autosave.")) dispatch({ type: "NEW_PROJECT" }); }}>New</button>
+          <button className="btn" title="Load plans/plan-terrain-v1.json" onClick={loadPlanV1}>Load Plan v1</button>
           <button className="btn" title="Save to this browser's localStorage" onClick={save}>Save</button>
         </div>
         <div className="toolbar-group">
@@ -1718,7 +1740,10 @@
         dispatch({ type:"SET_UI", patch:{ viewport:{ scale, panX: margin, panY: margin }, status:"Workspace fitted." } });
       };
       fitRef.current = fitWorkspace;
-      useEffect(() => { setTimeout(fitWorkspace, 40); }, []);
+      useEffect(() => {
+        const t = setTimeout(fitWorkspace, 40);
+        return () => clearTimeout(t);
+      }, [project.workspace.widthM, project.workspace.heightM]);
 
       const nextSelectionForHit = (id: string, additive = false) => {
         const current = uiRef.current.selectedIds;

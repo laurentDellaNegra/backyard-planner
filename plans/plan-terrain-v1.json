@@ -1,0 +1,724 @@
+{
+  "id": "project-mqw3vn4h-bre1tp",
+  "name": "Untitled backyard plan",
+  "workspace": {
+    "widthM": 200,
+    "heightM": 160
+  },
+  "units": "m",
+  "layers": [
+    {
+      "id": "property",
+      "name": "Property",
+      "visible": true,
+      "locked": false,
+      "order": 0
+    },
+    {
+      "id": "shapes",
+      "name": "Shapes",
+      "visible": true,
+      "locked": false,
+      "order": 1
+    },
+    {
+      "id": "text",
+      "name": "Text",
+      "visible": true,
+      "locked": false,
+      "order": 2
+    }
+  ],
+  "objects": [
+    {
+      "visible": true,
+      "locked": false,
+      "z": 0,
+      "style": {
+        "fill": "#16a34a",
+        "stroke": "#16a34a",
+        "strokeWidth": 0.18,
+        "opacity": 1,
+        "dash": "8 5"
+      },
+      "id": "property-boundary",
+      "type": "polygon",
+      "kind": "property",
+      "name": "Property boundary",
+      "layerId": "property",
+      "points": [
+        {
+          "x": 72.2,
+          "y": 41.3
+        },
+        {
+          "x": 145,
+          "y": 59.4
+        },
+        {
+          "x": 145.4,
+          "y": 106.4
+        },
+        {
+          "x": 55.9,
+          "y": 106.3
+        }
+      ],
+      "rotation": 0,
+      "measurementHidden": false,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {
+        "area": {
+          "x": 20.5,
+          "y": 18.5
+        },
+        "seg-0": {
+          "x": 3.9,
+          "y": -5.7
+        },
+        "seg-1": {
+          "x": 9.9,
+          "y": 1.5
+        },
+        "seg-3": {
+          "x": -5.7,
+          "y": -6.1
+        },
+        "seg-2": {
+          "x": 5.4,
+          "y": 5.1
+        }
+      },
+      "objectLabel": {
+        "visible": true,
+        "text": "Taille totale du terrain = ",
+        "offset": {
+          "x": 10.1,
+          "y": 18.5
+        },
+        "fontSizeM": 1.3
+      }
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1782552592961,
+      "style": {
+        "fill": "#64748b",
+        "stroke": "#64748b",
+        "strokeWidth": 0.12,
+        "opacity": 0.72
+      },
+      "id": "patio-mqw5sfgg-yspx0g",
+      "kind": "rectangle",
+      "name": "Patio/deck 11:29",
+      "layerId": "shapes",
+      "type": "rectangle",
+      "x": 79.6,
+      "y": 94.8,
+      "width": 9,
+      "height": 8.3,
+      "rotation": 0,
+      "measurementHidden": false,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {
+        "area": {
+          "x": 0.2,
+          "y": 1.3
+        }
+      },
+      "objectLabel": {
+        "visible": true,
+        "text": "Maison",
+        "offset": {
+          "x": 0.2,
+          "y": -1.7
+        },
+        "fontSizeM": 1.3
+      }
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1782553717519,
+      "style": {
+        "fill": "#0f172a",
+        "stroke": "#0f172a",
+        "strokeWidth": 0.05,
+        "opacity": 1
+      },
+      "id": "label-mqw6gj66-dv02vc",
+      "kind": "label",
+      "name": "Nord",
+      "layerId": "text",
+      "type": "label",
+      "x": 52.5,
+      "y": 67.8,
+      "text": "Nord",
+      "fontSizeM": 1.5,
+      "rotation": 0,
+      "measurementHidden": false,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Nord",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      }
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1782553766526,
+      "style": {
+        "fill": "#0f172a",
+        "stroke": "#0f172a",
+        "strokeWidth": 0.05,
+        "opacity": 1
+      },
+      "id": "label-mqw6hkzh-g4s4o3",
+      "kind": "label",
+      "name": "Label 11:49",
+      "layerId": "text",
+      "type": "label",
+      "x": 107.9,
+      "y": 44.8,
+      "text": "Est",
+      "fontSizeM": 1.5,
+      "rotation": 0,
+      "measurementHidden": false,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Label 11:49",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      }
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1782553780908,
+      "style": {
+        "fill": "#0f172a",
+        "stroke": "#0f172a",
+        "strokeWidth": 0.05,
+        "opacity": 1
+      },
+      "id": "label-mqw6hw2z-8zqlzc",
+      "kind": "label",
+      "name": "Label 11:49",
+      "layerId": "text",
+      "type": "label",
+      "x": 149.7,
+      "y": 84.4,
+      "text": "Sud",
+      "fontSizeM": 1.5,
+      "rotation": 0,
+      "measurementHidden": false,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Label 11:49",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      }
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1782553792902,
+      "style": {
+        "fill": "#0f172a",
+        "stroke": "#0f172a",
+        "strokeWidth": 0.05,
+        "opacity": 1
+      },
+      "id": "label-mqw6i5c6-gmdxna",
+      "kind": "label",
+      "name": "Label 11:49",
+      "layerId": "text",
+      "type": "label",
+      "x": 99.5,
+      "y": 111.6,
+      "text": "Ouest",
+      "fontSizeM": 1.5,
+      "rotation": 0,
+      "measurementHidden": false,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Label 11:49",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      }
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1782554045012,
+      "style": {
+        "fill": "#491664",
+        "stroke": "#491664",
+        "strokeWidth": 0.12,
+        "opacity": 0.55
+      },
+      "id": "tree-mqw6njv7-vt6267",
+      "kind": "circle",
+      "name": "Tree 11:54",
+      "layerId": "shapes",
+      "type": "circle",
+      "cx": 71.6,
+      "cy": 99.5,
+      "r": 2.2,
+      "rotation": 0,
+      "measurementHidden": true,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": true,
+        "text": "Puit",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      }
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1782555561954,
+      "style": {
+        "fill": "#c47021",
+        "stroke": "#c47021",
+        "strokeWidth": 0.12,
+        "opacity": 0.55
+      },
+      "id": "tree-mqw7k2ci-9aqzhh",
+      "kind": "circle",
+      "name": "Tree 12:19",
+      "layerId": "shapes",
+      "type": "circle",
+      "cx": 84.7,
+      "cy": 89.1,
+      "r": 2.5,
+      "rotation": 0,
+      "measurementHidden": true,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": true,
+        "text": "Fosse sceptique ?",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      }
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1782555899799,
+      "style": {
+        "fill": "#b45309",
+        "stroke": "#b45309",
+        "strokeWidth": 0.14,
+        "opacity": 0.82
+      },
+      "id": "shed-mqw7rb12-g6zi7g",
+      "kind": "rectangle",
+      "name": "Shed 12:24",
+      "layerId": "shapes",
+      "type": "rectangle",
+      "x": 63.8,
+      "y": 80.1,
+      "width": 6,
+      "height": 4,
+      "rotation": 283.3,
+      "measurementHidden": false,
+      "hiddenMeasurements": [
+        "area"
+      ],
+      "measurementOffsets": {
+        "width": {
+          "x": -0.9,
+          "y": 1.4
+        }
+      },
+      "objectLabel": {
+        "visible": true,
+        "text": "Cabanne",
+        "offset": {
+          "x": 0,
+          "y": 5.1
+        },
+        "fontSizeM": 1.3
+      }
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1782557634527,
+      "style": {
+        "fill": "#b45309",
+        "stroke": "#b45309",
+        "strokeWidth": 0.14,
+        "opacity": 0.82
+      },
+      "id": "shed-mqw8shjz-s6lgn3",
+      "kind": "rectangle",
+      "name": "Shed 12:53",
+      "layerId": "shapes",
+      "rotation": 0,
+      "type": "rectangle",
+      "x": 95.3,
+      "y": 79.7,
+      "width": 6.5,
+      "height": 4.6,
+      "measurementHidden": false,
+      "hiddenMeasurements": [
+        "area"
+      ],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": true,
+        "text": "Abris voiture",
+        "offset": {
+          "x": 0.3,
+          "y": 4.3
+        },
+        "fontSizeM": 1.3
+      }
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1782573637586,
+      "id": "polygon-mqwibhle-ojpe2q",
+      "kind": "polygon",
+      "name": "Polygon 17:20",
+      "layerId": "shapes",
+      "style": {
+        "fill": "#16a34a",
+        "stroke": "#16a34a",
+        "strokeWidth": 0.12,
+        "opacity": 0.58
+      },
+      "rotation": 0,
+      "measurementHidden": true,
+      "hiddenMeasurements": [
+        "seg-0",
+        "seg-1",
+        "seg-2",
+        "seg-3"
+      ],
+      "measurementOffsets": {
+        "seg-2": {
+          "x": -3,
+          "y": 0.5
+        },
+        "seg-1": {
+          "x": 0.1,
+          "y": 2.3
+        },
+        "seg-3": {
+          "x": -0.6,
+          "y": -2.4
+        },
+        "seg-0": {
+          "x": 3.4,
+          "y": 1
+        },
+        "area": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "objectLabel": {
+        "visible": false,
+        "text": "Taille terrain cloture = ",
+        "offset": {
+          "x": -9.8,
+          "y": -0.1
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "polygon",
+      "points": [
+        {
+          "x": 64.7,
+          "y": 71.4
+        },
+        {
+          "x": 72.2,
+          "y": 41.3
+        },
+        {
+          "x": 145,
+          "y": 59.4
+        },
+        {
+          "x": 145.2,
+          "y": 81.9
+        }
+      ]
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1782573824701,
+      "id": "line-mqwifhz1-mf1ifa",
+      "kind": "line",
+      "name": "Line 17:23",
+      "layerId": "shapes",
+      "style": {
+        "fill": "none",
+        "stroke": "#94a3b8",
+        "strokeWidth": 1,
+        "opacity": 0.95
+      },
+      "rotation": 0,
+      "measurementHidden": false,
+      "hiddenMeasurements": [
+        "seg-3"
+      ],
+      "measurementOffsets": {
+        "seg-2": {
+          "x": -3.2,
+          "y": 1.7
+        },
+        "length": {
+          "x": -6.3,
+          "y": 27.1
+        },
+        "seg-0": {
+          "x": 2.1,
+          "y": 2.5
+        },
+        "seg-1": {
+          "x": 10.1,
+          "y": -1.4
+        }
+      },
+      "objectLabel": {
+        "visible": true,
+        "text": "Longueur totale du Mur =",
+        "offset": {
+          "x": 28,
+          "y": 19.4
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "polyline",
+      "points": [
+        {
+          "x": 64.7,
+          "y": 71.4
+        },
+        {
+          "x": 55.9,
+          "y": 106.3
+        },
+        {
+          "x": 145.4,
+          "y": 106.4
+        },
+        {
+          "x": 145.2,
+          "y": 81.9
+        }
+      ],
+      "widthM": 0
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1782574059065,
+      "id": "line-mqwikit5-lh65k9",
+      "kind": "line",
+      "name": "Line 17:27",
+      "layerId": "shapes",
+      "style": {
+        "fill": "none",
+        "stroke": "#7c2d12",
+        "strokeWidth": 1.1,
+        "opacity": 0.95
+      },
+      "rotation": 0,
+      "measurementHidden": false,
+      "hiddenMeasurements": [
+        "seg-0"
+      ],
+      "measurementOffsets": {
+        "length": {
+          "x": 2.8,
+          "y": -0.5
+        }
+      },
+      "objectLabel": {
+        "visible": true,
+        "text": "Grand portail",
+        "offset": {
+          "x": -5.2,
+          "y": 0.4
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "polyline",
+      "points": [
+        {
+          "x": 64.5,
+          "y": 72.2
+        },
+        {
+          "x": 63.6,
+          "y": 75.6
+        }
+      ],
+      "widthM": 0
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1782574222913,
+      "id": "line-mqwio18h-kq63l3",
+      "kind": "line",
+      "name": "Line 17:27 copy",
+      "layerId": "shapes",
+      "style": {
+        "fill": "none",
+        "stroke": "#7c2d12",
+        "strokeWidth": 1.1,
+        "opacity": 0.95
+      },
+      "rotation": 0,
+      "measurementHidden": false,
+      "hiddenMeasurements": [
+        "seg-0"
+      ],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": true,
+        "text": "Portail",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "polyline",
+      "points": [
+        {
+          "x": 96.2,
+          "y": 106.3
+        },
+        {
+          "x": 94.7,
+          "y": 106.3
+        }
+      ],
+      "widthM": 0
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1782575024757,
+      "id": "line-mqwj57xw-9rqafa",
+      "kind": "line",
+      "name": "Line 17:43",
+      "layerId": "shapes",
+      "style": {
+        "fill": "none",
+        "stroke": "#ca8a04",
+        "strokeWidth": 1,
+        "opacity": 0.95
+      },
+      "rotation": 0,
+      "measurementHidden": false,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {
+        "length": {
+          "x": 46.3,
+          "y": 27.7
+        },
+        "seg-2": {
+          "x": -2.9,
+          "y": -0.1
+        },
+        "seg-1": {
+          "x": -0.2,
+          "y": -1.4
+        },
+        "seg-0": {
+          "x": 3.3,
+          "y": 0.9
+        },
+        "seg-3": {
+          "x": -1.4,
+          "y": 2
+        }
+      },
+      "objectLabel": {
+        "visible": true,
+        "text": "Longueur totale cloture = ",
+        "offset": {
+          "x": 3.2,
+          "y": 6.7
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "polyline",
+      "points": [
+        {
+          "x": 72.2,
+          "y": 41.3
+        },
+        {
+          "x": 64.7,
+          "y": 71.4
+        },
+        {
+          "x": 145.2,
+          "y": 81.9
+        },
+        {
+          "x": 145,
+          "y": 59.4
+        },
+        {
+          "x": 72.2,
+          "y": 41.3
+        }
+      ],
+      "widthM": 0
+    }
+  ],
+  "settings": {
+    "showGrid": true,
+    "showMeasurements": true,
+    "snapToGrid": false,
+    "snapToVertices": true,
+    "snapToEdges": true,
+    "snapToMidpoints": true,
+    "orthogonalSnap": false
+  },
+  "savedAt": "2026-06-27T15:53:30.636Z"
+}

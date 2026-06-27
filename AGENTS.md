@@ -5,12 +5,13 @@ This repo currently ships a **single-file React/TypeScript backyard planner**. K
 ## Current Project Shape
 
 - Main app: `index.html`
+- Starter plan: `plans/plan-terrain-v1.json`
 - Documentation: `README.md`
 - Delivery format: one self-contained HTML file.
 - Runtime: React 18 UMD, ReactDOM 18 UMD, Babel Standalone from CDNs.
 - App script: inline TypeScript/TSX in `<script id="app-source" type="text/plain">`, transformed at runtime by Babel.
 - Rendering: SVG editor surface.
-- Persistence: browser `localStorage`, editable JSON import/export, SVG-to-canvas PNG export.
+- Persistence: browser `localStorage`, manual static plan loading, editable JSON import/export, SVG-to-canvas PNG export.
 
 Do not split the app into multiple files, add a build system, or migrate to Vite unless the user explicitly asks for that.
 
@@ -73,13 +74,14 @@ Default layers:
 2. `shapes` - Shapes
 3. `text` - Text
 
-Autosave key:
+Plan loading and autosave keys:
 
 ```ts
+const STARTER_PROJECT_URL = "plans/plan-terrain-v1.json";
 const STORAGE_KEY = "backyard-planner-single-file-v1";
 ```
 
-Keep this key unless the user explicitly accepts losing/migrating existing browser autosaves.
+Keep the storage key unless the user explicitly accepts losing/migrating existing browser autosaves. Keep the plan URL relative so the manual `Load Plan v1` button works under GitHub Pages project paths.
 
 ## State Rules
 
@@ -110,6 +112,8 @@ Line numbers drift; use `rg` first.
 - Defaults: `defaultLayers`, `KIND_LABELS`, `KIND_LAYER`, `KIND_STYLE`.
 - Initial project: `makeInitialProject()`.
 - Import normalization: `normalizedProject()`.
+- Startup loading: `loadInitialProject()` restores `localStorage` or creates a blank project.
+- Manual Plan v1 loading: `loadStarterProject()` fetches `plans/plan-terrain-v1.json`.
 - Object creation: `createObjectForTool()`.
 - Snapping: `collectSnapTargets()` and `applySnapping()`.
 - Quantities and measurements: `objectMeasurements()`, `objectMeasurementItems()`, `deriveQuantities()`.
