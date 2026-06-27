@@ -123,7 +123,7 @@
     .btn:hover, .icon-btn:hover, .toggle-btn:hover { background: #273244; border-color: #64748b; }
     .btn:active, .icon-btn:active, .toggle-btn:active { transform: translateY(1px); }
     .btn[disabled], .icon-btn[disabled] { opacity: .45; cursor: not-allowed; transform: none; }
-    .toggle-btn[aria-pressed="true"], .tool-btn.active { background: #075985; border-color: var(--accent); color: white; }
+    .btn[aria-pressed="true"], .toggle-btn[aria-pressed="true"], .tool-btn.active { background: #075985; border-color: var(--accent); color: white; }
     .toggle-btn.compact { min-width: 34px; padding: 6px 7px; }
     .danger { border-color: rgba(251,113,133,.55); color: #fecdd3; }
     .danger:hover { background: #4c1d2f; border-color: #fb7185; }
@@ -428,6 +428,9 @@
     .handle { fill: #f8fafc; stroke: #0284c7; stroke-width: 1.5; vector-effect: non-scaling-stroke; cursor: grab; }
     .handle:hover { fill: #bae6fd; stroke: #0369a1; }
     .mid-handle { fill: #fef3c7; stroke: #d97706; stroke-width: 1.3; vector-effect: non-scaling-stroke; cursor: copy; }
+    .segment-handle { fill: none; stroke: rgba(14,165,233,.001); stroke-width: 10; vector-effect: non-scaling-stroke; pointer-events: stroke; cursor: pointer; }
+    .segment-handle:hover { stroke: rgba(14,165,233,.28); }
+    .selected-segment { fill: none; stroke: #f97316; stroke-width: 3.5; vector-effect: non-scaling-stroke; stroke-dasharray: 6 4; pointer-events: stroke; cursor: pointer; }
     .resize-handle { fill: #f8fafc; stroke: #7c3aed; stroke-width: 1.5; vector-effect: non-scaling-stroke; cursor: nwse-resize; }
     .selection-outline { fill: none; stroke: #0284c7; stroke-width: 2; vector-effect: non-scaling-stroke; stroke-dasharray: 7 4; pointer-events: none; }
     .hover-outline { fill: none; stroke: rgba(14,165,233,.75); stroke-width: 1.5; vector-effect: non-scaling-stroke; pointer-events: none; }
@@ -521,7 +524,7 @@
     type Tool = "select" | "pan" | "property" | "polygon" | "line" | "rect" | "circle" | "sketch" | "label";
     type DragMode = "pan" | "move" | "vertex" | "midpoint" | "resize" | "radius" | "draw-rect" | "draw-circle" | "draw-freehand" | "select-box" | "measure-label" | "object-label";
     type MeasurementItem = { id: string; label: string; value: string; point: Point };
-    type SelectedHandle = null | { objectId: string; kind: "vertex" | "midpoint" | "resize" | "radius"; index?: number; corner?: string };
+    type SelectedHandle = null | { objectId: string; kind: "vertex" | "segment" | "midpoint" | "resize" | "radius"; index?: number; corner?: string };
     type SnapResult = { point: Point; indicator?: { point: Point; label: string; line?: [Point, Point] } };
     type HistoryState = { project: Project; past: Project[]; future: Project[]; ui: UiState };
     type UiState = {
@@ -653,6 +656,32 @@
       }
       if (polygonSelfIntersects(points)) warnings.push("Polygon edges self-intersect.");
       return Array.from(new Set(warnings));
+    }
+
+    function pathMinPointCount(o: PlanObject) {
+      return o.type === "polygon" ? 3 : o.type === "polyline" ? 2 : 0;
+    }
+
+    function pathSegmentCount(o: PlanObject) {
+      if (o.type === "polygon") return o.points.length;
+      if (o.type === "polyline") return Math.max(0, o.points.length - 1);
+      return 0;
+    }
+
+    function deleteVertexFromObject(o: PlanObject, index: number): PlanObject | null {
+      if (o.type !== "polygon" && o.type !== "polyline") return null;
+      const min = pathMinPointCount(o);
+      if (o.points.length <= min || !Number.isInteger(index) || index < 0 || index >= o.points.length) return null;
+      return { ...o, points: o.points.filter((_, i) => i !== index) } as PlanObject;
+    }
+
+    function deleteSegmentFromObject(o: PlanObject, index: number): PlanObject | null {
+      if (o.type !== "polygon" && o.type !== "polyline") return null;
+      const min = pathMinPointCount(o);
+      const segmentCount = pathSegmentCount(o);
+      if (o.points.length <= min || !Number.isInteger(index) || index < 0 || index >= segmentCount) return null;
+      const deleteIndex = o.type === "polyline" && index === 0 ? 0 : (index + 1) % o.points.length;
+      return deleteVertexFromObject(o, deleteIndex);
     }
 
     function boundingBoxForObject(o: PlanObject) {
@@ -1348,6 +1377,10 @@
         ["polygon area", () => polygonArea([{x:0,y:0},{x:10,y:0},{x:10,y:10},{x:0,y:10}]) === 100],
         ["self-intersection", () => polygonSelfIntersects([{x:0,y:0},{x:4,y:4},{x:0,y:4},{x:4,y:0}]) === true],
         ["path length", () => pathLength([{x:0,y:0},{x:3,y:4},{x:6,y:4}]) === 8],
+        ["segment deletion", () => {
+          const next = deleteSegmentFromObject({type:"polyline", id:"s", kind:"line", name:"s", layerId:"shapes", locked:false, visible:true, style:KIND_STYLE.line, z:0, points:[{x:0,y:0},{x:1,y:0},{x:2,y:0}]}, 0) as PolylineObject | null;
+          return !!next && next.points.length === 2 && next.points[0].x === 1 && next.points[1].x === 2;
+        }],
         ["rectangle measurement", () => rectArea({type:"rectangle", id:"t", kind:"rectangle", name:"r", layerId:"shapes", locked:false, visible:true, style:KIND_STYLE.rectangle, z:0, x:0,y:0,width:5,height:4}) === 20],
         ["hidden measurement", () => objectMeasurementItems({type:"rectangle", id:"h", kind:"rectangle", name:"h", layerId:"shapes", locked:false, visible:true, style:KIND_STYLE.rectangle, z:0, x:0,y:0,width:5,height:4, hiddenMeasurements:["width"]}).length === 2],
         ["circle measurement", () => round1(circlePerimeter({type:"circle", id:"c", kind:"circle", name:"c", layerId:"shapes", locked:false, visible:true, style:KIND_STYLE.circle, z:0, cx:0,cy:0,r:2})) === 12.6],
@@ -1583,8 +1616,14 @@
       const circleSize = 5;
       objs.forEach(o => {
         if ((o.type === "polygon" || o.type === "polyline") && o.kind !== "sketch") {
+          const segmentCount = pathSegmentCount(o);
+          for (let i = 0; i < segmentCount; i++) {
+            const a = o.points[i], b = o.points[(i + 1) % o.points.length];
+            const selected = selectedHandle?.objectId === o.id && selectedHandle.kind === "segment" && selectedHandle.index === i;
+            handles.push(<line key={`${o.id}-s-${i}`} className={selected ? "selected-segment" : "segment-handle"} x1={mToPx(a.x)} y1={mToPx(a.y)} x2={mToPx(b.x)} y2={mToPx(b.y)} data-handle-object={o.id} data-handle-kind="segment" data-handle-index={i} />);
+          }
           o.points.forEach((p, i) => handles.push(<circle key={`${o.id}-v-${i}`} className="handle" cx={mToPx(p.x)} cy={mToPx(p.y)} r={circleSize} data-handle-object={o.id} data-handle-kind="vertex" data-handle-index={i} />));
-          const edgeCount = o.type === "polygon" ? o.points.length : o.points.length - 1;
+          const edgeCount = segmentCount;
           for (let i = 0; i < edgeCount; i++) {
             const m = midpoint(o.points[i], o.points[(i+1) % o.points.length]);
             handles.push(<rect key={`${o.id}-m-${i}`} className="mid-handle" x={mToPx(m.x)-4} y={mToPx(m.y)-4} width={8} height={8} transform={`rotate(45 ${mToPx(m.x)} ${mToPx(m.y)})`} data-handle-object={o.id} data-handle-kind="midpoint" data-handle-index={i} />);
@@ -1760,9 +1799,17 @@
           e.stopPropagation();
           const objectId = handleEl.getAttribute("data-handle-object");
           const kind = handleEl.getAttribute("data-handle-kind");
+          if (!objectId || !kind) return;
           const index = Number(handleEl.getAttribute("data-handle-index"));
           const corner = handleEl.getAttribute("data-handle-corner");
           const beforeProject = deepClone(projectRef.current);
+          if (kind === "segment") {
+            const object = projectRef.current.objects.find(o => o.id === objectId);
+            const drag = object && isEditable(projectRef.current, object) ? {mode:"move", start:p, beforeProject, ids:[object.id]} : null;
+            dispatch({type:"SET_UI", patch:{selectedIds:object ? [object.id] : [objectId], selectedHandle:{objectId, kind:"segment", index}, drag, status:`Segment ${index + 1} selected. Press Delete to remove it.`}});
+            if (drag) try { svgRef.current?.setPointerCapture(e.pointerId); } catch {}
+            return;
+          }
           if (kind === "midpoint") {
             const next = updateObject(projectRef.current, objectId, (o: PlanObject) => {
               if (o.type !== "polygon" && o.type !== "polyline") return o;
@@ -2114,6 +2161,8 @@
       const color = objectColor(object);
       const measurements = objectMeasurements(object) as any;
       const measurementItems = objectMeasurementItems(object, false);
+      const segmentCount = pathSegmentCount(object);
+      const selectedSegment = selectedHandle?.objectId === object.id && selectedHandle.kind === "segment" ? selectedHandle.index : undefined;
       const warnings = object.type === "polygon" ? polygonWarnings(object.points) : [];
       const deleteObject = () => {
         if (object.kind === "property") { dispatch({type:"SET_UI", patch:{status:"Property boundary cannot be deleted; edit its vertices instead."}}); return; }
@@ -2145,11 +2194,22 @@
       const deleteSelectedVertex = () => {
         if (!selectedHandle || selectedHandle.objectId !== object.id || selectedHandle.kind !== "vertex") return;
         if (object.type !== "polygon" && object.type !== "polyline") return;
-        const min = object.type === "polygon" ? 3 : 2;
-        if (object.points.length <= min) { dispatch({type:"SET_UI", patch:{status:`Cannot delete: ${object.type} needs at least ${min} vertices.`}}); return; }
-        const pts = object.points.filter((_, i) => i !== selectedHandle.index);
-        applyObject(o => ({ ...(o as any), points: pts }), "Vertex deleted.");
+        const min = pathMinPointCount(object);
+        const index = selectedHandle.index ?? -1;
+        if (!deleteVertexFromObject(object, index)) { dispatch({type:"SET_UI", patch:{status:`Cannot delete: ${object.type} needs at least ${min} vertices.`}}); return; }
+        applyObject(o => deleteVertexFromObject(o, index) || o, "Vertex deleted.");
         dispatch({type:"SET_UI", patch:{selectedHandle:null}});
+      };
+      const deleteSegment = (index: number) => {
+        if (object.type !== "polygon" && object.type !== "polyline") return;
+        const min = pathMinPointCount(object);
+        if (!deleteSegmentFromObject(object, index)) { dispatch({type:"SET_UI", patch:{status:`Cannot delete: ${object.type} needs at least ${min} vertices.`}}); return; }
+        applyObject(o => deleteSegmentFromObject(o, index) || o, "Segment deleted.");
+        dispatch({type:"SET_UI", patch:{selectedHandle:null}});
+      };
+      const deleteSelectedSegment = () => {
+        if (selectedSegment === undefined) return;
+        deleteSegment(selectedSegment);
       };
       const updatePoint = (index: number, key: "x"|"y", value: number) => applyObject(o => {
         if (o.type !== "polygon" && o.type !== "polyline") return o;
@@ -2236,6 +2296,19 @@
               <NumberField label={`V${i+1} Y`} value={p.y} onChange={(v:number)=>updatePoint(i,"y",v)} />
             </div>)}
           </div>
+          {segmentCount > 0 && <div className="stack">
+            <div className="row between"><strong className="small">Segments</strong><button className="btn danger" disabled={selectedSegment === undefined} onClick={deleteSelectedSegment}>Delete selected segment</button></div>
+            <div className="stack">
+              {Array.from({ length: segmentCount }).map((_, i) => {
+                const a = object.points[i], b = object.points[(i + 1) % object.points.length];
+                const selected = selectedSegment === i;
+                return <div className="row between" key={i}>
+                  <button className="btn" disabled={!editable} aria-pressed={selected} onClick={() => dispatch({type:"SET_UI", patch:{selectedHandle:{objectId:object.id, kind:"segment", index:i}, status:`Segment ${i + 1} selected.`}})}>Segment {i + 1}: {fmtM(distance(a, b))}</button>
+                  <button className="btn danger" disabled={!editable} onClick={() => deleteSegment(i)}>Delete</button>
+                </div>;
+              })}
+            </div>
+          </div>}
         </div>}
         <div className="stack">
           <strong className="small">Style</strong>
@@ -2344,14 +2417,17 @@
           if (e.key === "Delete" || e.key === "Backspace") {
             e.preventDefault();
             const { project, ui } = stateRef.current;
-            if (ui.selectedHandle?.kind === "vertex") {
+            if (ui.selectedHandle?.kind === "vertex" || ui.selectedHandle?.kind === "segment") {
               const object = project.objects.find(o => o.id === ui.selectedHandle?.objectId);
               if (object && (object.type === "polygon" || object.type === "polyline")) {
-                const min = object.type === "polygon" ? 3 : 2;
-                if (object.points.length > min) {
-                  const next = updateObject(project, object.id, o => ({ ...(o as any), points:(o as any).points.filter((_:Point, i:number)=>i !== ui.selectedHandle?.index) }));
-                  dispatch({type:"PROJECT_APPLY", project:next, status:"Vertex deleted."});
+                const index = ui.selectedHandle.index ?? -1;
+                const nextObject = ui.selectedHandle.kind === "vertex" ? deleteVertexFromObject(object, index) : deleteSegmentFromObject(object, index);
+                if (nextObject) {
+                  const next = updateObject(project, object.id, () => nextObject);
+                  dispatch({type:"PROJECT_APPLY", project:next, status:ui.selectedHandle.kind === "vertex" ? "Vertex deleted." : "Segment deleted."});
                   dispatch({type:"SET_UI", patch:{selectedHandle:null}});
+                } else {
+                  dispatch({type:"SET_UI", patch:{status:`Cannot delete: ${object.type} needs at least ${pathMinPointCount(object)} vertices.`}});
                 }
               }
               return;

@@ -160,7 +160,7 @@ Keyboard shortcuts:
 - `T`: Text
 - `Space`: Pan
 - `Esc`: cancel drawing or clear selection
-- `Delete` / `Backspace`: delete selected object or selected vertex where valid
+- `Delete` / `Backspace`: delete selected object, vertex, or segment where valid
 - Arrow keys: nudge selected editable objects
 - `Shift` + arrow: larger nudge
 - `Ctrl/Cmd+Z`: undo
@@ -183,7 +183,7 @@ Manual QA checklist from the app:
 2. Edit the property boundary using vertex handles and midpoint insertion.
 3. Draw a rectangle, then resize it visually and numerically.
 4. Add polygon, rectangle, line, circle, hand-drawn line, and text objects.
-5. Edit dimensions, coordinates, object label, text, layer, lock state, and color in the inspector.
+5. Edit dimensions, coordinates, vertices, segments, object label, text, layer, lock state, and color in the inspector.
 6. Toggle grid, measurement labels, grid snap, vertex snap, edge snap, midpoint snap, and orthogonal snapping.
 7. Verify undo/redo with toolbar buttons and `Ctrl/Cmd+Z`, `Ctrl/Cmd+Shift+Z`, and `Ctrl/Cmd+Y`.
 8. Hide and lock layers, then confirm hidden layers disappear and locked layers cannot be edited.
