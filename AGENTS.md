@@ -18,6 +18,8 @@ This repo ships a Vite React/TypeScript backyard planner. Keep this file focused
 
 Vite uses `base: "./"` so production builds work under GitHub Pages project paths.
 
+GitHub Pages must use the GitHub Actions workflow in `.github/workflows/deploy-pages.yml`, which deploys `dist/`. Do not use legacy Pages from `main` branch `/`; that serves the Vite source `index.html` and breaks in browsers.
+
 ## Product Scope
 
 Backyard Planner is a desktop/laptop planning tool in meters. It is intended for accurate-enough homeowner planning, not CAD, legal, survey, permit, or construction-grade work.
@@ -175,6 +177,7 @@ After meaningful changes:
 2. Run `npm run test`.
 3. Run `npm run build`.
 4. Smoke-test with `npm run dev` or `npm run preview`.
+5. For deployment changes, confirm Pages is set to GitHub Actions, not legacy branch-root publishing.
 
 Manual QA checklist from the app:
 
