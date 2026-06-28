@@ -18,7 +18,7 @@ This repo ships a Vite React/TypeScript backyard planner. Keep this file focused
 
 Vite uses `base: "./"` so production builds work under GitHub Pages project paths.
 
-GitHub Pages must use the GitHub Actions workflow in `.github/workflows/deploy-pages.yml`, which deploys `dist/`. Do not use legacy Pages from `main` branch `/`; that serves the Vite source `index.html` and breaks in browsers.
+GitHub Pages must serve the `gh-pages` branch root. The workflow in `.github/workflows/deploy-pages.yml` builds `dist/` and force-publishes it to `gh-pages`. Do not use legacy Pages from `main` branch `/`; that serves the Vite source `index.html` and breaks in browsers.
 
 ## Product Scope
 
@@ -177,7 +177,7 @@ After meaningful changes:
 2. Run `npm run test`.
 3. Run `npm run build`.
 4. Smoke-test with `npm run dev` or `npm run preview`.
-5. For deployment changes, confirm Pages is set to GitHub Actions, not legacy branch-root publishing.
+5. For deployment changes, confirm Pages is set to the `gh-pages` branch root, not `main` branch `/`.
 
 Manual QA checklist from the app:
 

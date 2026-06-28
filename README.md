@@ -23,4 +23,4 @@ The Vite config uses `base: "./"` so the built app can run from a GitHub Pages p
 
 ## Deploy
 
-GitHub Pages is deployed by `.github/workflows/deploy-pages.yml`. Do not configure Pages to serve the repository root directly; the root `index.html` is the Vite development shell and must be built first. The workflow deploys the generated `dist/` artifact.
+GitHub Pages is deployed by `.github/workflows/deploy-pages.yml`. Do not configure Pages to serve the repository root directly; the root `index.html` is the Vite development shell and must be built first. The workflow builds `dist/` and publishes it to the `gh-pages` branch.
