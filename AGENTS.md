@@ -1,21 +1,22 @@
 # Backyard Planner Agent Guide
 
-This repo currently ships a **single-file React/TypeScript backyard planner**. Keep this file focused on the facts an agent needs before editing.
+This repo ships a Vite React/TypeScript backyard planner. Keep this file focused on the facts an agent needs before editing.
 
 ## Current Project Shape
 
-- Main app: `index.html`
-- Starter plan: `plans/plan-terrain-v1.json`
+- App entry HTML: `index.html`
+- React entry: `src/main.tsx`
+- Root app shell: `src/App.tsx`
+- Pure model/geometry/state/export logic: `src/model.ts`
+- Component files: `src/components/`
+- Styles: `src/styles.css`
+- Plan v1: `public/plans/plan-terrain-v1.json`
 - Documentation: `README.md`
-- Delivery format: one self-contained HTML file.
-- Runtime: React 18 UMD, ReactDOM 18 UMD, Babel Standalone from CDNs.
-- App script: inline TypeScript/TSX in `<script id="app-source" type="text/plain">`, transformed at runtime by Babel.
+- Runtime: Vite, React 18, TypeScript.
 - Rendering: SVG editor surface.
 - Persistence: browser `localStorage`, manual static plan loading, editable JSON import/export, SVG-to-canvas PNG export.
 
-Do not split the app into multiple files, add a build system, or migrate to Vite unless the user explicitly asks for that.
-
-The file needs an internet-connected browser on first load because React and Babel are loaded from CDNs.
+Vite uses `base: "./"` so production builds work under GitHub Pages project paths.
 
 ## Product Scope
 
@@ -106,21 +107,15 @@ When changing schema or object fields, update `normalizedProject()` so older exp
 
 Line numbers drift; use `rg` first.
 
-- CSS/layout: top `<style>` block.
-- Type definitions and constants: near `type Point`, `PX_PER_M`, `HISTORY_LIMIT`, `STORAGE_KEY`.
-- Geometry helpers: `polygonArea`, `pathLength`, `rotatePointAround`, hit testing, transforms.
-- Defaults: `defaultLayers`, `KIND_LABELS`, `KIND_LAYER`, `KIND_STYLE`.
-- Initial project: `makeInitialProject()`.
-- Import normalization: `normalizedProject()`.
-- Startup loading: `loadInitialProject()` restores `localStorage` or creates a blank project.
-- Manual Plan v1 loading: `loadStarterProject()` fetches `plans/plan-terrain-v1.json`.
-- Object creation: `createObjectForTool()`.
-- Snapping: `collectSnapTargets()` and `applySnapping()`.
-- Quantities and measurements: `objectMeasurements()`, `objectMeasurementItems()`, `deriveQuantities()`.
-- Export: `downloadText()` and `exportProjectPng()`.
-- Built-in tests: `runGeometryTests()`.
-- Reducer/history: `appReducer()`.
-- UI: `TopToolbar()`, `TOOL_GROUPS`, `ToolPalette()`, `SvgWorkspace()`, `PropertiesInspector()`, `StatusBar()`, `ChecklistModal()`, `App()`.
+- `src/model.ts`: types, constants, geometry helpers, snapping, normalization, project creation, reducer/history, JSON/PNG export, built-in geometry tests.
+- `src/App.tsx`: root app shell, autosave effect, keyboard shortcuts.
+- `src/components/TopToolbar.tsx`: project actions, manual Plan v1 load, import/export, view/snap toggles.
+- `src/components/ToolPalette.tsx`: tool definitions and palette UI.
+- `src/components/SvgWorkspace.tsx`: SVG rendering, hit testing, pointer interactions, drawing previews, handles.
+- `src/components/PropertiesInspector.tsx`: project/object inspector, layers, quantities, vertices/segments/style editing.
+- `src/components/StatusBar.tsx`: bottom status strip.
+- `src/components/ChecklistModal.tsx`: manual QA checklist.
+- `src/model.test.ts`: Vitest coverage for model/geometry behavior.
 
 ## Geometry And Snapping
 
@@ -176,10 +171,10 @@ Do not trigger drawing shortcuts while focus is inside inputs, selects, or texta
 
 After meaningful changes:
 
-1. Open `index.html` in a browser with DevTools open.
-2. Confirm there are no console/runtime errors from Babel/React.
-3. Run the built-in geometry tests from the UI and fix failures.
-4. Smoke-test the edited workflow manually.
+1. Run `npm run typecheck`.
+2. Run `npm run test`.
+3. Run `npm run build`.
+4. Smoke-test with `npm run dev` or `npm run preview`.
 
 Manual QA checklist from the app:
 
@@ -195,28 +190,14 @@ Manual QA checklist from the app:
 10. Export JSON, reset/new project, import JSON, and confirm editable objects are restored.
 11. Export PNG with measurements on, then turn measurements off and export again; selection handles and editor chrome should not appear.
 
-For small documentation-only edits, a static check such as `python3 -m html.parser index.html` is enough if `index.html` was not changed.
+For small documentation-only edits, no app build is required unless source files changed.
 
 ## Editing Guidance
 
-- Make surgical edits in `index.html`; avoid unrelated refactors.
+- Make surgical edits; avoid unrelated refactors.
 - Preserve existing naming and local patterns.
 - Keep all derived measurements in helpers.
 - Preserve layer visibility/locking semantics in rendering, hit testing, and editing.
 - Preserve property boundary editability and selection.
-- Keep browser verification in mind because TypeScript is transpiled in-browser.
-- If a future Vite migration is requested, preserve behavior first, then extract modules and tests.
-
-Suggested Vite structure only if migration is explicitly requested:
-
-```txt
-src/
-  App.tsx
-  main.tsx
-  styles.css
-  types/project.ts
-  state/
-  geometry/
-  components/
-  export/
-```
+- Keep pure logic in `src/model.ts` or split it further by domain before putting it in components.
+- Keep component-specific interaction code in `src/components/`.
