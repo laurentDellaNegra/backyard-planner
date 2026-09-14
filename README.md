@@ -4,6 +4,8 @@ A React/TypeScript backyard planning app for drawing property boundaries, shapes
 
 Startup restores browser `localStorage` when present, otherwise it opens a blank editable project. Use the `Load Plan v1` button to load `public/plans/plan-terrain-v1.json` manually.
 
+To see interior angles, select a closed polygon or the property boundary and enable **Dimensions → Show angle labels** in the inspector. Each corner updates live as you drag vertices or edit coordinates, including angles greater than 180° at concave corners. You can hide individual angles or drag their labels. Angle labels start off, follow the existing dimension/measurement visibility controls, and are saved in JSON and included in PNG exports when visible. Undefined angles on invalid polygons display “—”.
+
 ## Run
 
 ```sh

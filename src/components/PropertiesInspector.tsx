@@ -126,6 +126,8 @@ function InspectorObjectEditor({ project, object, dispatch, selectedHandle }: { 
   const color = objectColor(object);
   const measurements = objectMeasurements(object) as any;
   const measurementItems = objectMeasurementItems(object, false);
+  const dimensionItems = measurementItems.filter(item => !item.id.startsWith("angle-"));
+  const angleItems = measurementItems.filter(item => item.id.startsWith("angle-"));
   const segmentCount = pathSegmentCount(object);
   const selectedSegment = selectedHandle?.objectId === object.id && selectedHandle.kind === "segment" ? selectedHandle.index : undefined;
   const warnings = object.type === "polygon" ? polygonWarnings(object.points) : [];
@@ -229,11 +231,21 @@ function InspectorObjectEditor({ project, object, dispatch, selectedHandle }: { 
       <strong className="small">Dimensions</strong>
       <label className="checkbox-line"><input type="checkbox" disabled={!editable} checked={!object.measurementHidden} onChange={toggleAllMeasurements} /> Show dimensions</label>
       <div className="stack">
-        {measurementItems.map(item => <label className="checkbox-line" key={item.id}>
+        {dimensionItems.map(item => <label className="checkbox-line" key={item.id}>
           <input type="checkbox" disabled={!editable || !!object.measurementHidden} checked={isMeasurementVisible(object, item.id)} onChange={() => toggleMeasurement(item.id)} />
           <span>{item.label}: {item.value}</span>
         </label>)}
       </div>
+      {object.type === "polygon" && <div className="stack">
+        <label className="checkbox-line"><input type="checkbox" disabled={!editable || !!object.measurementHidden} checked={!!object.showAngles} onChange={() => patch({ showAngles: !object.showAngles }, "Angle label visibility updated.")} /> Show angle labels</label>
+        {object.showAngles && <>
+          <div className="muted small">Interior angles update as you edit. Drag labels to reposition them.</div>
+          {angleItems.map(item => <label className="checkbox-line" key={item.id}>
+            <input type="checkbox" disabled={!editable || !!object.measurementHidden} checked={isMeasurementVisible(object, item.id)} onChange={() => toggleMeasurement(item.id)} />
+            <span>{item.label}: {item.value}</span>
+          </label>)}
+        </>}
+      </div>}
     </div>}
 
     {object.type === "rectangle" && <div className="three-cols">

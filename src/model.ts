@@ -5,7 +5,7 @@ export type ObjectType = "polygon" | "rectangle" | "circle" | "polyline" | "labe
 export type ObjectKind = "property" | "polygon" | "rectangle" | "circle" | "line" | "sketch" | "label" | "area";
 export type AttachedLabel = { visible: boolean; text: string; offset: Point; fontSizeM: number };
 export type CommonObject = { id: string; type: ObjectType; kind: ObjectKind; name: string; layerId: string; locked: boolean; visible: boolean; style: Style; z: number; rotation?: number; measurementHidden?: boolean; hiddenMeasurements?: string[]; measurementOffsets?: Record<string, Point>; objectLabel?: AttachedLabel };
-export type PolygonObject = CommonObject & { type: "polygon"; points: Point[] };
+export type PolygonObject = CommonObject & { type: "polygon"; points: Point[]; showAngles?: boolean };
 export type RectangleObject = CommonObject & { type: "rectangle"; x: number; y: number; width: number; height: number };
 export type CircleObject = CommonObject & { type: "circle"; cx: number; cy: number; r: number };
 export type PolylineObject = CommonObject & { type: "polyline"; points: Point[]; widthM?: number };
@@ -155,6 +155,27 @@ export function polygonSelfIntersects(points: Point[]) {
   }
   return false;
 }
+export function polygonInteriorAngles(points: Point[]): (number | null)[] {
+  const undefinedAngles = points.map(() => null);
+  if (points.length < 3 || points.some(p => !Number.isFinite(p.x) || !Number.isFinite(p.y))) return undefinedAngles;
+  const signedArea = points.reduce((sum, a, i) => {
+    const b = points[(i + 1) % points.length];
+    return sum + a.x * b.y - b.x * a.y;
+  }, 0);
+  if (almost(signedArea, 0, 1e-9) || polygonSelfIntersects(points)) return undefinedAngles;
+  if (points.some((p, i) => distance(p, points[(i + 1) % points.length]) < 1e-9)) return undefinedAngles;
+  // Signed turns distinguish reflex corners in either winding direction.
+  const winding = Math.sign(signedArea);
+  return points.map((point, i) => {
+    const previous = points[(i + points.length - 1) % points.length];
+    const next = points[(i + 1) % points.length];
+    const incoming = sub(point, previous), outgoing = sub(next, point);
+    const cross = incoming.x * outgoing.y - incoming.y * outgoing.x;
+    const dot = incoming.x * outgoing.x + incoming.y * outgoing.y;
+    if (almost(cross, 0, 1e-9) && dot < 0) return null;
+    return 180 - winding * Math.atan2(cross, dot) * 180 / Math.PI;
+  });
+}
 export function polygonWarnings(points: Point[]) {
   const warnings: string[] = [];
   if (points.length < 3) warnings.push("A closed polygon needs at least 3 vertices.");
@@ -295,7 +316,7 @@ export function setObjectRotation(o: PlanObject, rotation: number): PlanObject {
 }
 
 export function isMeasurementVisible(o: PlanObject, id: string) {
-  return !o.measurementHidden && !(o.hiddenMeasurements || []).includes(id);
+  return !o.measurementHidden && !(o.hiddenMeasurements || []).includes(id) && (!id.startsWith("angle-") || (o.type === "polygon" && !!o.showAngles));
 }
 
 export function measurementOffset(o: PlanObject, id: string): Point {
@@ -317,6 +338,17 @@ export function objectMeasurementItems(o: PlanObject, visibleOnly = true): Measu
     });
     const bb = boundingBoxForObject(o);
     items.push({ id: "area", label: "Area", value: fmtM2(polygonArea(o.points)), point: { x: bb.x + bb.width / 2, y: bb.y + bb.height / 2 } });
+    const signedArea = o.points.reduce((sum, a, i) => {
+      const b = o.points[(i + 1) % o.points.length];
+      return sum + a.x * b.y - b.x * a.y;
+    }, 0);
+    polygonInteriorAngles(o.points).forEach((angle, i) => {
+      const vertex = o.points[i], previous = o.points[(i + o.points.length - 1) % o.points.length], next = o.points[(i + 1) % o.points.length];
+      const offset = Math.min(2.5, distance(vertex, previous) / 4, distance(vertex, next) / 4);
+      const direction = Math.atan2(next.y - vertex.y, next.x - vertex.x) + (Math.sign(signedArea) || 1) * (angle ?? 90) * Math.PI / 360;
+      const point = { x: vertex.x + offset * Math.cos(direction), y: vertex.y + offset * Math.sin(direction) };
+      items.push({ id: `angle-${i}`, label: `Angle ${i + 1}`, value: angle === null ? "—" : `${round1(angle).toFixed(1)}°`, point: Number.isFinite(point.x) && Number.isFinite(point.y) ? point : normalizePoint(vertex) });
+    });
   } else if (o.type === "rectangle") {
     const pts = getObjectVertices(o);
     items.push({ id: "width", label: "Width", value: fmtM(Math.abs(o.width)), point: midpoint(pts[0], pts[1]) });
@@ -512,6 +544,7 @@ export function makeInitialProject(): Project {
     measurementHidden: false,
     hiddenMeasurements: [],
     measurementOffsets: {},
+    showAngles: false,
     objectLabel: { visible: false, text: "Property boundary", offset: { x: 0, y: -2 }, fontSizeM: 1.3 },
     points: [{x:0,y:0},{x:100,y:0},{x:100,y:100},{x:0,y:100}],
   };
@@ -611,6 +644,7 @@ export function normalizedProject(input: any): Project {
         measurementHidden: !!o.measurementHidden,
         hiddenMeasurements: Array.isArray(o.hiddenMeasurements) ? o.hiddenMeasurements : [],
         measurementOffsets: normalizeMeasurementOffsets(o.measurementOffsets),
+        ...(o.type === "polygon" ? { showAngles: o.showAngles === true } : {}),
         objectLabel: normalizeObjectLabel(o, kind),
       } as PlanObject;
     }),
@@ -635,7 +669,7 @@ export function createObjectForTool(tool: Tool, points: Point[], extra: any = {}
   base.objectLabel = { visible: false, text: KIND_LABELS[kind], offset: { x: 0, y: -2 }, fontSizeM: 1.3 };
   if (["polygon","property"].includes(tool)) {
     if (points.length < 3) return null;
-    return { ...base, type: "polygon", points: points.map(p => ({ x: round1(p.x), y: round1(p.y) })) } as PolygonObject;
+    return { ...base, type: "polygon", points: points.map(p => ({ x: round1(p.x), y: round1(p.y) })), showAngles: false } as PolygonObject;
   }
   if (tool === "line") {
     if (points.length < 2) return null;
