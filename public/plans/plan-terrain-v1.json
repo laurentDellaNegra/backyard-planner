@@ -247,7 +247,7 @@
       "name": "Tree 11:54",
       "layerId": "shapes",
       "type": "circle",
-      "cx": 84.7,
+      "cx": 84.8,
       "cy": 101,
       "r": 1.1,
       "rotation": 0,
@@ -309,19 +309,19 @@
       }
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789413379126,
       "id": "rectangle-mu1mivxx-13p6mk",
       "kind": "rectangle",
       "name": "Rectangle 09:16 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#2563eb",
         "stroke": "#2563eb",
         "strokeWidth": 0.14,
         "opacity": 0.72
       },
-      "z": 1789413379126,
       "rotation": 346.9,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -347,19 +347,19 @@
       "height": 7
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789413489292,
       "id": "rectangle-mu1ml8y4-stxf5f",
       "kind": "rectangle",
       "name": "Rectangle 09:16 PM copy",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#2563eb",
         "stroke": "#2563eb",
         "strokeWidth": 0.14,
         "opacity": 0.72
       },
-      "z": 1789413489292,
       "rotation": 346.9,
       "measurementHidden": false,
       "hiddenMeasurements": [
@@ -392,19 +392,19 @@
       "height": 7
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789413903128,
       "id": "rectangle-mu1mu49k-f54bmg",
       "kind": "rectangle",
       "name": "Rectangle 09:25 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#64748b",
         "stroke": "#64748b",
         "strokeWidth": 0.14,
         "opacity": 0.72
       },
-      "z": 1789413903128,
       "rotation": 347.2,
       "measurementHidden": false,
       "hiddenMeasurements": [],
@@ -438,57 +438,19 @@
       "height": 10
     },
     {
-      "id": "rectangle-mu1mx3rz-1pmmpl",
-      "kind": "rectangle",
-      "name": "Rectangle 09:27 PM",
-      "layerId": "shapes",
-      "locked": false,
       "visible": true,
-      "style": {
-        "fill": "#64748b",
-        "stroke": "#64748b",
-        "strokeWidth": 0.14,
-        "opacity": 0.72
-      },
-      "z": 1789414042464,
-      "rotation": 346.9,
-      "measurementHidden": false,
-      "hiddenMeasurements": [],
-      "measurementOffsets": {
-        "area": {
-          "x": -0.5,
-          "y": 1.6
-        }
-      },
-      "objectLabel": {
-        "visible": true,
-        "text": "Maison",
-        "offset": {
-          "x": 0,
-          "y": -2
-        },
-        "fontSizeM": 1.3
-      },
-      "type": "rectangle",
-      "x": 111.8,
-      "y": 81.6,
-      "width": 10,
-      "height": 10
-    },
-    {
+      "locked": false,
+      "z": 1789414235983,
       "id": "line-mu1n193i-dapesd",
       "kind": "line",
       "name": "Line 09:30 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "none",
         "stroke": "#111827",
         "strokeWidth": 1.2,
         "opacity": 0.95
       },
-      "z": 1789414235983,
       "rotation": 0,
       "measurementHidden": false,
       "hiddenMeasurements": [
@@ -527,19 +489,19 @@
       "widthM": 0
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789414321666,
       "id": "rectangle-mu1n337m-oz8som",
       "kind": "rectangle",
       "name": "Rectangle 09:32 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#92400e",
         "stroke": "#92400e",
         "strokeWidth": 0.14,
         "opacity": 0.72
       },
-      "z": 1789414321666,
       "rotation": 11.5,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -560,19 +522,19 @@
       "height": 8.8
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789414539065,
       "id": "rectangle-mu1n7qyh-kqqcxy",
       "kind": "rectangle",
       "name": "Rectangle 09:32 PM copy",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#92400e",
         "stroke": "#92400e",
         "strokeWidth": 0.14,
         "opacity": 0.72
       },
-      "z": 1789414539065,
       "rotation": 11.5,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -637,19 +599,19 @@
       }
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789414787656,
       "id": "sketch-mu1nd2rr-cmcic5",
       "kind": "sketch",
       "name": "Hand-drawn line 09:39 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "none",
         "stroke": "#fef08a",
         "strokeWidth": 1,
         "opacity": 0.95
       },
-      "z": 1789414787656,
       "rotation": 0,
       "measurementHidden": false,
       "hiddenMeasurements": [],
@@ -1125,19 +1087,19 @@
       "widthM": 0
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789414799455,
       "id": "sketch-mu1ndbvj-gp6tdp",
       "kind": "sketch",
       "name": "Hand-drawn line 09:39 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "none",
         "stroke": "#fef08a",
         "strokeWidth": 1,
         "opacity": 0.95
       },
-      "z": 1789414799455,
       "rotation": 0,
       "measurementHidden": false,
       "hiddenMeasurements": [],
@@ -1349,19 +1311,19 @@
       "widthM": 0
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789414817322,
       "id": "sketch-mu1ndpnt-5kgqmi",
       "kind": "sketch",
       "name": "Hand-drawn line 09:40 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "none",
         "stroke": "#fef08a",
         "strokeWidth": 1,
         "opacity": 0.95
       },
-      "z": 1789414817322,
       "rotation": 0,
       "measurementHidden": false,
       "hiddenMeasurements": [],
@@ -1677,19 +1639,19 @@
       "widthM": 0
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789414838655,
       "id": "sketch-mu1ne64e-q64xx4",
       "kind": "sketch",
       "name": "Hand-drawn line 09:40 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "none",
         "stroke": "#fef08a",
         "strokeWidth": 1,
         "opacity": 0.95
       },
-      "z": 1789414838655,
       "rotation": 0,
       "measurementHidden": false,
       "hiddenMeasurements": [],
@@ -1957,19 +1919,19 @@
       "widthM": 0
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789414857788,
       "id": "sketch-mu1nekvw-kk3vxm",
       "kind": "sketch",
       "name": "Hand-drawn line 09:40 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "none",
         "stroke": "#fef08a",
         "strokeWidth": 1,
         "opacity": 0.95
       },
-      "z": 1789414857788,
       "rotation": 0,
       "measurementHidden": false,
       "hiddenMeasurements": [],
@@ -2225,143 +2187,19 @@
       "widthM": 0
     },
     {
-      "id": "sketch-mu1netww-qk9t70",
-      "kind": "sketch",
-      "name": "Hand-drawn line 09:41 PM",
-      "layerId": "shapes",
-      "locked": false,
       "visible": true,
-      "style": {
-        "fill": "none",
-        "stroke": "#fef08a",
-        "strokeWidth": 1,
-        "opacity": 0.95
-      },
-      "z": 1789414869489,
-      "rotation": 0,
-      "measurementHidden": false,
-      "hiddenMeasurements": [],
-      "measurementOffsets": {},
-      "objectLabel": {
-        "visible": false,
-        "text": "Hand-drawn line",
-        "offset": {
-          "x": 0,
-          "y": -2
-        },
-        "fontSizeM": 1.3
-      },
-      "type": "polyline",
-      "points": [
-        {
-          "x": 105.3,
-          "y": 88.1
-        },
-        {
-          "x": 105.7,
-          "y": 88.1
-        },
-        {
-          "x": 106,
-          "y": 88.1
-        },
-        {
-          "x": 106.4,
-          "y": 88.1
-        },
-        {
-          "x": 106.8,
-          "y": 88.1
-        },
-        {
-          "x": 107.3,
-          "y": 88.1
-        },
-        {
-          "x": 107.6,
-          "y": 88.1
-        },
-        {
-          "x": 108,
-          "y": 88
-        },
-        {
-          "x": 108.3,
-          "y": 88
-        },
-        {
-          "x": 108.6,
-          "y": 87.9
-        },
-        {
-          "x": 108.8,
-          "y": 87.9
-        },
-        {
-          "x": 109,
-          "y": 87.8
-        },
-        {
-          "x": 109.3,
-          "y": 87.8
-        },
-        {
-          "x": 109.5,
-          "y": 87.8
-        },
-        {
-          "x": 109.7,
-          "y": 87.8
-        },
-        {
-          "x": 109.9,
-          "y": 87.8
-        },
-        {
-          "x": 110.2,
-          "y": 87.8
-        },
-        {
-          "x": 110.4,
-          "y": 87.8
-        },
-        {
-          "x": 110.6,
-          "y": 87.7
-        },
-        {
-          "x": 110.8,
-          "y": 87.7
-        },
-        {
-          "x": 111,
-          "y": 87.6
-        },
-        {
-          "x": 111.2,
-          "y": 87.6
-        },
-        {
-          "x": 111.4,
-          "y": 87.6
-        }
-      ],
-      "widthM": 0
-    },
-    {
+      "locked": false,
+      "z": 1789414882072,
       "id": "sketch-mu1nf3mf-o693xp",
       "kind": "sketch",
       "name": "Hand-drawn line 09:41 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "none",
         "stroke": "#fef08a",
         "strokeWidth": 1,
         "opacity": 0.95
       },
-      "z": 1789414882072,
       "rotation": 0,
       "measurementHidden": false,
       "hiddenMeasurements": [],
@@ -2533,19 +2371,19 @@
       "widthM": 0
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789414893739,
       "id": "sketch-mu1nfcmi-ut5mbu",
       "kind": "sketch",
       "name": "Hand-drawn line 09:41 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "none",
         "stroke": "#fef08a",
         "strokeWidth": 1,
         "opacity": 0.95
       },
-      "z": 1789414893739,
       "rotation": 0,
       "measurementHidden": false,
       "hiddenMeasurements": [],
@@ -2705,19 +2543,19 @@
       "widthM": 0
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415061140,
       "id": "polygon-mu1nixsk-mh6094",
       "kind": "polygon",
       "name": "Polygon 09:44 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415061140,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -2766,19 +2604,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415068022,
       "id": "polygon-mu1nj33q-1omlnz",
       "kind": "polygon",
       "name": "Polygon 09:44 PM copy",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415068022,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -2822,19 +2660,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415082955,
       "id": "polygon-mu1njemj-yxtonj",
       "kind": "polygon",
       "name": "Polygon 09:44 PM copy copy",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415082955,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -2878,19 +2716,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415095355,
       "id": "polygon-mu1njo6z-rgc711",
       "kind": "polygon",
       "name": "Polygon 09:44 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415095355,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -2935,19 +2773,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415109640,
       "id": "polygon-mu1njz7s-0btwo9",
       "kind": "polygon",
       "name": "Polygon 09:45 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415109640,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -2983,19 +2821,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415123840,
       "id": "polygon-mu1nka68-imw1oa",
       "kind": "polygon",
       "name": "Polygon 09:45 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415123840,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -3031,19 +2869,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415131938,
       "id": "polygon-mu1nkgf6-lt1y4b",
       "kind": "polygon",
       "name": "Polygon 09:45 PM copy",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415131938,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -3060,38 +2898,38 @@
       "type": "polygon",
       "points": [
         {
-          "x": 106.9,
-          "y": 89.4
+          "x": 107,
+          "y": 89.2
         },
         {
-          "x": 107.3,
-          "y": 93.9
+          "x": 107.4,
+          "y": 93.7
         },
         {
-          "x": 111.9,
-          "y": 93.5
+          "x": 112,
+          "y": 93.3
         },
         {
-          "x": 110.8,
-          "y": 89.8
+          "x": 110.9,
+          "y": 89.6
         }
       ],
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415148056,
       "id": "polygon-mu1nksuv-x7l9gp",
       "kind": "polygon",
       "name": "Polygon 09:45 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415148056,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -3127,19 +2965,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415160240,
       "id": "polygon-mu1nl29c-qmugbl",
       "kind": "polygon",
       "name": "Polygon 09:46 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415160240,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -3179,19 +3017,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415177307,
       "id": "polygon-mu1nlfff-qnvwnv",
       "kind": "polygon",
       "name": "Polygon 09:46 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415177307,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -3235,19 +3073,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415193323,
       "id": "polygon-mu1nlrsb-r1g79p",
       "kind": "polygon",
       "name": "Polygon 09:46 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415193323,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -3287,19 +3125,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415212458,
       "id": "polygon-mu1nm6jt-5nvbba",
       "kind": "polygon",
       "name": "Polygon 09:46 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415212458,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -3335,19 +3173,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415395757,
       "id": "sketch-mu1nq3zg-1bqix7",
       "kind": "sketch",
       "name": "Hand-drawn line 09:49 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "none",
         "stroke": "#d9f99d",
         "strokeWidth": 1,
         "opacity": 0.95
       },
-      "z": 1789415395757,
       "rotation": 0,
       "measurementHidden": false,
       "hiddenMeasurements": [],
@@ -3967,19 +3805,19 @@
       "widthM": 0
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415419123,
       "id": "polygon-mu1nqm0i-67ztzy",
       "kind": "polygon",
       "name": "Polygon 09:50 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415419123,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -4027,19 +3865,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415441691,
       "id": "polygon-mu1nr3fe-2i14rx",
       "kind": "polygon",
       "name": "Polygon 09:50 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415441691,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -4092,19 +3930,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415455491,
       "id": "polygon-mu1nre2q-6c24k0",
       "kind": "polygon",
       "name": "Polygon 09:50 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415455491,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -4160,19 +3998,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415472823,
       "id": "polygon-mu1nrrg7-z7v5wf",
       "kind": "polygon",
       "name": "Polygon 09:51 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415472823,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -4228,19 +4066,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415485907,
       "id": "polygon-mu1ns1jn-t4r4r2",
       "kind": "polygon",
       "name": "Polygon 09:51 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#22c55e",
         "stroke": "#22c55e",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415485907,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -4292,19 +4130,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415594857,
       "id": "polygon-mu1nudm0-t60a5q",
       "kind": "polygon",
       "name": "Polygon 09:53 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#365314",
         "stroke": "#365314",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415594857,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -4408,19 +4246,19 @@
       "showAngles": false
     },
     {
+      "visible": true,
+      "locked": false,
+      "z": 1789415737909,
       "id": "polygon-mu1nxfzo-w862wy",
       "kind": "polygon",
       "name": "Polygon 09:55 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#365314",
         "stroke": "#365314",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415737909,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -4488,67 +4326,19 @@
       "showAngles": false
     },
     {
-      "id": "polygon-mu1nxz8a-kqfs3a",
-      "kind": "polygon",
-      "name": "Polygon 09:56 PM",
-      "layerId": "shapes",
-      "locked": false,
       "visible": true,
-      "style": {
-        "fill": "#365314",
-        "stroke": "#365314",
-        "strokeWidth": 0.12,
-        "opacity": 0.58
-      },
-      "z": 1789415762842,
-      "rotation": 0,
-      "measurementHidden": true,
-      "hiddenMeasurements": [],
-      "measurementOffsets": {},
-      "objectLabel": {
-        "visible": true,
-        "text": "Arbres",
-        "offset": {
-          "x": 0,
-          "y": -2
-        },
-        "fontSizeM": 1.3
-      },
-      "type": "polygon",
-      "points": [
-        {
-          "x": 63,
-          "y": 96.8
-        },
-        {
-          "x": 60.6,
-          "y": 107.4
-        },
-        {
-          "x": 69.7,
-          "y": 105.5
-        },
-        {
-          "x": 68.4,
-          "y": 98
-        }
-      ],
-      "showAngles": false
-    },
-    {
+      "locked": false,
+      "z": 1789415795343,
       "id": "polygon-mu1nyob2-lug3t3",
       "kind": "polygon",
       "name": "Polygon 09:56 PM",
       "layerId": "shapes",
-      "locked": false,
-      "visible": true,
       "style": {
         "fill": "#365314",
         "stroke": "#365314",
         "strokeWidth": 0.12,
         "opacity": 0.58
       },
-      "z": 1789415795343,
       "rotation": 0,
       "measurementHidden": true,
       "hiddenMeasurements": [],
@@ -4582,6 +4372,1192 @@
         }
       ],
       "showAngles": false
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1789496873654,
+      "id": "rectangle-mu308gqd-bymanv",
+      "kind": "rectangle",
+      "name": "Rectangle 08:27 PM",
+      "layerId": "shapes",
+      "style": {
+        "fill": "#64748b",
+        "stroke": "#64748b",
+        "strokeWidth": 0.14,
+        "opacity": 0.72
+      },
+      "rotation": 5.5,
+      "measurementHidden": true,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {
+        "area": {
+          "x": -0.1,
+          "y": 1.5
+        }
+      },
+      "objectLabel": {
+        "visible": true,
+        "text": "Terrain de basket",
+        "offset": {
+          "x": 1.2,
+          "y": -0.4
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "rectangle",
+      "x": 101.9,
+      "y": 65.7,
+      "width": 5,
+      "height": 6
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1789497740197,
+      "id": "sketch-mu30r1d0-wi184m",
+      "kind": "sketch",
+      "name": "Hand-drawn line 08:42 PM",
+      "layerId": "shapes",
+      "style": {
+        "fill": "none",
+        "stroke": "#fde68a",
+        "strokeWidth": 1,
+        "opacity": 0.95
+      },
+      "rotation": 0,
+      "measurementHidden": false,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Hand-drawn line",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "polyline",
+      "points": [
+        {
+          "x": 95.2,
+          "y": 75.4
+        },
+        {
+          "x": 95.4,
+          "y": 75.4
+        },
+        {
+          "x": 95.6,
+          "y": 75.5
+        },
+        {
+          "x": 95.8,
+          "y": 75.5
+        },
+        {
+          "x": 96,
+          "y": 75.5
+        },
+        {
+          "x": 96.2,
+          "y": 75.5
+        },
+        {
+          "x": 96.4,
+          "y": 75.5
+        },
+        {
+          "x": 96.7,
+          "y": 75.5
+        },
+        {
+          "x": 96.9,
+          "y": 75.4
+        },
+        {
+          "x": 97.1,
+          "y": 75.3
+        },
+        {
+          "x": 97.3,
+          "y": 75.2
+        },
+        {
+          "x": 97.5,
+          "y": 75.2
+        },
+        {
+          "x": 97.7,
+          "y": 75.1
+        },
+        {
+          "x": 97.9,
+          "y": 75
+        },
+        {
+          "x": 98.1,
+          "y": 74.9
+        },
+        {
+          "x": 98.3,
+          "y": 74.7
+        },
+        {
+          "x": 98.5,
+          "y": 74.5
+        },
+        {
+          "x": 98.7,
+          "y": 74.4
+        },
+        {
+          "x": 98.7,
+          "y": 74.2
+        },
+        {
+          "x": 98.9,
+          "y": 74.1
+        },
+        {
+          "x": 99,
+          "y": 73.9
+        },
+        {
+          "x": 99.1,
+          "y": 73.7
+        },
+        {
+          "x": 99.2,
+          "y": 73.5
+        },
+        {
+          "x": 99.3,
+          "y": 73.3
+        },
+        {
+          "x": 99.5,
+          "y": 73.1
+        },
+        {
+          "x": 99.6,
+          "y": 72.9
+        },
+        {
+          "x": 99.8,
+          "y": 72.7
+        },
+        {
+          "x": 99.9,
+          "y": 72.5
+        },
+        {
+          "x": 100.1,
+          "y": 72.4
+        },
+        {
+          "x": 100.3,
+          "y": 72.3
+        },
+        {
+          "x": 100.5,
+          "y": 72.1
+        },
+        {
+          "x": 100.7,
+          "y": 72
+        },
+        {
+          "x": 100.9,
+          "y": 72
+        },
+        {
+          "x": 101.1,
+          "y": 71.9
+        },
+        {
+          "x": 101.3,
+          "y": 71.8
+        },
+        {
+          "x": 101.5,
+          "y": 71.8
+        },
+        {
+          "x": 101.7,
+          "y": 71.8
+        },
+        {
+          "x": 101.9,
+          "y": 71.7
+        },
+        {
+          "x": 102.1,
+          "y": 71.6
+        },
+        {
+          "x": 102.3,
+          "y": 71.6
+        },
+        {
+          "x": 102.5,
+          "y": 71.5
+        },
+        {
+          "x": 102.7,
+          "y": 71.5
+        }
+      ],
+      "widthM": 0
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1790248302939,
+      "id": "line-muffm7a2-9d6hm8",
+      "kind": "line",
+      "name": "Line 01:11 PM",
+      "layerId": "shapes",
+      "style": {
+        "fill": "none",
+        "stroke": "#111827",
+        "strokeWidth": 1.2,
+        "opacity": 0.95
+      },
+      "rotation": 0,
+      "measurementHidden": false,
+      "hiddenMeasurements": [
+        "seg-0"
+      ],
+      "measurementOffsets": {
+        "length": {
+          "x": 0.1,
+          "y": 4
+        }
+      },
+      "objectLabel": {
+        "visible": true,
+        "text": "Portail",
+        "offset": {
+          "x": 0.6,
+          "y": 1.6
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "polyline",
+      "points": [
+        {
+          "x": 65.5,
+          "y": 108.4
+        },
+        {
+          "x": 66.5,
+          "y": 108.2
+        }
+      ],
+      "widthM": 0
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1790248515150,
+      "id": "polygon-muffqr0u-6614k0",
+      "kind": "polygon",
+      "name": "Polygon 01:15 PM",
+      "layerId": "shapes",
+      "style": {
+        "fill": "#374151",
+        "stroke": "#374151",
+        "strokeWidth": 0.12,
+        "opacity": 0.58
+      },
+      "rotation": 0,
+      "measurementHidden": true,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {
+        "area": {
+          "x": 0.3,
+          "y": -1.8
+        }
+      },
+      "objectLabel": {
+        "visible": true,
+        "text": "Boutique",
+        "offset": {
+          "x": 0.2,
+          "y": -0.9
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "polygon",
+      "points": [
+        {
+          "x": 60.4,
+          "y": 99.2
+        },
+        {
+          "x": 58.3,
+          "y": 110.1
+        },
+        {
+          "x": 64.8,
+          "y": 108.6
+        },
+        {
+          "x": 66.3,
+          "y": 100.5
+        }
+      ],
+      "showAngles": false
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1790249947545,
+      "id": "sketch-mufglg9k-l4byck",
+      "kind": "sketch",
+      "name": "Hand-drawn line 01:39 PM",
+      "layerId": "shapes",
+      "style": {
+        "fill": "none",
+        "stroke": "#fef08a",
+        "strokeWidth": 1,
+        "opacity": 0.95
+      },
+      "rotation": 0,
+      "measurementHidden": false,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Hand-drawn line",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "polyline",
+      "points": [
+        {
+          "x": 113.4,
+          "y": 81.8
+        },
+        {
+          "x": 113.6,
+          "y": 81.9
+        },
+        {
+          "x": 113.8,
+          "y": 82.1
+        },
+        {
+          "x": 113.9,
+          "y": 82.3
+        },
+        {
+          "x": 114.1,
+          "y": 82.5
+        },
+        {
+          "x": 114.2,
+          "y": 82.7
+        },
+        {
+          "x": 114.3,
+          "y": 82.9
+        },
+        {
+          "x": 114.4,
+          "y": 83.1
+        },
+        {
+          "x": 114.5,
+          "y": 83.3
+        },
+        {
+          "x": 114.6,
+          "y": 83.5
+        },
+        {
+          "x": 114.7,
+          "y": 83.7
+        },
+        {
+          "x": 114.9,
+          "y": 83.9
+        },
+        {
+          "x": 115,
+          "y": 84.1
+        },
+        {
+          "x": 115.2,
+          "y": 84.3
+        },
+        {
+          "x": 115.3,
+          "y": 84.5
+        },
+        {
+          "x": 115.5,
+          "y": 84.6
+        },
+        {
+          "x": 115.7,
+          "y": 84.7
+        },
+        {
+          "x": 115.9,
+          "y": 84.8
+        },
+        {
+          "x": 116.2,
+          "y": 84.9
+        },
+        {
+          "x": 116.4,
+          "y": 85
+        },
+        {
+          "x": 116.6,
+          "y": 85.2
+        },
+        {
+          "x": 116.8,
+          "y": 85.3
+        },
+        {
+          "x": 117,
+          "y": 85.5
+        },
+        {
+          "x": 117.2,
+          "y": 85.7
+        },
+        {
+          "x": 117.4,
+          "y": 85.8
+        },
+        {
+          "x": 117.5,
+          "y": 86
+        },
+        {
+          "x": 117.7,
+          "y": 86.1
+        },
+        {
+          "x": 117.8,
+          "y": 86.3
+        },
+        {
+          "x": 118,
+          "y": 86.4
+        },
+        {
+          "x": 118.1,
+          "y": 86.6
+        },
+        {
+          "x": 118.2,
+          "y": 86.8
+        },
+        {
+          "x": 118.4,
+          "y": 87
+        },
+        {
+          "x": 118.4,
+          "y": 87.2
+        },
+        {
+          "x": 118.5,
+          "y": 87.4
+        },
+        {
+          "x": 118.6,
+          "y": 87.6
+        },
+        {
+          "x": 118.6,
+          "y": 87.8
+        },
+        {
+          "x": 118.7,
+          "y": 88
+        },
+        {
+          "x": 118.8,
+          "y": 88.3
+        },
+        {
+          "x": 118.9,
+          "y": 88.6
+        },
+        {
+          "x": 119,
+          "y": 88.8
+        },
+        {
+          "x": 119.1,
+          "y": 89
+        },
+        {
+          "x": 119.2,
+          "y": 89.2
+        },
+        {
+          "x": 119.3,
+          "y": 89.4
+        },
+        {
+          "x": 119.4,
+          "y": 89.6
+        },
+        {
+          "x": 119.4,
+          "y": 89.8
+        },
+        {
+          "x": 119.4,
+          "y": 90
+        },
+        {
+          "x": 119.4,
+          "y": 90.2
+        },
+        {
+          "x": 119.4,
+          "y": 90.4
+        },
+        {
+          "x": 119.4,
+          "y": 90.7
+        },
+        {
+          "x": 119.5,
+          "y": 90.9
+        },
+        {
+          "x": 119.6,
+          "y": 91.1
+        }
+      ],
+      "widthM": 0
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1790249976028,
+      "id": "sketch-mufgm28s-g4nc4n",
+      "kind": "sketch",
+      "name": "Hand-drawn line 01:39 PM",
+      "layerId": "shapes",
+      "style": {
+        "fill": "none",
+        "stroke": "#fef08a",
+        "strokeWidth": 1,
+        "opacity": 0.95
+      },
+      "rotation": 0,
+      "measurementHidden": false,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Hand-drawn line",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "polyline",
+      "points": [
+        {
+          "x": 70.9,
+          "y": 93.5
+        },
+        {
+          "x": 70.9,
+          "y": 93.7
+        },
+        {
+          "x": 70.8,
+          "y": 93.9
+        },
+        {
+          "x": 70.7,
+          "y": 94.1
+        },
+        {
+          "x": 70.6,
+          "y": 94.3
+        },
+        {
+          "x": 70.5,
+          "y": 94.5
+        },
+        {
+          "x": 70.4,
+          "y": 94.7
+        },
+        {
+          "x": 70.2,
+          "y": 94.9
+        },
+        {
+          "x": 70.1,
+          "y": 95.1
+        },
+        {
+          "x": 70,
+          "y": 95.3
+        },
+        {
+          "x": 69.9,
+          "y": 95.5
+        },
+        {
+          "x": 69.9,
+          "y": 95.7
+        },
+        {
+          "x": 69.8,
+          "y": 95.9
+        },
+        {
+          "x": 69.7,
+          "y": 96.1
+        },
+        {
+          "x": 69.6,
+          "y": 96.3
+        },
+        {
+          "x": 69.6,
+          "y": 96.5
+        },
+        {
+          "x": 69.6,
+          "y": 96.7
+        },
+        {
+          "x": 69.5,
+          "y": 96.9
+        },
+        {
+          "x": 69.5,
+          "y": 97.2
+        },
+        {
+          "x": 69.4,
+          "y": 97.4
+        },
+        {
+          "x": 69.4,
+          "y": 97.7
+        },
+        {
+          "x": 69.3,
+          "y": 97.9
+        },
+        {
+          "x": 69.3,
+          "y": 98.2
+        },
+        {
+          "x": 69.2,
+          "y": 98.4
+        },
+        {
+          "x": 69.2,
+          "y": 98.7
+        },
+        {
+          "x": 69.1,
+          "y": 98.9
+        },
+        {
+          "x": 69.1,
+          "y": 99.3
+        },
+        {
+          "x": 69,
+          "y": 99.5
+        },
+        {
+          "x": 68.9,
+          "y": 99.7
+        },
+        {
+          "x": 68.9,
+          "y": 99.9
+        },
+        {
+          "x": 68.7,
+          "y": 100.1
+        },
+        {
+          "x": 68.7,
+          "y": 100.3
+        },
+        {
+          "x": 68.6,
+          "y": 100.5
+        },
+        {
+          "x": 68.5,
+          "y": 100.7
+        },
+        {
+          "x": 68.5,
+          "y": 100.9
+        },
+        {
+          "x": 68.4,
+          "y": 101.1
+        },
+        {
+          "x": 68.4,
+          "y": 101.3
+        },
+        {
+          "x": 68.4,
+          "y": 101.5
+        },
+        {
+          "x": 68.3,
+          "y": 101.7
+        },
+        {
+          "x": 68.2,
+          "y": 101.9
+        },
+        {
+          "x": 68.1,
+          "y": 102.1
+        },
+        {
+          "x": 68.1,
+          "y": 102.3
+        },
+        {
+          "x": 67.9,
+          "y": 102.6
+        },
+        {
+          "x": 67.8,
+          "y": 102.8
+        },
+        {
+          "x": 67.8,
+          "y": 103
+        },
+        {
+          "x": 67.7,
+          "y": 103.2
+        },
+        {
+          "x": 67.6,
+          "y": 103.5
+        },
+        {
+          "x": 67.5,
+          "y": 103.8
+        },
+        {
+          "x": 67.4,
+          "y": 104
+        },
+        {
+          "x": 67.3,
+          "y": 104.2
+        },
+        {
+          "x": 67.3,
+          "y": 104.5
+        },
+        {
+          "x": 67.2,
+          "y": 104.7
+        },
+        {
+          "x": 67.2,
+          "y": 104.9
+        },
+        {
+          "x": 67.1,
+          "y": 105.2
+        },
+        {
+          "x": 67,
+          "y": 105.4
+        },
+        {
+          "x": 67,
+          "y": 105.7
+        },
+        {
+          "x": 66.8,
+          "y": 106
+        },
+        {
+          "x": 66.7,
+          "y": 106.2
+        },
+        {
+          "x": 66.5,
+          "y": 106.5
+        },
+        {
+          "x": 66.4,
+          "y": 106.7
+        },
+        {
+          "x": 66.3,
+          "y": 106.9
+        },
+        {
+          "x": 66.2,
+          "y": 107.1
+        },
+        {
+          "x": 66.1,
+          "y": 107.3
+        },
+        {
+          "x": 66,
+          "y": 107.5
+        },
+        {
+          "x": 66,
+          "y": 107.7
+        },
+        {
+          "x": 65.9,
+          "y": 107.9
+        },
+        {
+          "x": 65.9,
+          "y": 107.8
+        }
+      ],
+      "widthM": 0
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1790250055659,
+      "id": "polygon-mufgnror-40s9ac",
+      "kind": "polygon",
+      "name": "Polygon 09:45 PM copy",
+      "layerId": "shapes",
+      "style": {
+        "fill": "#22c55e",
+        "stroke": "#22c55e",
+        "strokeWidth": 0.12,
+        "opacity": 0.58
+      },
+      "rotation": 0,
+      "measurementHidden": true,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Polygon",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "polygon",
+      "points": [
+        {
+          "x": 109.7,
+          "y": 82.4
+        },
+        {
+          "x": 111,
+          "y": 86
+        },
+        {
+          "x": 114.9,
+          "y": 85.7
+        },
+        {
+          "x": 113.6,
+          "y": 82.8
+        }
+      ],
+      "showAngles": false
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1790250077243,
+      "id": "polygon-mufgo8cb-tvx7c5",
+      "kind": "polygon",
+      "name": "Polygon 09:45 PM copy copy",
+      "layerId": "shapes",
+      "style": {
+        "fill": "#22c55e",
+        "stroke": "#22c55e",
+        "strokeWidth": 0.12,
+        "opacity": 0.58
+      },
+      "rotation": 0,
+      "measurementHidden": true,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Polygon",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "polygon",
+      "points": [
+        {
+          "x": 111.3,
+          "y": 86.8
+        },
+        {
+          "x": 112.6,
+          "y": 93.1
+        },
+        {
+          "x": 118.6,
+          "y": 91
+        },
+        {
+          "x": 116.3,
+          "y": 86.3
+        }
+      ],
+      "showAngles": false
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1790250098093,
+      "id": "polygon-mufgoofh-zxvzl4",
+      "kind": "polygon",
+      "name": "Polygon 09:45 PM copy copy copy",
+      "layerId": "shapes",
+      "style": {
+        "fill": "#22c55e",
+        "stroke": "#22c55e",
+        "strokeWidth": 0.12,
+        "opacity": 0.58
+      },
+      "rotation": 0,
+      "measurementHidden": true,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Polygon",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "polygon",
+      "points": [
+        {
+          "x": 114.4,
+          "y": 81.3
+        },
+        {
+          "x": 116.2,
+          "y": 83.9
+        },
+        {
+          "x": 118.5,
+          "y": 85.2
+        },
+        {
+          "x": 120.5,
+          "y": 90.6
+        },
+        {
+          "x": 124.6,
+          "y": 88.8
+        },
+        {
+          "x": 122.2,
+          "y": 80.3
+        }
+      ],
+      "showAngles": false
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1790250145210,
+      "id": "circle-mufgposa-2p16xr",
+      "kind": "circle",
+      "name": "Circle 01:42 PM",
+      "layerId": "shapes",
+      "style": {
+        "fill": "#b91c1c",
+        "stroke": "#b91c1c",
+        "strokeWidth": 0.12,
+        "opacity": 1
+      },
+      "rotation": 0,
+      "measurementHidden": true,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Circle",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "circle",
+      "cx": 108.2,
+      "cy": 87.7,
+      "r": 1.4
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1790250335494,
+      "id": "circle-mufgtrly-gx29i8",
+      "kind": "circle",
+      "name": "Circle 01:42 PM copy",
+      "layerId": "shapes",
+      "style": {
+        "fill": "#b91c1c",
+        "stroke": "#b91c1c",
+        "strokeWidth": 0.12,
+        "opacity": 1
+      },
+      "rotation": 0,
+      "measurementHidden": true,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Circle",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "circle",
+      "cx": 81.6,
+      "cy": 52.1,
+      "r": 1.4
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1790250359994,
+      "id": "circle-mufguaii-m3rzlt",
+      "kind": "circle",
+      "name": "Circle 01:42 PM copy copy",
+      "layerId": "shapes",
+      "style": {
+        "fill": "#b91c1c",
+        "stroke": "#b91c1c",
+        "strokeWidth": 0.12,
+        "opacity": 1
+      },
+      "rotation": 0,
+      "measurementHidden": true,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Circle",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "circle",
+      "cx": 137.3,
+      "cy": 52.2,
+      "r": 1.4
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1790250367311,
+      "id": "circle-mufgug5r-gt0yt5",
+      "kind": "circle",
+      "name": "Circle 01:42 PM copy copy copy",
+      "layerId": "shapes",
+      "style": {
+        "fill": "#b91c1c",
+        "stroke": "#b91c1c",
+        "strokeWidth": 0.12,
+        "opacity": 1
+      },
+      "rotation": 0,
+      "measurementHidden": true,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Circle",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "circle",
+      "cx": 141.2,
+      "cy": 67.1,
+      "r": 1.4
+    },
+    {
+      "visible": true,
+      "locked": false,
+      "z": 1790250377627,
+      "id": "circle-mufguo4b-vbg7xo",
+      "kind": "circle",
+      "name": "Circle 01:42 PM copy copy copy copy",
+      "layerId": "shapes",
+      "style": {
+        "fill": "#b91c1c",
+        "stroke": "#b91c1c",
+        "strokeWidth": 0.12,
+        "opacity": 1
+      },
+      "rotation": 0,
+      "measurementHidden": true,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Circle",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "circle",
+      "cx": 117,
+      "cy": 70.5,
+      "r": 1.4
     }
   ],
   "settings": {
@@ -4593,5 +5569,5 @@
     "snapToMidpoints": true,
     "orthogonalSnap": false
   },
-  "savedAt": "2026-09-14T20:06:39.935Z"
+  "savedAt": "2026-10-03T15:31:49.192Z"
 }
