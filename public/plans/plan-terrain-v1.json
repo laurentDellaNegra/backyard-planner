@@ -4714,242 +4714,6 @@
     {
       "visible": true,
       "locked": false,
-      "z": 1790249947545,
-      "id": "sketch-mufglg9k-l4byck",
-      "kind": "sketch",
-      "name": "Hand-drawn line 01:39 PM",
-      "layerId": "shapes",
-      "style": {
-        "fill": "none",
-        "stroke": "#fef08a",
-        "strokeWidth": 1,
-        "opacity": 0.95
-      },
-      "rotation": 0,
-      "measurementHidden": false,
-      "hiddenMeasurements": [],
-      "measurementOffsets": {},
-      "objectLabel": {
-        "visible": false,
-        "text": "Hand-drawn line",
-        "offset": {
-          "x": 0,
-          "y": -2
-        },
-        "fontSizeM": 1.3
-      },
-      "type": "polyline",
-      "points": [
-        {
-          "x": 113.4,
-          "y": 81.8
-        },
-        {
-          "x": 113.6,
-          "y": 81.9
-        },
-        {
-          "x": 113.8,
-          "y": 82.1
-        },
-        {
-          "x": 113.9,
-          "y": 82.3
-        },
-        {
-          "x": 114.1,
-          "y": 82.5
-        },
-        {
-          "x": 114.2,
-          "y": 82.7
-        },
-        {
-          "x": 114.3,
-          "y": 82.9
-        },
-        {
-          "x": 114.4,
-          "y": 83.1
-        },
-        {
-          "x": 114.5,
-          "y": 83.3
-        },
-        {
-          "x": 114.6,
-          "y": 83.5
-        },
-        {
-          "x": 114.7,
-          "y": 83.7
-        },
-        {
-          "x": 114.9,
-          "y": 83.9
-        },
-        {
-          "x": 115,
-          "y": 84.1
-        },
-        {
-          "x": 115.2,
-          "y": 84.3
-        },
-        {
-          "x": 115.3,
-          "y": 84.5
-        },
-        {
-          "x": 115.5,
-          "y": 84.6
-        },
-        {
-          "x": 115.7,
-          "y": 84.7
-        },
-        {
-          "x": 115.9,
-          "y": 84.8
-        },
-        {
-          "x": 116.2,
-          "y": 84.9
-        },
-        {
-          "x": 116.4,
-          "y": 85
-        },
-        {
-          "x": 116.6,
-          "y": 85.2
-        },
-        {
-          "x": 116.8,
-          "y": 85.3
-        },
-        {
-          "x": 117,
-          "y": 85.5
-        },
-        {
-          "x": 117.2,
-          "y": 85.7
-        },
-        {
-          "x": 117.4,
-          "y": 85.8
-        },
-        {
-          "x": 117.5,
-          "y": 86
-        },
-        {
-          "x": 117.7,
-          "y": 86.1
-        },
-        {
-          "x": 117.8,
-          "y": 86.3
-        },
-        {
-          "x": 118,
-          "y": 86.4
-        },
-        {
-          "x": 118.1,
-          "y": 86.6
-        },
-        {
-          "x": 118.2,
-          "y": 86.8
-        },
-        {
-          "x": 118.4,
-          "y": 87
-        },
-        {
-          "x": 118.4,
-          "y": 87.2
-        },
-        {
-          "x": 118.5,
-          "y": 87.4
-        },
-        {
-          "x": 118.6,
-          "y": 87.6
-        },
-        {
-          "x": 118.6,
-          "y": 87.8
-        },
-        {
-          "x": 118.7,
-          "y": 88
-        },
-        {
-          "x": 118.8,
-          "y": 88.3
-        },
-        {
-          "x": 118.9,
-          "y": 88.6
-        },
-        {
-          "x": 119,
-          "y": 88.8
-        },
-        {
-          "x": 119.1,
-          "y": 89
-        },
-        {
-          "x": 119.2,
-          "y": 89.2
-        },
-        {
-          "x": 119.3,
-          "y": 89.4
-        },
-        {
-          "x": 119.4,
-          "y": 89.6
-        },
-        {
-          "x": 119.4,
-          "y": 89.8
-        },
-        {
-          "x": 119.4,
-          "y": 90
-        },
-        {
-          "x": 119.4,
-          "y": 90.2
-        },
-        {
-          "x": 119.4,
-          "y": 90.4
-        },
-        {
-          "x": 119.4,
-          "y": 90.7
-        },
-        {
-          "x": 119.5,
-          "y": 90.9
-        },
-        {
-          "x": 119.6,
-          "y": 91.1
-        }
-      ],
-      "widthM": 0
-    },
-    {
-      "visible": true,
-      "locked": false,
       "z": 1790249976028,
       "id": "sketch-mufgm28s-g4nc4n",
       "kind": "sketch",
@@ -5246,158 +5010,6 @@
         }
       ],
       "widthM": 0
-    },
-    {
-      "visible": true,
-      "locked": false,
-      "z": 1790250055659,
-      "id": "polygon-mufgnror-40s9ac",
-      "kind": "polygon",
-      "name": "Polygon 09:45 PM copy",
-      "layerId": "shapes",
-      "style": {
-        "fill": "#22c55e",
-        "stroke": "#22c55e",
-        "strokeWidth": 0.12,
-        "opacity": 0.58
-      },
-      "rotation": 0,
-      "measurementHidden": true,
-      "hiddenMeasurements": [],
-      "measurementOffsets": {},
-      "objectLabel": {
-        "visible": false,
-        "text": "Polygon",
-        "offset": {
-          "x": 0,
-          "y": -2
-        },
-        "fontSizeM": 1.3
-      },
-      "type": "polygon",
-      "points": [
-        {
-          "x": 109.7,
-          "y": 82.4
-        },
-        {
-          "x": 111,
-          "y": 86
-        },
-        {
-          "x": 114.9,
-          "y": 85.7
-        },
-        {
-          "x": 113.6,
-          "y": 82.8
-        }
-      ],
-      "showAngles": false
-    },
-    {
-      "visible": true,
-      "locked": false,
-      "z": 1790250077243,
-      "id": "polygon-mufgo8cb-tvx7c5",
-      "kind": "polygon",
-      "name": "Polygon 09:45 PM copy copy",
-      "layerId": "shapes",
-      "style": {
-        "fill": "#22c55e",
-        "stroke": "#22c55e",
-        "strokeWidth": 0.12,
-        "opacity": 0.58
-      },
-      "rotation": 0,
-      "measurementHidden": true,
-      "hiddenMeasurements": [],
-      "measurementOffsets": {},
-      "objectLabel": {
-        "visible": false,
-        "text": "Polygon",
-        "offset": {
-          "x": 0,
-          "y": -2
-        },
-        "fontSizeM": 1.3
-      },
-      "type": "polygon",
-      "points": [
-        {
-          "x": 111.3,
-          "y": 86.8
-        },
-        {
-          "x": 112.6,
-          "y": 93.1
-        },
-        {
-          "x": 118.6,
-          "y": 91
-        },
-        {
-          "x": 116.3,
-          "y": 86.3
-        }
-      ],
-      "showAngles": false
-    },
-    {
-      "visible": true,
-      "locked": false,
-      "z": 1790250098093,
-      "id": "polygon-mufgoofh-zxvzl4",
-      "kind": "polygon",
-      "name": "Polygon 09:45 PM copy copy copy",
-      "layerId": "shapes",
-      "style": {
-        "fill": "#22c55e",
-        "stroke": "#22c55e",
-        "strokeWidth": 0.12,
-        "opacity": 0.58
-      },
-      "rotation": 0,
-      "measurementHidden": true,
-      "hiddenMeasurements": [],
-      "measurementOffsets": {},
-      "objectLabel": {
-        "visible": false,
-        "text": "Polygon",
-        "offset": {
-          "x": 0,
-          "y": -2
-        },
-        "fontSizeM": 1.3
-      },
-      "type": "polygon",
-      "points": [
-        {
-          "x": 114.4,
-          "y": 81.3
-        },
-        {
-          "x": 116.2,
-          "y": 83.9
-        },
-        {
-          "x": 118.5,
-          "y": 85.2
-        },
-        {
-          "x": 120.5,
-          "y": 90.6
-        },
-        {
-          "x": 124.6,
-          "y": 88.8
-        },
-        {
-          "x": 122.2,
-          "y": 80.3
-        }
-      ],
-      "showAngles": false
     },
     {
       "visible": true,
@@ -5878,6 +5490,39 @@
       "cx": 135.7,
       "cy": 63.6,
       "r": 1.4
+    },
+    {
+      "id": "rectangle-mvwg36gc-568gk1",
+      "kind": "rectangle",
+      "name": "Rectangle 02:36 PM",
+      "layerId": "shapes",
+      "locked": false,
+      "visible": true,
+      "style": {
+        "fill": "#64748b",
+        "stroke": "#64748b",
+        "strokeWidth": 0.14,
+        "opacity": 0.72
+      },
+      "z": 1793453802349,
+      "rotation": 347.4,
+      "measurementHidden": false,
+      "hiddenMeasurements": [],
+      "measurementOffsets": {},
+      "objectLabel": {
+        "visible": false,
+        "text": "Rectangle",
+        "offset": {
+          "x": 0,
+          "y": -2
+        },
+        "fontSizeM": 1.3
+      },
+      "type": "rectangle",
+      "x": 112.1,
+      "y": 81.8,
+      "width": 10,
+      "height": 10
     }
   ],
   "settings": {
@@ -5889,5 +5534,5 @@
     "snapToMidpoints": true,
     "orthogonalSnap": false
   },
-  "savedAt": "2026-10-31T12:35:38.988Z"
+  "savedAt": "2026-10-31T13:37:36.597Z"
 }
